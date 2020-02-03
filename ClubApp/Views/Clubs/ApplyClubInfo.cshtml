@@ -1,0 +1,110 @@
+﻿@model ClubApp.Models.ClubNumber
+@{
+    ViewBag.Title = "社团信息";
+}
+
+<h2>社团信息</h2>
+@using (Html.BeginForm("ApplyClubInfo", "Clubs", FormMethod.Post, new { @class = "layui-form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Type, new { @class = "layui-form-label" })
+        <div class="layui-input-inline">
+            <label class="layui-input">@Model.Type.Name</label>
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+            社团类型应与申请时一致，不允许更改。
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Name, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            @Html.TextBoxFor(m => m.Name, new { @class = "layui-input" })
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.HeadImg, new { @class = "layui-form-label" })
+        <div class="layui-input-inline">
+            <div class="layui-upload-drag" id="uploadDemo">
+                <i class="layui-icon"></i>
+                <p>点击上传，或将文件拖拽到此处</p>
+            </div>
+        </div>
+        <div class="layui-input-inline">
+            <div class="layui-upload-drag" id="uploadDemo">
+                <i class="layui-icon"></i>
+                <p>点击上传，或将文件拖拽到此处</p>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.ShortDesc, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            @Html.TextBoxFor(m => m.ShortDesc, new { @class = "layui-input" })
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Desc, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            @Html.TextAreaFor(m => m.Desc, new { @class = "layui-input", placeholder = "对该社团做个简单的介绍会更容易吸引同学参加哟（最大500字符）" })
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="submit" class="layui-btn" lay-submit value="确认提交" />
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+
+}
+<script>
+        //Demo
+        layui.use(['form', 'upload'], function () {
+            var form = layui.form
+                , upload = layui.upload;
+            //监听提交
+            form.on('submit(formDemo)', function (data) {
+                layer.msg(JSON.stringify(data.field));
+                return false;
+            });
+            form.verify({
+                maxlength: function (value, item) {
+                    if (value.length > 500) {
+                        return '超过最大长度[500]个字符！'
+                    }
+                }
+                , required: function (value) {
+                    if (value != 1) {
+                        return '未上传审批文件的申请不允许提交'
+                    }
+                }
+            })
+
+            //上传
+            upload.render({
+                elem: '#uploadDemo'
+                , url: '/#' //上传接口
+                , accept: 'file'
+                , exts: 'zip|rar|7z'
+                , auto:false
+                , size: 2048
+                , data: {
+                    id: function () {
+                        return $("#Id").val();
+                    }
+                }
+                , done: function (res) {
+                    if (res.code == 0) {
+                        window.Location.reload();
+                    }
+                    else {
+                        alert(res.msg);
+                    }
+                }
+                , error: function (index, upload) {
+                    alert("文件上传失败（非服务器异常）")
+                }
+            });
+        });
+</script>

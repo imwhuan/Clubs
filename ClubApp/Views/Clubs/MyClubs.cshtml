@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewBag.Title = "我的社团";
+}
+
+<h2>@ViewBag.Msg</h2>
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>我的社团</legend>
+</fieldset>
+<table id="demo" lay-filter="test"></table>
+<script type="text/html" id="clubTpl">
+    <a href="/detail/{{d.ClubId}}" class="layui-table-link">{{d.Club}}</a>
+</script>
+<script type="text/html" id="barDemo">
+    <!-- 这里同样支持 laytpl 语法，如： -->
+    {{#  if(d.CState ==="待提交"){ }}
+    <a href="/Clubs/ApplyClubSubmit?cid={{d.ClubId}}" class="layui-btn layui-btn-xs">提交审批</a>
+    {{#  } }}
+    {{#  if(d.Status ==="社长"){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="check">管理</a>
+    {{# } else { }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="check">申请退出</a>
+    {{#  } }}
+</script>
+<script>
+layui.use('table', function(){
+  var table = layui.table;
+
+  //第一个实例
+  table.render({
+    elem: '#demo'
+    ,height: 312
+    ,url: '/Clubs/MyClubsData' //数据接口
+    ,page: true //开启分页
+    ,cols: [[ //表头
+      { field: 'ClubId', title: '社团编号',  sort: true}
+      , { field: 'Club', title: '社团',  sort: true , templet: '#clubTpl'}
+      , { field: 'CState', title: '社团状态',  sort: true }
+      , { field: 'Status', title: '职位', sort: true}
+      , { field: 'Desc', title: '备注'}
+      , { field: 'CreateDate', title: '创建日期', sort: true }
+      , { fixed: 'right', align:'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+    ]]
+  });
+
+});
+</script>

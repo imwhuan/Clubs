@@ -1,0 +1,47 @@
+﻿@model IEnumerable<ClubApp.Models.AuditDetail>
+@{
+    ViewBag.Title = "审批明细";
+}
+
+<h2>@ViewBag.Msg</h2>
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>审批记录以用户创建开始，审批结果不代表最终结果</legend>
+</fieldset>
+<ul class="layui-timeline">
+    @foreach (var item in Model)
+    {
+        <li class="layui-timeline-item">
+            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+            <div class="layui-timeline-content layui-text">
+                <h3 class="layui-timeline-title">@item.AuditDate</h3>
+                <p>
+                    姓名：@(item.AuditUser==null?"未知":item.AuditUser.UserName)
+                    <br>审批结果：
+                    @if (item.CheckState == 1)
+                    {
+                        <span style="color:blue">创建</span>
+                    }
+                    else if (item.CheckState == 2)
+                    {
+                        <span style="color:green">通过</span>
+                    }
+                    else if (item.CheckState == 3)
+                    {
+                        <span style="color:red">拒绝</span>
+                    }
+                    else
+                    {
+                        <span>其他</span>
+                    }
+                    <br>备注：@item.AuditDesc
+                </p>
+            </div>
+        </li>
+    }
+    <li class="layui-timeline-item">
+        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+        <div class="layui-timeline-content layui-text">
+            <h3 class="layui-timeline-title">申请编号：@(Model.FirstOrDefault()==null?"未创建":Model.FirstOrDefault().ApplyId.ToString())</h3>          
+        </div>
+    </li>
+</ul>

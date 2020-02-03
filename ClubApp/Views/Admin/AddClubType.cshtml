@@ -1,0 +1,40 @@
+﻿@model ClubApp.Models.ClubType
+@{
+    ViewBag.Title = "添加社团类型";
+}
+
+<h2>添加社团类型</h2>
+<div>
+    @using (Html.BeginForm("AddClubType", "Admin", FormMethod.Post, new { @class = "layui-form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="layui-form-item">
+            @Html.LabelFor(m => m.Name, new { @class = "layui-form-label" })
+            <div class="layui-input-block">
+                @Html.TextBoxFor(m => m.Name, new { @class = "layui-input" })
+                @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="layui-form-item">
+            @Html.LabelFor(m => m.Enable, new { @class = "layui-form-label" })
+            <div class="layui-input-block">
+                <input type="checkbox" name="Enable" lay-skin="switch" lay-text="开启|关闭">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="submit" value="确认" class="layui-btn" />
+            </div>
+        </div>
+    }
+</div>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    layui.use('form', function(){
+  var form = layui.form;
+  
+  //监听提交
+});
+</script>

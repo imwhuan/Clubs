@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/Content/layui/css/layui.css">
+    <script src="~/Content/layui/layui.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <style>
+        .text-danger{
+            color:red;
+        }
+        .layui-logo{
+            position:absolute;
+            left:0;
+            top:0;
+            width:200px;height:100%;
+            line-height:60px;
+            text-align:center;
+            color:#009688;
+            font-size:16px}
+        .layui-breadcrumb{
+            line-height:55px;
+            padding-right:10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="layui-header">
+        <div class="layui-logo">社团综合管理系统</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <span class="layui-breadcrumb layui-layout-right">
+            @Html.ActionLink("登陆", "Login", "Account", new { id = "login-link" })
+            @Html.ActionLink("注册", "Register", "Account", new { id = "reg-link" })
+            <a href="/" id="other-link">其他</a>
+        </span>
+    </div>
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+        @RenderBody()
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © @DateTime.Now.Year <i class="layui-icon layui-icon-engine"></i> imwhuan - 社团综合管理系统
+    </div>
+    <script>
+        //JavaScript代码区域
+        layui.use('element', function () {
+            var element = layui.element;
+
+        });
+    </script>
+</body>
+</html>

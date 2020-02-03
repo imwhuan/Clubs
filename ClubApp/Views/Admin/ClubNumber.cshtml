@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "社团账号池";
+}
+<h2>@ViewBag.Msg</h2>
+<h2>当前共有<span style="color:red;font-size:larger">@ViewBag.Count</span>个社团</h2>
+<p>
+    <a href="~/Admin/AddClubNumber" class="layui-btn"><i class="layui-icon">&#xe608;</i> 添加</a>
+</p>
+<table class="layui-table" lay-data="{height:305, url:'/Admin/ClubsNumberData', page:true, id:'test', skin: 'row', even: true}">
+    <thead>
+        <tr>
+            <th lay-data="{field:'ClubId', width:200, sort: true}">账号</th>
+            <th lay-data="{field:'State', width:100, templet:'#bgstyle'}">状态</th>
+            <th lay-data="{field:'CreateDate', width:200, sort: true}">创建日期</th>
+        </tr>
+    </thead>
+</table>
+<script id="bgstyle" type="text/html">
+    <span style="color: {{d.Style}};">{{ d.State }}</span>
+</script>
+
+<script id="barDemo1" type="text/html">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">工具性按钮</a>
+</script>
+<table class="layui-hide" id="demo" lay-filter="test"></table>
+
+<script>
+    layui.use('table', function () {
+        var table = layui.table;
+    });
+</script>

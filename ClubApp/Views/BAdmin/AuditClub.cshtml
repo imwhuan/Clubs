@@ -1,0 +1,60 @@
+﻿@model IEnumerable<ClubApp.Models.ApplyAudit>
+@{
+    ViewBag.Title = "社团审批";
+}
+
+<h2>@ViewBag.Msg</h2>
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>社团审批</legend>
+</fieldset>
+<div class="layui-form">
+    <table class="layui-table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(m => m.Id)</th>
+                <th>@Html.DisplayNameFor(m => m.Type)</th>
+                <th>@Html.DisplayNameFor(m => m.ApplyUser)</th>
+                <th>@Html.DisplayNameFor(m => m.ApplyDate)</th>
+                <th>@Html.DisplayNameFor(m => m.AuditDate)</th>
+                <th>@Html.DisplayNameFor(m => m.AuditTimes)</th>
+                <th>@Html.DisplayNameFor(m => m.CheckState)</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>@Html.DisplayFor(m => item.Id)</td>
+                <td>@Html.DisplayFor(m => item.Type.Name)</td>
+                <td>@Html.DisplayFor(m => item.ApplyUser.UserName)</td>
+                <td>@Html.DisplayFor(m => item.ApplyDate)</td>
+                <td>@Html.DisplayFor(m => item.AuditDate)</td>
+                <td>@Html.DisplayFor(m => item.AuditTimes)</td>
+                @if (item.CheckState == 1)
+                {
+                    <td style="color:blue">待审批</td>
+                    <td>
+                        @Html.ActionLink("查看记录", "AuditClubDetail", new { id = item.Id }, new { @class = "layui-btn layui-btn-primary layui-btn-xs" })
+                        @Html.ActionLink("开始审批", "AuditClubA", new { id = item.Id }, new { @class = "layui-btn layui-btn-xs" })
+                    </td>
+                }
+                else if (item.CheckState == 2)
+                {
+                    <td style="color:green">通过</td>
+                    <td>
+                        @Html.ActionLink("查看记录", "AuditClubDetail", new { id = item.Id }, new { @class = "layui-btn layui-btn-primary layui-btn-xs" })
+                    </td>
+                }
+                else if (item.CheckState == 3)
+                {
+                    <td style="color:red">拒绝</td>
+                    <td>
+                        @Html.ActionLink("查看记录", "AuditClubDetail", new { id = item.Id }, new { @class = "layui-btn layui-btn-primary layui-btn-xs" })
+                    </td>
+                }
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

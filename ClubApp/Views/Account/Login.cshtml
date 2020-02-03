@@ -1,0 +1,155 @@
+﻿@model ClubApp.Models.LoginViewModel
+@{
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+    ViewBag.Title = "登陆";
+}
+<style type="text/css">
+    .text-danger{color:red;}
+    @@keyframes brandimg {
+    0% {
+        top: 0
+    }
+
+    50% {
+        top: -150px
+    }
+
+    100% {
+        top: 0
+    }
+}
+
+.text-danger {
+    color: #f00;
+    font-size: smaller;
+}
+
+.brand-fa {
+    margin: 0 auto;
+    height: 50px;
+    width: 100px;
+    position: relative;
+}
+
+.brand {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    z-index: 30;
+}
+
+.brand-jump {
+    animation: brandimg 1s normal;
+}
+
+.brand img {
+    width: 100%;
+}
+.login-div {
+    z-index: 20;
+    box-shadow: lightgray 0 0 20px;
+    border-radius: 6px;
+    background-color: #fff;
+    position: relative;
+    transition: all 1s;
+    padding: 50px 15px 15px 0;
+}
+
+.login-other {
+    padding-left: 15px;
+}
+
+.login-other a {
+    margin: 10px;
+}
+
+.login-style1 {
+    z-index: 10;
+    width: 80%;
+    height: 20px;
+    margin: -10px auto 0;
+    box-shadow: lightgray 0 0 20px;
+    border-radius: 6px;
+    background-color: #fff;
+    position: relative;
+    transition: all 1s
+}
+</style>
+<h2>Login</h2>
+<div class="layui-row">
+    
+    <div class="layui-col-md4 layui-col-md-offset4 layui-col-sm6 layui-col-sm-offset3">
+        <div class="brand-fa">
+            <div id="brand" class="brand">
+                <img src="~/Content/images/kodinger.jpg" />
+            </div>
+        </div>
+        <div class="login-div">
+            @using (Html.BeginForm("Login", "Account",new { ReturnUrl = ViewBag.ReturnUrl },FormMethod.Post, new { @class = "layui-form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="layui-form-item">
+                    @Html.LabelFor(m => m.UserName, new { @class = "layui-form-label" })
+                    <div class="layui-input-block">
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "layui-input" })
+                        @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    @Html.LabelFor(m => m.Password, new { @class = "layui-form-label" })
+                    <div class="layui-input-block">
+                        @Html.PasswordFor(m => m.Password, new { @class = "layui-input" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    @Html.LabelFor(m => m.RememberMe, new { @class = "layui-form-label" })
+                    <div class="layui-input-block">
+                        <input type="checkbox" name="RememberMe" lay-skin="switch" value="true" lay-text="开启|关闭">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="submit" value="登陆" class="layui-btn" />
+                        <input type="button" onclick="brandjump()" value="注册" class="layui-btn" />
+                    </div>
+                </div>
+                <div class="login-other">
+                    <blockquote class="layui-elem-quote">使用其他方式登陆</blockquote>
+                    <blockquote class="layui-elem-quote layui-quote-nm">
+                        <div class="layui-row">
+                            <a href="#" class="layui-col-md4 layui-col-sm6"><i class="layui-icon layui-icon-cellphone"></i> 电话号码</a>
+                            <a href="#" class="layui-col-md4 layui-col-sm6"><i class="layui-icon layui-icon-login-qq"></i> 腾讯QQ</a>
+                            <a href="#" class="layui-col-md4 layui-col-sm6"><i class="layui-icon layui-icon-login-wechat"></i> 微信</a>
+                            <a href="#" class="layui-col-md4 layui-col-sm6"><i class="layui-icon layui-icon-login-weibo"></i> 微博</a>
+                            <a href="#" class="layui-col-md4 layui-col-sm6"><i class="layui-icon layui-icon-water"></i> 其他</a>
+                        </div>
+                    </blockquote>
+                </div>
+            }
+        </div>
+        <div class="login-style1">
+
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    $("#login-link").removeAttr("href").text("").append("<cite>登陆</cite>")
+    function brandjump() {
+        $("#brand").addClass("brand-jump");
+        setTimeout(function () {
+            $("#brand").removeClass("brand-jump");
+        }, 1000);
+    }
+    //Demo
+layui.use('form', function(){
+  var form = layui.form;
+  
+  //监听提交
+});
+</script>

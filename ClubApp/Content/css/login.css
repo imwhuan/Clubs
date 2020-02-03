@@ -1,0 +1,57 @@
+﻿@keyframes brandimg {
+    0% {
+        top: 0
+    }
+
+    50% {
+        top: -150px
+    }
+
+    100% {
+        top: 0
+    }
+}
+
+.text-danger {
+    color: #f00;
+    font-size: smaller;
+}
+
+.brand-fa {
+    margin: 0 auto;
+    height: 50px;
+    width: 100px;
+    position: relative;
+}
+
+.brand {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    z-index: 30;
+}
+
+.brand-jump {
+    animation: brandimg 1s normal;
+}
+
+.brand img {
+    width: 100%;
+}
+.login-div {
+    z-index: 20;
+    box-shadow: lightgray 0 0 20px;
+    border-radius: 6px;
+    background-color: #fff;
+    position: relative;
+    transition: all 1s
+}
+
+.login-style1 {
+    z-index: 10;
+    width: 80%;
+    height: 20px;
+    margin: -10px auto 0;
+}

@@ -1,0 +1,56 @@
+﻿@model IEnumerable<ClubApp.Models.ClubType>
+@{
+    ViewBag.Title = "社团类型";
+}
+    <h2>@ViewBag.Msg</h2>
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>当前共有<span style="color:red;font-size:larger"> @Model.Count() </span>个社团类型</legend>
+    </fieldset>
+    <p>
+        <a href="~/Admin/AddClubType" class="layui-btn"><i class="layui-icon">&#xe608;</i> 添加</a>
+    </p>
+    <div class="layui-form">
+        <table class="layui-table">
+            <colgroup>
+                <col width="150">
+                <col width="200">
+                <col width="200">
+                <col>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(m => m.Id)</th>
+                    <th>@Html.DisplayNameFor(m => m.Name)</th>
+                    <th>@Html.DisplayNameFor(m => m.Enable)</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>@Html.DisplayFor(m => item.Id)</td>
+                    <td>@Html.DisplayFor(m => item.Name)</td>
+                    @if (item.Enable == 1)
+                    {
+                        <td style="color:green">已启用</td>
+                        <td>
+                            @Html.ActionLink("关闭", "ClubTypeClose", new { id = item.Id }, new { @class = "layui-btn layui-btn-primary layui-btn-xs" })
+                            <span style="margin:0 10px">|</span>
+                            @Html.ActionLink("删除", "ClubTypeDelete", new { id = item.Id }, new { @class = "layui-btn layui-btn-danger layui-btn-xs" })
+                        </td>
+                    }
+                    else
+                    {
+                        <td style="color:red">未启用</td>
+                        <td>
+                            @Html.ActionLink("启用", "ClubTypeOpen", new { id = item.Id }, new { @class = "layui-btn layui-btn-xs" })
+                            <span style="margin:0 10px">|</span>
+                            @Html.ActionLink("删除", "ClubTypeDelete", new { id = item.Id }, new { @class = "layui-btn layui-btn-danger layui-btn-xs" })
+                        </td>
+                    }
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>

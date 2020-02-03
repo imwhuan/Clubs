@@ -1,0 +1,63 @@
+﻿@model ClubApp.Models.DelClubTypeModel
+@{
+    ViewBag.Title = "社团类型删除";
+}
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>社团类型[ @Model.TypeName ]下共有<span style="color:red;font-size:larger"> @Model.clubs.Count() </span>个社团</legend>
+</fieldset>
+<div class="layui-form">
+    <table class="layui-table">
+        <colgroup>
+            <col width="150">
+            <col width="200">
+            <col width="200">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th>社团编号</th>
+                <th>社团名</th>
+                <th>状态</th>
+                <th>创建日期</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.clubs)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(m => item.ClubId)</td>
+                    <td>@Html.DisplayFor(m => item.ClubName)</td>
+                    <td>@Html.DisplayFor(m => item.State)</td>
+                    <td>@Html.DisplayFor(m => item.CreateDate)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@if (Model.clubs.Count() > 0)
+{
+    <blockquote class="layui-elem-quote">
+        由于该社团类型下仍然存在积极活跃的小社团，所以不可以删除人家了啦~
+        <i class="layui-icon layui-icon-tree" style="font-size:xx-large"></i>
+    </blockquote>
+}
+else
+{
+    <blockquote class="layui-elem-quote layui-quote-nm">
+        <i class="layui-icon layui-icon-tips" style="font-size:xx-large;color:red"></i>
+        是否确认要删除该社团类型？（该操作不可恢复！）<br />
+        删除指定社团类型后，将无法申请为该类型的社团。
+        <br>
+        <div style="margin-top:10px">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <input type="submit" value="确认删除" class="layui-btn layui-btn-danger" />
+            }
+        </div>
+    </blockquote>
+}
+<blockquote class="layui-elem-quote">
+    @Html.ActionLink("返回", "ClubType", null, new { @class="layui-btn"})
+</blockquote>

@@ -1,0 +1,66 @@
+﻿@model ClubApp.Models.AllTypeModel
+@{
+    ViewBag.Title = "申请通道删除";
+}
+
+<h2>暂不允许申请通道删除</h2>
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>申请类型[ @Model.TypeName ]下共有<span style="color:red;font-size:larger"> @Model.Data.Count() </span>个进行中的任务</legend>
+</fieldset>
+<div class="layui-form">
+    <table class="layui-table">
+        <colgroup>
+            <col width="150">
+            <col width="200">
+            <col width="200">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th>任务编号</th>
+                <th>申请类型</th>
+                <th>申请进度</th>
+                <th>创建日期</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Data)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(m => item.Id)</td>
+                    <td>@Html.DisplayFor(m => item.Type)</td>
+                    <td>@Html.DisplayFor(m => item.CheckState)</td>
+                    <td>@Html.DisplayFor(m => item.ApplyDate)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@if (Model.Data.Count() > 0)
+{
+    <blockquote class="layui-elem-quote">
+        由于该申请通道下仍然存在未完成的任务，所以不可以删除人家了啦~
+        <i class="layui-icon layui-icon-tree" style="font-size:xx-large"></i>
+    </blockquote>
+}
+else
+{
+    <blockquote class="layui-elem-quote layui-quote-nm">
+        <span style="font-size:xx-large;color:red"><i class="layui-icon layui-icon-tips" style="font-size:xx-large"></i>暂不允许删除</span><br />
+        是否确认要删除该申请类型？（该操作不可恢复！）<br />
+        删除指定申请类型后，用户将无法进行该类型任务的申请。<br />
+        强烈建议使用[关闭]该任务类型代替[删除]操作！
+        <br>
+        <div style="margin-top:10px">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <input type="submit" value="确认删除" disabled class="layui-btn layui-btn-disabled" />
+            }
+        </div>
+    </blockquote>
+}
+<blockquote class="layui-elem-quote">
+    @Html.ActionLink("返回", "ApplyType", null, new { @class = "layui-btn" })
+</blockquote>

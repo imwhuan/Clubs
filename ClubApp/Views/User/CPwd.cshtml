@@ -1,0 +1,63 @@
+﻿@model ClubApp.Models.CPassWorldModel
+@{
+    ViewBag.Title = "基本信息";
+}
+<style>
+    .diy-inline {
+        display: inline-block;
+        float: left;
+    }
+</style>
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>修改密码</legend>
+</fieldset>
+@if (ViewBag.Msg != null)
+{
+    <blockquote class="layui-elem-quote layui-quote-nm">
+        @ViewBag.Msg
+    </blockquote>
+}
+@using (Html.BeginForm("CPwd", "User", FormMethod.Post, new { @class = "layui-form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.OldPwd, new { @class = "layui-form-label" })
+        <div class="layui-input-inline">
+            @Html.PasswordFor(m => m.OldPwd, new { @class = "layui-input" })
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+            @Html.ValidationMessageFor(m => m.OldPwd, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.NewPwd, new { @class = "layui-form-label" })
+        <div class="layui-input-inline">
+            @Html.PasswordFor(m => m.NewPwd, new { @class = "layui-input" })
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+            @Html.ValidationMessageFor(m => m.NewPwd, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.RePwd, new { @class = "layui-form-label" })
+        <div class="layui-input-inline">
+            @Html.PasswordFor(m => m.RePwd, new { @class = "layui-input" })
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+            @Html.ValidationMessageFor(m => m.RePwd, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="submit" value="保存" class="layui-btn" />
+        </div>
+    </div>
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    layui.use('form', function () {
+        var form = layui.form;
+    });
+</script>

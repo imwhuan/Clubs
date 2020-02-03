@@ -1,0 +1,58 @@
+﻿@using Microsoft.AspNet.Identity
+
+@if (Request.IsAuthenticated)
+{
+    string img = "/Content/layui/images/face/1.gif";
+    string name = User.Identity.Name;
+    if (((System.Security.Claims.ClaimsIdentity)User.Identity).FindFirst(System.Security.Claims.ClaimTypes.UserData) != null)
+    {
+        img = ((System.Security.Claims.ClaimsIdentity)User.Identity).FindFirst(System.Security.Claims.ClaimTypes.UserData).Value;
+    }
+    if (((System.Security.Claims.ClaimsIdentity)User.Identity).FindFirst(System.Security.Claims.ClaimTypes.GivenName) != null)
+    {
+        name = ((System.Security.Claims.ClaimsIdentity)User.Identity).FindFirst(System.Security.Claims.ClaimTypes.GivenName).Value;
+    }
+    <ul class="layui-nav layui-layout-right">
+        <li class="layui-nav-item">
+            <a href="javascript:;">
+                <img src="@img" class="layui-nav-img">
+                @name
+            </a>
+            <dl class="layui-nav-child">
+                <dd>@Html.ActionLink("个人主页", "Index", "User")</dd>
+                <dd>@Html.ActionLink("基本资料", "UMsg", "User")</dd>
+                <dd>@Html.ActionLink("密码更改", "CPwd", "User")</dd>
+                <dd><a href="">安全设置</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item"><a href="JavaScript:signout()">臣退了</a></li>
+    </ul>
+}
+else
+{
+    <ul class="layui-nav layui-layout-right">
+        <li class="layui-nav-item">
+            @Html.ActionLink("注册", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
+        </li>
+        <li class="layui-nav-item">
+            @Html.ActionLink("登录", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+        </li>
+    </ul>
+}
+<script type="text/javascript">
+    function signout() {
+        $.ajax({
+            type: "post",
+            data: "",
+            url: "/Account/LogOff",
+            dataType: "text",
+            contentType: "application/json",
+            success: function (res) {
+                window.location.reload();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("操作失败," + errorThrown)
+            }
+        })
+    }
+</script>

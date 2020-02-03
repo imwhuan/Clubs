@@ -1,0 +1,43 @@
+﻿@model ClubApp.Models.AddUserNumModel
+
+@{
+    ViewBag.Title = "添加社团账号";
+}
+
+<h2>社团账号</h2>
+
+@using (Html.BeginForm("AddClubNumber", "Admin", FormMethod.Post, new { @class = "layui-form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.NowNum, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            @Html.TextBoxFor(m => m.NowNum, new { @class = "layui-input", @disabled = "disabled" })
+            @Html.ValidationMessageFor(m => m.NowNum, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.MinNum, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            @Html.TextBoxFor(m => m.MinNum, new { @class = "layui-input" })
+            @Html.ValidationMessageFor(m => m.MinNum, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.MaxNum, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            @Html.TextBoxFor(m => m.MaxNum, new { @class = "layui-input" })
+            @Html.ValidationMessageFor(m => m.MaxNum, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="submit" value="添加" class="layui-btn" />
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "ClubNumber")
+</div>

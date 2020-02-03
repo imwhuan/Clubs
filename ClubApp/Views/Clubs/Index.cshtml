@@ -1,0 +1,37 @@
+﻿@model IEnumerable<ClubApp.Models.ClubNumber>
+@{
+    ViewBag.Title = "社团";
+}
+
+    <h2>当前共有<span style="color:red;font-size:larger">@Model.Count()</span>个社团</h2>
+
+    <table class="layui-table">
+        <colgroup>
+            <col width="10%">
+            <col width="20%">
+            <col width="40%">
+            <col width="20%" />
+            <col width="10%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>编号</th>
+                <th>名称</th>
+                <th>描述</th>
+                <th>创建时间</th>
+                <th>创建人</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.ClubId)</td>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.ShortDesc)</td>
+                <td>@Html.DisplayFor(modelItem => item.CreateDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.User.UserName)</td>
+            </tr>
+            }
+        </tbody>
+    </table>

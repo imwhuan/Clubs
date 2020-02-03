@@ -1,0 +1,99 @@
+﻿@model ClubApp.Models.UserNumber
+@{
+    ViewBag.Title = "基本信息";
+}
+<style>
+    .diy-inline {
+        display: inline-block;
+        float: left;
+    }
+</style>
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>基本信息</legend>
+</fieldset>
+@if (ViewBag.Msg != null)
+{
+<blockquote class="layui-elem-quote layui-quote-nm">
+    @ViewBag.Msg
+</blockquote>
+}
+@using (Html.BeginForm("UMsg", "User", FormMethod.Post, new { @class = "layui-form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.UserName, new { @class = "layui-form-label" })
+        <div class="layui-input-inline">
+            <input type="text" name="UserName" value="@Model.UserName" required lay-verify="required|maxlength10" class="layui-input" placeholder="1-30个字符" />
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+            一个好听的名字足以让自己赢在起跑线上
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Gender, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            <div class="diy-inline">
+                @Html.RadioButtonFor(m => m.Gender, 0, new { id = "s1", title = "保密" })
+                @Html.RadioButtonFor(m => m.Gender, 1, new { id = "s2", title = "男" })
+                @Html.RadioButtonFor(m => m.Gender, 2, new { id = "s3", title = "女" })
+            </div>
+
+            <div class="layui-form-mid layui-word-aux">
+                人们都说男女有别，这是真的么？
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Birthday, new { @class = "layui-form-label" })
+        <div class="layui-input-inline">
+            @if (Model.Birthday.HasValue)
+            {
+                <input type="text" name="Birthday" autocomplete="off" class="layui-input" value="@(((DateTime)Model.Birthday).ToString("yyyy-MM-dd"))" id="test1">
+            }
+            else
+            {
+                <input type="text" name="Birthday" autocomplete="off" class="layui-input" placeholder="点击这里选择日期" id="test1">
+            }
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+            会有多少人和我同一天生日呢？真是令人期待
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.ShortDesc, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            @Html.TextBoxFor(m => m.ShortDesc, new { @class = "layui-input", placeholder = "最多100个字符" })
+        </div>
+        @Html.ValidationMessageFor(m => m.ShortDesc, "", new { @class = "text-danger" })
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Desc, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            @Html.TextAreaFor(m => m.Desc, new { @class = "layui-textarea", placeholder = "对自己有趣的描述更容易获得异性的青睐哦~~~" })
+        </div>
+        @Html.ValidationMessageFor(m => m.Desc, "", new { @class = "text-danger" })
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="submit" value="保存" class="layui-btn" />
+        </div>
+    </div>
+}
+<script>
+    layui.use(['form', 'laydate'], function () {
+        var form = layui.form
+            , laydate = layui.laydate;
+        form.verify({
+            maxlength10: function (value, item) {
+                if (value.length > 10) {
+                    return '输入字符数不能超过10个！'
+                }
+            }
+        })
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test1' //指定元素
+        });
+    });
+</script>

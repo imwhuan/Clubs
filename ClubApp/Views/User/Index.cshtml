@@ -1,0 +1,61 @@
+﻿@model ClubApp.Models.UserIndexModel
+@{
+    ViewBag.Title = "个人中心";
+}
+<style>
+    .font-size-100{
+        font-size:100px;
+    }
+</style>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>账号： @Model.UserId </legend>
+</fieldset>
+
+<div style="padding: 20px; background-color: #F2F2F2;">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">昵称： @Model.UserName 状态： @Model.Online</div>
+                <div class="layui-card-body">
+                    <img src="@Model.HeadImg" /> <br />
+                    真实姓名： @Model.RelName <br />
+                    性别： @Model.Gender <br />
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">注册日期： @(Model.CreateDate == null ? "未知" : Model.CreateDate.ToString()) | 注册天数： @Model.SysAge </div>
+                <div class="layui-card-body">
+                    学院： @Model.Coloege <br />
+                    班级： @Model.Class <br />
+                    最后登陆日期： @(Model.LoginDate == null ? "未知" : Model.LoginDate.ToString())
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">@Model.Coloege | @Model.Role | @Model.Label</div>
+                <div class="layui-card-body">
+                    @Model.ShortDesc
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header"><i class="layui-icon layui-icon-star"></i>简介</div>
+                <div class="layui-card-body">
+                    @Model.Desc
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header"><i class="layui-icon layui-icon-star"></i>我参加的社团</div>
+                <div class="layui-card-body">
+                    @Model.Desc
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
