@@ -42,6 +42,10 @@ namespace ClubApp.Controllers
         {
             return View(db.ClubNumbers.Where(c => c.State == (int)EnumState.正常).ToList());
         }
+        public ActionResult Club()
+        {
+            return View();
+        }
         public ActionResult ApplyClub(string Msg = "")
         {
             if (!string.IsNullOrEmpty(Msg))

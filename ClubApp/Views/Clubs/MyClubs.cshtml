@@ -9,7 +9,7 @@
 </fieldset>
 <table id="demo" lay-filter="test"></table>
 <script type="text/html" id="clubTpl">
-    <a href="/detail/{{d.ClubId}}" class="layui-table-link">{{d.Club}}</a>
+    <a href="/Clubs/Club?cid={{d.ClubId}}" class="layui-table-link">{{d.Club}}</a>
 </script>
 <script type="text/html" id="barDemo">
     <!-- 这里同样支持 laytpl 语法，如： -->
@@ -44,4 +44,5 @@ layui.use('table', function(){
   });
 
 });
+    $("#c4").addClass("layui-this");
 </script>

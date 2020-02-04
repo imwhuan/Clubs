@@ -4,6 +4,7 @@ namespace ClubApp.Models
 {
     public class ClubViewModel
     {
+        
     }
     public class UserClubModel
     {

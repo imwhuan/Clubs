@@ -338,6 +338,7 @@
     <Content Include="Views\BAdmin\AuditClubDetail.cshtml" />
     <Content Include="Views\User\UMsg.cshtml" />
     <Content Include="Views\User\CPwd.cshtml" />
+    <Content Include="Views\Clubs\Club.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

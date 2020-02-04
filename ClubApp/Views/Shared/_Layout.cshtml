@@ -45,29 +45,36 @@
             <div class="layui-side-scroll">
                 <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
                 <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="layui-nav-item layui-nav-itemed">
+                            <a class="" href="javascript:;">超级管理员控制</a>
+                            <dl class="layui-nav-child">
+                                <dd id="a1">@Html.ActionLink("用户账号池", "UserNumber", "Admin")</dd>
+                                <dd id="a2">@Html.ActionLink("社团账号池", "ClubNumber", "Admin")</dd>
+                                <dd id="a3">@Html.ActionLink("社团类型管理", "ClubType", "Admin")</dd>
+                            </dl>
+                        </li>
+                    }
+                    @if (User.IsInRole("Admin")||User.IsInRole("BAdmin"))
+                    {
+                        <li class="layui-nav-item layui-nav-itemed">
+                            <a class="" href="javascript:;">管理员控制</a>
+                            <dl class="layui-nav-child">
+                                <dd id="b1">@Html.ActionLink("社团创建审批", "AuditClub", "BAdmin")</dd>
+                                <dd id="b2">@Html.ActionLink("社团活动审批", "ClubNumber", "Admin")</dd>
+                                <dd id="b3">@Html.ActionLink("系统公告", "ClubType", "Admin")</dd>
+                            </dl>
+                        </li>
+                    }
+
                     <li class="layui-nav-item layui-nav-itemed">
-                        <a class="" href="javascript:;">超级管理员控制</a>
-                        <dl class="layui-nav-child">
-                            <dd>@Html.ActionLink("用户账号池", "UserNumber", "Admin")</dd>
-                            <dd>@Html.ActionLink("社团账号池", "ClubNumber", "Admin")</dd>
-                            <dd>@Html.ActionLink("社团类型管理", "ClubType", "Admin")</dd>
-                        </dl>
-                    </li>
-                    <li class="layui-nav-item layui-nav-itemed">
-                        <a class="" href="javascript:;">管理员控制</a>
-                        <dl class="layui-nav-child">
-                            <dd>@Html.ActionLink("社团创建审批", "AuditClub", "BAdmin")</dd>
-                            <dd>@Html.ActionLink("社团活动审批", "ClubNumber", "Admin")</dd>
-                            <dd>@Html.ActionLink("系统公告", "ClubType", "Admin")</dd>
-                        </dl>
-                    </li>
-                    <li class="layui-nav-item">
                         <a href="javascript:;">社团</a>
                         <dl class="layui-nav-child">
-                            <dd>@Html.ActionLink("社团查询", "Index", "Clubs")</dd>
-                            <dd>@Html.ActionLink("加入社团", "JoinClub", "Clubs")</dd>
-                            <dd>@Html.ActionLink("创建社团", "ApplyClub", "Clubs")</dd>
-                            <dd>@Html.ActionLink("管理我的社团", "MyClubs", "Clubs")</dd>
+                            <dd id="c1">@Html.ActionLink("社团查询", "Index", "Clubs")</dd>
+                            <dd id="c2">@Html.ActionLink("加入社团", "JoinClub", "Clubs")</dd>
+                            <dd id="c3">@Html.ActionLink("创建社团", "ApplyClub", "Clubs")</dd>
+                            <dd id="c4">@Html.ActionLink("管理我的社团", "MyClubs", "Clubs")</dd>
                         </dl>
                     </li>
                     <li class="layui-nav-item"><a href="">我是社长</a></li>

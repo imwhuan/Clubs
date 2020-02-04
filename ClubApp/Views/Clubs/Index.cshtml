@@ -27,7 +27,7 @@
             {
             <tr>
                 <td>@Html.DisplayFor(modelItem => item.ClubId)</td>
-                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td><a href="~/Clubs/Club?cid=@item.ClubId">@Html.DisplayFor(modelItem => item.Name)</a> </td>
                 <td>@Html.DisplayFor(modelItem => item.ShortDesc)</td>
                 <td>@Html.DisplayFor(modelItem => item.CreateDate)</td>
                 <td>@Html.DisplayFor(modelItem => item.User.UserName)</td>
@@ -35,3 +35,6 @@
             }
         </tbody>
     </table>
+<script>
+    $("#c1").addClass("layui-this");
+</script>
