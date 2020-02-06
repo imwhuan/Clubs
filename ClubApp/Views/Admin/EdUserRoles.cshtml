@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewBag.Title = "角色控制";
+}
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>我的社团</legend>
+</fieldset>
+<table id="demo" lay-filter="test"></table>
+<script type="text/html" id="clubTpl">
+    <a href="/Clubs/Club?cid={{d.ClubId}}" class="layui-table-link">{{d.Club}}</a>
+</script>
+<script type="text/html" id="barDemo">
+    <!-- 这里同样支持 laytpl 语法，如： -->
+    {{#  if(d.ifup){ }}
+    <input type="button" onclick="JavaScript: SetBAdmin(this, '{{d.id}}')" class="layui-btn layui-btn-xs" value="任命管理员" />
+    <input type="button" style="display:none;margin-left:0" onclick="JavaScript: CancelBAdmin(this, '{{d.id}}')" class="layui-btn layui-btn-xs layui-btn-danger" value="取消管理员" />
+    {{#  } else{}}
+    <input type="button" style="display:none" onclick="JavaScript: SetBAdmin(this, '{{d.id}}')" class="layui-btn layui-btn-xs" value="任命管理员" />
+    <input type="button" style="margin-left:0" onclick="JavaScript: CancelBAdmin(this, '{{d.id}}')" class="layui-btn layui-btn-xs layui-btn-danger" value="取消管理员" />
+    {{# } }}
+</script>
+<script>
+    layui.use('table', function () {
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            , height: 312
+            , url: '/GetData/UserSimpleData' //数据接口
+            , page: true //开启分页
+            , cols: [[ //表头
+                { field: 'id', title: '用户账户', sort: true }
+                , { field: 'name', title: '邮箱' }
+                , { field: 'roles', title: '已承担角色', sort: true }
+                , { fixed: 'right', align: 'center', toolbar: '#barDemo' } //这里的toolbar值是模板元素的选择器
+            ]]
+        });
+
+    });
+    function SetBAdmin(btn,u) {
+        $.post("/Admin/SetBAdmin", {"uid":u}, function (data) {
+            if (data == "OK") {
+                $(btn).hide();
+                $(btn).next().show();
+                var roles = $(btn).parents("tr").children("td").eq(2).children("div");
+                if (roles.html() == "无") {
+                    roles.html("BAdmin")
+                }
+                else {
+                    roles.html()+="/BAdmin"
+                }
+                layer.msg(u+"任命管理员成功");
+            }
+            else {            
+                layer.msg(data);
+            }
+        })
+    }
+    function CancelBAdmin(btn,u) {
+        $.post("/Admin/CancelBAdmin", {"uid":u}, function (data) {
+            if (data == "OK") {
+                $(btn).hide();
+                $(btn).prev().show();
+                var roles = $(btn).parents("tr").children("td").eq(2).children("div");
+                if (roles.html() == "BAdmin") {
+                    roles.html("无")
+                }
+                else {
+                    roles.html(roles.html()+"/已移除BAdmin")
+                }
+                layer.msg(u+"取消管理员成功");
+            }
+            else {            
+                layer.msg(data);
+            }
+        })
+    }
+</script>
