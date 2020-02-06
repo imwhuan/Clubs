@@ -59,6 +59,14 @@ namespace ClubApp.Models
         /// 公告
         /// </summary>
         public virtual DbSet<AnnounceMent> AnnounceMents { get; set; }
+        /// <summary>
+        /// 投票活动
+        /// </summary>
+        public virtual DbSet<Vote> Votes { get; set; }
+        /// <summary>
+        /// 投票记录
+        /// </summary>
+        public virtual DbSet<Voting> Votings { get; set; }
     }
     public class AppUser : IdentityUser
     {
@@ -110,7 +118,7 @@ namespace ClubApp.Models
         public virtual Coloege Coloege { get; set; }
         [Display(Name = "班级"), MaxLength(30)]
         public string Class { get; set; }
-        [MaxLength(30), Display(Name = "真实姓名")]
+        [MaxLength(20), Display(Name = "学号")]
         public string RelName { get; set; }
         [Display(Name = "性别")]
         public int? Gender { get; set; }
@@ -272,5 +280,39 @@ namespace ClubApp.Models
         [MaxLength(50), Display(Name = "职位名称")]
         public string Name { get; set; }
         public int? Enable { get; set; }
+    }
+    public class Vote
+    {
+        [Key, Display(Name = "编号"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        [MaxLength(100), Display(Name = "标题")]
+        public string Title { get; set; }
+        [MaxLength(200), Display(Name = "简介")]
+        public string ShortDesc { get; set; }
+        [MaxLength(500), Display(Name = "说明")]
+        public string LongDesc { get; set; }
+        [Display(Name = "得票")]
+        public int Votes { get; set; }
+        [Display(Name = "开始日期")]
+        public DateTime BeginDate { get; set; }
+        [Display(Name = "截至日期")]
+        public DateTime EndDate { get; set; }
+        public virtual UserNumber User { get; set; }
+        public virtual ClubNumber Club { get; set; }
+        [Display(Name ="状态")]
+        public int State { get; set; }
+        [Display(Name ="标识")]
+        public int uorc { get; set; }
+    }
+    public class Voting
+    {
+        [Key,Display(Name ="编号"),DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        [Display(Name ="活动")]
+        public int VoteId { get; set; }
+        [MaxLength(10),Display(Name ="用户")]
+        public string UserId { get; set; }
+        [Display(Name ="创建日期")]
+        public DateTime CreateDate { get; set; }
     }
 }

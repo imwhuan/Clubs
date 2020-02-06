@@ -29,14 +29,19 @@
             <ul class="layui-nav layui-layout-left">
                 <li class="layui-nav-item"><a href="">控制台</a></li>
                 <li class="layui-nav-item"><a href="">商品管理</a></li>
-                <li class="layui-nav-item"><a href="">用户</a></li>
-                <li class="layui-nav-item">
-                    <a href="javascript:;">变量控制</a>
-                    <dl class="layui-nav-child">
-                        <dd>@Html.ActionLink("申请递交通道", "ApplyType", "Admin")</dd>
-                        <dd><a href="">授权管理</a></dd>
-                    </dl>
-                </li>
+                @if (User.IsInRole("Admin"))
+                {
+                    <li class="layui-nav-item"><a href="">用户</a></li>
+                    <li class="layui-nav-item">
+                        <a href="javascript:;">变量控制</a>
+                        <dl class="layui-nav-child">
+                            <dd>@Html.ActionLink("申请递交通道", "ApplyType", "Admin")</dd>
+                            <dd>@Html.ActionLink("权限控制", "EdUserRoles", "Admin")</dd>
+                            <dd>@Html.ActionLink("系统初始化", "AdminFirstSet", "Admin")</dd>
+                        </dl>
+                    </li>
+                }
+
             </ul>
             @Html.Partial("_LoginPartial")
         </div>
@@ -78,7 +83,7 @@
                         </dl>
                     </li>
                     <li class="layui-nav-item"><a href="">我是社长</a></li>
-                    <li class="layui-nav-item"><a href="">发布商品</a></li>
+                    <li class="layui-nav-item"><a href="">活动投票</a></li>
                 </ul>
             </div>
         </div>

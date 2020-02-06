@@ -1,8 +1,13 @@
 ﻿using ClubApp.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 
 namespace ClubApp.Controllers
@@ -10,12 +15,178 @@ namespace ClubApp.Controllers
     [Authorize]
     public class AdminController : Controller
     {
+        #region 初始化用户/角色/登陆管理器
+        private AppSignInManager _signInManager;
+        private AppUserManager _userManager;
+        private AppRoleManager _roleManager;
+
+        public AdminController()
+        {
+        }
+
+        public AdminController(AppUserManager userManager, AppSignInManager signInManager, AppRoleManager roleManager)
+        {
+            UserManager = userManager;
+            SignInManager = signInManager;
+            RoleManager = roleManager;
+
+        }
+
+        public AppSignInManager SignInManager
+        {
+            get
+            {
+                return _signInManager ?? HttpContext.GetOwinContext().Get<AppSignInManager>();
+            }
+            private set
+            {
+                _signInManager = value;
+            }
+        }
+
+        public AppUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<AppUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
+        public AppRoleManager RoleManager
+        {
+            get
+            {
+                return _roleManager ?? HttpContext.GetOwinContext().Get<AppRoleManager>();
+            }
+            private set
+            {
+                _roleManager = value;
+            }
+        }
+
         AppDbContext db = new AppDbContext();
+        #endregion
         // GET: Admin
         public ActionResult Index()
         {
             return View();
         }
+
+        [Authorize(Roles ="Admin")]
+        /// <summary>
+        /// 一键初始化，为项目填充初始数据
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult AdminFirstSet()
+        {
+            ViewBag.Msg = "执行结果：";
+            //设置角色
+            if (!RoleManager.RoleExists("BAdmin"))
+            {
+                RoleManager.Create(new IdentityRole("BAdmin"));
+                ViewBag.Msg += "角色初始化成功；";
+            }
+            else
+            {
+                ViewBag.Msg += "角色初始化失败；";
+            }
+            //申请通道
+            if (db.ApplyTypes.Count() == 0)
+            {
+                List<ApplyType> types = new List<ApplyType>()
+                {
+                    new ApplyType(){Name = "注册社团", Enable = 1},
+                    new ApplyType(){Name = "注销社团", Enable = 1},
+                    new ApplyType(){Name = "加入社团", Enable = 1},
+                    new ApplyType(){Name = "退出社团", Enable = 1},
+                };
+                db.ApplyTypes.AddRange(types);
+                ViewBag.Msg += "申请通道初始化成功；";
+            }
+            else
+            {
+                ViewBag.Msg += "申请通道初始化失败；";
+            }
+            //社团类型
+            if (db.ClubTypes.Count() == 0)
+            {
+                ClubType club = new ClubType() { Name = "无", Enable = 0 };
+                db.ClubTypes.Add(club);
+                ViewBag.Msg += "社团类型初始化成功；";
+            }
+            else
+            {
+                ViewBag.Msg += "社团类型初始化失败；";
+            }
+            //社团职位
+            if (db.UserStatuses.Count() == 0)
+            {
+                List<UserStatus> types = new List<UserStatus>()
+                {
+                    new UserStatus(){Name = "社长", Enable = 1},
+                    new UserStatus(){Name = "秘书", Enable = 1},
+                    new UserStatus(){Name = "优秀会员", Enable = 1},
+                    new UserStatus(){Name = "会员", Enable = 1},
+                };
+                db.UserStatuses.AddRange(types);
+                ViewBag.Msg += "社团职位初始化成功；";
+            }
+            else
+            {
+                ViewBag.Msg += "社团职位初始化失败；";
+            }
+            db.SaveChanges();
+            return View();
+        }
+
+        public ActionResult EdUserRoles()
+        {
+            return View();
+        }
+        public string SetBAdmin(string uid)
+        {
+            try
+            {
+                var u = UserManager.FindByName(uid);
+                if (u != null)
+                {
+                    UserManager.AddToRole(u.Id, "BAdmin");
+                    return "OK";
+                }
+                else
+                {
+                    return "用户" + uid + "不存在";
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }      
+        }
+        public string CancelBAdmin(string uid)
+        {
+            try
+            {
+                var u = UserManager.FindByName(uid);
+                if (u != null)
+                {
+                    UserManager.RemoveFromRole(u.Id, "BAdmin");
+                    return "OK";
+                }
+                else
+                {
+                    return "用户" + uid + "不存在";
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
         #region 用户账号管理
         public ActionResult UserNumber(string Msg = "")
         {
@@ -28,7 +199,7 @@ namespace ClubApp.Controllers
         public ActionResult AddUserNumber()
         {
             AddUserNumModel model = new AddUserNumModel();
-            var userinfo = db.UserNumbers.Select(u => u.UserId).Max();
+            var userinfo = db.UserNumbers.Where(u=>u.UserId!="Admin").Select(u => u.UserId).Max();
             if (userinfo == null)
             {
                 model.NowNum = 0;

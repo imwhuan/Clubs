@@ -174,6 +174,10 @@ namespace ClubApp.Controllers
                     userinfo.CreateDate = DateTime.Now;
                     userinfo.State = (int)EnumState.正常;
                     db.SaveChanges();
+                    if (userinfo.UserId == "Admin")
+                    {
+                        await UserManager.AddToRoleAsync(user.Id, "Admin");
+                    }
                     //return RedirectToAction("Login");
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code }, protocol: Request.Url.Scheme);
@@ -278,8 +282,20 @@ namespace ClubApp.Controllers
                 var user = db.UserNumbers.Where(u => u.State == (int)EnumState.未使用).OrderBy(u => u.UserId).Skip(count - 1).FirstOrDefault();
                 return user.UserId;
             }
-            else
+            else if (db.UserNumbers.Count()==0)
             {
+                UserNumber newuser = new UserNumber() { UserId = "Admin", State = (int)EnumState.未使用 };
+                db.UserNumbers.Add(newuser);
+                if (!RoleManager.RoleExists("Admin"))
+                {
+                    Microsoft.AspNet.Identity.EntityFramework.IdentityRole role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole("Admin");
+                    RoleManager.Create(role);
+                }
+                db.SaveChanges();
+                return "Admin";
+            }
+            else
+            {               
                 return null;
             }
         }

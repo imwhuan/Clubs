@@ -18,8 +18,11 @@
             width:200px;height:100%;
             line-height:60px;
             text-align:center;
+            font-size:16px
+        }
+        .layui-logo a{ 
             color:#009688;
-            font-size:16px}
+        }
         .layui-breadcrumb{
             line-height:55px;
             padding-right:10px;
@@ -28,7 +31,7 @@
 </head>
 <body>
     <div class="layui-header">
-        <div class="layui-logo">社团综合管理系统</div>
+        <div class="layui-logo">@Html.ActionLink("社团综合管理系统", "Index", "Home")  </div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <span class="layui-breadcrumb layui-layout-right">
             @Html.ActionLink("登陆", "Login", "Account", new { id = "login-link" })

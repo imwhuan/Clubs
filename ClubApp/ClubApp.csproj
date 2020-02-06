@@ -259,29 +259,13 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BAdminController.cs" />
     <Compile Include="Controllers\ClubsController.cs" />
+    <Compile Include="Controllers\GetDataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202001111610089_InitialCreate.cs" />
-    <Compile Include="Migrations\202001111610089_InitialCreate.Designer.cs">
-      <DependentUpon>202001111610089_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001111712274_BaseCreate.cs" />
-    <Compile Include="Migrations\202001111712274_BaseCreate.Designer.cs">
-      <DependentUpon>202001111712274_BaseCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001150650046_LittleC.cs" />
-    <Compile Include="Migrations\202001150650046_LittleC.Designer.cs">
-      <DependentUpon>202001150650046_LittleC.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001191020572_LittleC1.cs" />
-    <Compile Include="Migrations\202001191020572_LittleC1.Designer.cs">
-      <DependentUpon>202001191020572_LittleC1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdminViewModels.cs" />
     <Compile Include="Models\AppDbContext.cs" />
     <Compile Include="Models\ClubViewModel.cs" />
@@ -339,6 +323,8 @@
     <Content Include="Views\User\UMsg.cshtml" />
     <Content Include="Views\User\CPwd.cshtml" />
     <Content Include="Views\Clubs\Club.cshtml" />
+    <Content Include="Views\Admin\AdminFirstSet.cshtml" />
+    <Content Include="Views\Admin\EdUserRoles.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -350,21 +336,8 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\upload\apply\" />
     <Folder Include="Content\upload\clubimg\" />
+    <Folder Include="Views\GetData\" />
     <Folder Include="Views\Upload\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\202001111610089_InitialCreate.resx">
-      <DependentUpon>202001111610089_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001111712274_BaseCreate.resx">
-      <DependentUpon>202001111712274_BaseCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001150650046_LittleC.resx">
-      <DependentUpon>202001150650046_LittleC.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001191020572_LittleC1.resx">
-      <DependentUpon>202001191020572_LittleC1.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
