@@ -1,0 +1,139 @@
+﻿@model ClubApp.Models.UserSetModel
+@{
+    ViewBag.Title = "账号设置";
+}
+<style>
+    .diy-inline {
+        display: inline-block;
+        float: left;
+    }
+</style>
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>账号设置</legend>
+</fieldset>
+@if (ViewBag.Msg != null)
+{
+    <blockquote class="layui-elem-quote layui-quote-nm">
+        @ViewBag.Msg
+    </blockquote>
+}
+
+@using (Html.BeginForm("UserSet", "User", FormMethod.Post, new { @class = "layui-form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Email, new { @class = "layui-form-label" })
+        <div class="layui-input-inline">
+            @Html.TextBoxFor(m => m.Email, new { @class = "layui-input", @readonly = true })
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+            开发者很累，此项暂时不支持更改
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Phone, new { @class = "layui-form-label" })
+        <div class="layui-input-inline">
+            @Html.TextBoxFor(m => m.Phone, new { @class = "layui-input", @readonly = true })
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+            开发者很累，此项暂时不支持更改
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.RealName, new { @class = "layui-form-label" })
+        <div class="layui-input-inline">
+            @Html.TextBoxFor(m => m.RealName, new { @class = "layui-input" ,placeholder="输入你的学号/职工号"})
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+            @Html.ValidationMessageFor(m => m.RealName, "", new { @class="text-danger"})
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Cologe, new { @class = "layui-form-label" })
+        <div class="layui-input-inline">
+            <select name="Type" lay-verify="required">
+                <option value="">请选择你的学院</option>
+                @foreach (var item in Model.Cologes)
+                {
+                    if (item.Name == Model.Cologe)
+                    {
+                        <option value="@item.Id" selected="">@item.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+            若未找到你的学院，请联系管理员
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Grade, new { @class = "layui-form-label" })
+        <div class="layui-input-inline">
+            <select name="Grade">
+                <option value="">请选择年级</option>
+                <option value="2015">2015级</option>
+                <option value="2016">2016级</option>
+                <option value="2017">2017级</option>
+                <option value="2018">2018级</option>
+                <option value="2019">2019级</option>
+                <option value="2020">2020级</option>
+            </select>
+        </div>
+        <div class="layui-input-inline">
+            <select name="Grade2">
+                <option value="">请选择所在班</option>
+                <option value="1">1班</option>
+                <option value="2">2班</option>
+                <option value="3">3班</option>
+                <option value="4">4班</option>
+                <option value="5">5班</option>
+                <option value="6">6班</option>
+                <option value="7">7班</option>
+                <option value="8">8班</option>
+                <option value="9">9班</option>
+            </select>
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+
+        </div>
+    </div>
+    if (Model.Labels.Count == 0)
+    {
+        <div class="layui-form-item">
+            <label class="layui-form-label">@Html.DisplayNameFor(m => m.Labels)</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="like[write]" title="写作">
+                <input type="checkbox" name="like[read]" title="阅读">
+                <input type="checkbox" name="like[game]" title="游戏">
+                <a href="#" title="查看更多">......</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="layui-form-item">
+            <label class="layui-form-label">@Html.DisplayNameFor(m => m.Labels)</label>
+            <div class="layui-input-block">
+                @foreach (string label in Model.Labels)
+                {
+                    <input type="checkbox" name="like[write]" checked="" title="@label">
+                }
+            </div>
+        </div>
+    }
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="submit" value="保存" class="layui-btn" />
+        </div>
+    </div>
+}
+<script>
+    layui.use('form', function () {
+        var form = layui.form;
+    });
+</script>
