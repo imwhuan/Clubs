@@ -1,107 +1,72 @@
 ﻿@model IEnumerable<ClubApp.Models.UserNumber>
 
 @{
-    ViewBag.Title = "UserNumber";
+    ViewBag.Title = "用户账户总览";
 }
 
 <h2>@ViewBag.Msg</h2>
-
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>用户账号总览</legend>
+</fieldset>
 <p>
-    <a href="~/Admin/AddUserNumber" class="layui-btn"><i class="layui-icon">&#xe608;</i> 添加</a>
+    <a href="~/Admin/AddUserNumber" class="layui-btn layui-btn-sm"><i class="layui-icon">&#xe608;</i> 添加账号</a>
 </p>
-<table class="layui-table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HeadImg)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.State)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OnlineState)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Class)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RelName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Gender)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Birthday)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ShortDesc)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Desc)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreateDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LoginDate)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.HeadImg)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.State)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.OnlineState)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Class)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RelName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Gender)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Birthday)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ShortDesc)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Desc)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreateDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LoginDate)
-                </td>
-                @*<td>
-                    @Html.ActionLink("Edit", "Edit", new { id=item.UserId }) |
-                    @Html.ActionLink("Details", "Details", new { id=item.UserId }) |
-                    @Html.ActionLink("Delete", "Delete", new { id=item.UserId })
-                </td>*@
-            </tr>
-        }
-    </tbody>
-</table>
+<table id="demo" lay-filter="test"></table>
+
+<script type="text/html" id="barDemo">
+    <!-- 这里同样支持 laytpl 语法，如： -->
+    {{#  if(d.state==='未使用'){ }}
+    <input type="button" onclick="JavaScript: Lock(this, '{{d.id}}')" class="layui-btn layui-btn-xs" value="系统锁定" />
+    <input type="button" style="display:none;margin-left:0" onclick="JavaScript: UnLock(this, '{{d.id}}')" class="layui-btn layui-btn-xs layui-btn-danger" value="解除锁定" />
+    {{#  } else if(d.state==='系统锁定'){}}
+    <input type="button" style="display:none" onclick="JavaScript: Lock(this, '{{d.id}}')" class="layui-btn layui-btn-xs" value="系统锁定" />
+    <input type="button" style="margin-left:0" onclick="JavaScript: UnLock(this, '{{d.id}}')" class="layui-btn layui-btn-xs layui-btn-danger" value="解除锁定" />
+    {{# } }}
+</script>
+<script>
+    layui.use('table', function () {
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            , height: 312
+            , url: '/GetData/UserNumberData' //数据接口
+            , page: true //开启分页
+            , cols: [[ //表头
+                { field: 'id', title: '用户账户', sort: true }
+                , { field: 'relname', title: '关联编号',sort:true }
+                , { field: 'state', title: '状态', sort: true }
+                , { fixed: 'right', align: 'center', toolbar: '#barDemo' } //这里的toolbar值是模板元素的选择器
+            ]]
+        });
+
+    });
+    function Lock(btn, u) {
+        $.post("/Admin/LockUserNum", {"uid":u}, function (data) {
+            if (data == "OK") {
+                $(btn).hide();
+                $(btn).next().show();
+                $(btn).parents("tr").children("td").eq(2).children("div").html("系统锁定")
+                layer.msg(u+"系统锁定成功");
+            }
+            else {            
+                layer.msg(data);
+            }
+        })
+    }
+    function UnLock(btn, u) {
+        $.post("/Admin/UnLockUserNum", {"uid":u}, function (data) {
+            if (data == "OK") {
+                $(btn).hide();
+                $(btn).prev().show();
+                $(btn).parents("tr").children("td").eq(2).children("div").html("未使用")
+                layer.msg(u+"解除锁定成功");
+            }
+            else {
+                layer.msg(data);
+            }
+        })
+    }
+    $("#a1").addClass("layui-this");
+</script>

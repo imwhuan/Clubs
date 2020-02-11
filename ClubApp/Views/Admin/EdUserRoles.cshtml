@@ -6,9 +6,6 @@
     <legend>我的社团</legend>
 </fieldset>
 <table id="demo" lay-filter="test"></table>
-<script type="text/html" id="clubTpl">
-    <a href="/Clubs/Club?cid={{d.ClubId}}" class="layui-table-link">{{d.Club}}</a>
-</script>
 <script type="text/html" id="barDemo">
     <!-- 这里同样支持 laytpl 语法，如： -->
     {{#  if(d.ifup){ }}
@@ -48,7 +45,7 @@
                     roles.html("BAdmin")
                 }
                 else {
-                    roles.html()+="/BAdmin"
+                    roles.html(roles.html()+"/BAdmin")
                 }
                 layer.msg(u+"任命管理员成功");
             }

@@ -3,31 +3,70 @@
     ViewBag.Title = "社团账号池";
 }
 <h2>@ViewBag.Msg</h2>
-<h2>当前共有<span style="color:red;font-size:larger">@ViewBag.Count</span>个社团</h2>
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>社团账号总览</legend>
+</fieldset>
 <p>
-    <a href="~/Admin/AddClubNumber" class="layui-btn"><i class="layui-icon">&#xe608;</i> 添加</a>
+    <a href="~/Admin/AddClubNumber" class="layui-btn layui-btn-sm"><i class="layui-icon">&#xe608;</i> 添加</a>
 </p>
-<table class="layui-table" lay-data="{height:305, url:'/Admin/ClubsNumberData', page:true, id:'test', skin: 'row', even: true}">
-    <thead>
-        <tr>
-            <th lay-data="{field:'ClubId', width:200, sort: true}">账号</th>
-            <th lay-data="{field:'State', width:100, templet:'#bgstyle'}">状态</th>
-            <th lay-data="{field:'CreateDate', width:200, sort: true}">创建日期</th>
-        </tr>
-    </thead>
-</table>
+<table id="demo" lay-filter="test"></table>
 <script id="bgstyle" type="text/html">
     <span style="color: {{d.Style}};">{{ d.State }}</span>
 </script>
-
-<script id="barDemo1" type="text/html">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">工具性按钮</a>
+<script type="text/html" id="barDemo">
+    <!-- 这里同样支持 laytpl 语法，如： -->
+    {{#  if(d.State==='未使用'){ }}
+    <input type="button" onclick="JavaScript: Lock(this, '{{d.ClubId}}')" class="layui-btn layui-btn-xs" value="系统锁定" />
+    <input type="button" style="display:none;margin-left:0" onclick="JavaScript: UnLock(this, '{{d.ClubId}}')" class="layui-btn layui-btn-xs layui-btn-danger" value="解除锁定" />
+    {{#  } else if(d.State==='系统锁定'){}}
+    <input type="button" style="display:none" onclick="JavaScript: Lock(this, '{{d.ClubId}}')" class="layui-btn layui-btn-xs" value="系统锁定" />
+    <input type="button" style="margin-left:0" onclick="JavaScript: UnLock(this, '{{d.ClubId}}')" class="layui-btn layui-btn-xs layui-btn-danger" value="解除锁定" />
+    {{# } }}
 </script>
-<table class="layui-hide" id="demo" lay-filter="test"></table>
-
 <script>
     layui.use('table', function () {
         var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            , height: 312
+            , url: '/GetData/ClubsNumberData' //数据接口
+            , page: true //开启分页
+            , cols: [[ //表头
+                { field: 'ClubId', title: '社团账号', sort: true }
+                , { field: 'State', title: '状态', sort: true,templet:'#bgstyle' }
+                , { field: 'CreateDate', title: '创建日期', sort: true }
+                , { fixed: 'right', align: 'center', toolbar: '#barDemo' } //这里的toolbar值是模板元素的选择器
+            ]]
+        });
+
     });
+    function Lock(btn, u) {
+        $.post("/Admin/LockClubNum", { "cid": u }, function (data) {
+            if (data == "OK") {
+                $(btn).hide();
+                $(btn).next().show();
+                $(btn).parents("tr").children("td").eq(1).children("div").html("系统锁定")
+                layer.msg(u + "系统锁定成功");
+            }
+            else {
+                layer.msg(data);
+            }
+        })
+    }
+    function UnLock(btn, u) {
+        $.post("/Admin/UnLockClubNum", { "cid": u }, function (data) {
+            if (data == "OK") {
+                $(btn).hide();
+                $(btn).prev().show();
+                $(btn).parents("tr").children("td").eq(1).children("div").html("未使用")
+                layer.msg(u + "解除锁定成功");
+            }
+            else {
+                layer.msg(data);
+            }
+        })
+    }
     $("#a2").addClass("layui-this");
 </script>

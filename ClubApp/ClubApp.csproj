@@ -131,6 +131,16 @@
     <Content Include="Content\images\47.png" />
     <Content Include="Content\images\5.jpg" />
     <Content Include="Content\images\55.png" />
+    <Content Include="Content\images\fav1.jpg" />
+    <Content Include="Content\images\head4.jpg" />
+    <Content Include="Content\images\head1.png" />
+    <Content Include="Content\images\head2.png" />
+    <Content Include="Content\images\head3.jpg" />
+    <Content Include="Content\images\home1.jpg" />
+    <Content Include="Content\images\home2.png" />
+    <Content Include="Content\images\home3.jpg" />
+    <Content Include="Content\images\home4.jpg" />
+    <Content Include="Content\images\home5.jpg" />
     <Content Include="Content\images\kodinger.jpg" />
     <Content Include="Content\layui\css\global.css" />
     <Content Include="Content\layui\css\layui.css" />
@@ -266,6 +276,19 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202002060156318_InitialCreate.cs" />
+    <Compile Include="Migrations\202002060156318_InitialCreate.designer.cs">
+      <DependentUpon>202002060156318_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002071511230_rebuild.cs" />
+    <Compile Include="Migrations\202002071511230_rebuild.designer.cs">
+      <DependentUpon>202002071511230_rebuild.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002090658232_edit1.cs" />
+    <Compile Include="Migrations\202002090658232_edit1.designer.cs">
+      <DependentUpon>202002090658232_edit1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdminViewModels.cs" />
     <Compile Include="Models\AppDbContext.cs" />
     <Compile Include="Models\ClubViewModel.cs" />
@@ -325,6 +348,7 @@
     <Content Include="Views\Clubs\Club.cshtml" />
     <Content Include="Views\Admin\AdminFirstSet.cshtml" />
     <Content Include="Views\Admin\EdUserRoles.cshtml" />
+    <Content Include="Views\User\UserSet.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -338,6 +362,17 @@
     <Folder Include="Content\upload\clubimg\" />
     <Folder Include="Views\GetData\" />
     <Folder Include="Views\Upload\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202002060156318_InitialCreate.resx">
+      <DependentUpon>202002060156318_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002071511230_rebuild.resx">
+      <DependentUpon>202002071511230_rebuild.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002090658232_edit1.resx">
+      <DependentUpon>202002090658232_edit1.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

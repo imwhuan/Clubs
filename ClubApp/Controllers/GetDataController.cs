@@ -65,7 +65,7 @@ namespace ClubApp.Controllers
 
         AppDbContext db = new AppDbContext();
         #endregion
-        // GET: GetData
+        // GET: GetData 获取已注册用户，权限控制页面调用
         public async Task<ActionResult> UserSimpleData(int page, int limit)
         {
             List<UserSimpleModel> datas = new List<UserSimpleModel>();
@@ -94,6 +94,116 @@ namespace ClubApp.Controllers
                 {
                     data.roles = "无";
                 }
+                datas.Add(data);
+            }
+            PageDataModel dataModel = new PageDataModel()
+            {
+                code = 0,
+                msg = "",
+                count = db.Users.Count(),
+                data = datas.AsQueryable()
+            };
+
+            return Json(dataModel, JsonRequestBehavior.AllowGet);
+        }
+        //获取所有账号池
+        public ActionResult UserNumberData(int page, int limit)
+        {
+            List<UserNumberModel> datas = new List<UserNumberModel>();
+            foreach (UserNumber us in db.UserNumbers.OrderBy(u => u.UserId).Skip((page - 1) * limit).Take(limit).ToList())
+            {
+                UserNumberModel data = new UserNumberModel()
+                {
+                    id = us.UserId,
+                    relname=us.RelName??"无",
+                    state=Enum.GetName(typeof(EnumState),us.State)
+                };
+                datas.Add(data);
+            }
+            PageDataModel dataModel = new PageDataModel()
+            {
+                code = 0,
+                msg = "",
+                count = db.Users.Count(),
+                data = datas.AsQueryable()
+            };
+
+            return Json(dataModel, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult ClubsNumberData(int page, int limit)
+        {
+            List<ClubsNumberModel> models = new List<ClubsNumberModel>();
+            foreach (ClubNumber club in db.ClubNumbers.OrderBy(c => c.ClubId).Skip((page - 1) * limit).Take(limit))
+            {
+                ClubsNumberModel model = new ClubsNumberModel();
+                model.ClubId = club.ClubId;
+                switch (club.State)
+                {
+                    case ((int)EnumState.未使用):
+                        model.State = Enum.GetName(typeof(EnumState), club.State);
+                        model.Style = "black";
+                        break;
+                    case ((int)EnumState.系统锁定):
+                        model.State = Enum.GetName(typeof(EnumState), club.State);
+                        model.Style = "gray";
+                        break;
+                    case ((int)EnumState.待提交):
+                        model.State = Enum.GetName(typeof(EnumState), club.State);
+                        model.Style = "red";
+                        break;
+                    case ((int)EnumState.正常):
+                        model.State = Enum.GetName(typeof(EnumState), club.State);
+                        model.Style = "green";
+                        break;
+                    case ((int)EnumState.待审批):
+                        model.State = Enum.GetName(typeof(EnumState), club.State);
+                        model.Style = "orange";
+                        break;
+                    case ((int)EnumState.查封):
+                        model.State = Enum.GetName(typeof(EnumState), club.State);
+                        model.Style = "pink";
+                        break;
+                    case ((int)EnumState.冻结):
+                        model.State = Enum.GetName(typeof(EnumState), club.State);
+                        model.Style = "bule";
+                        break;
+                    case ((int)EnumState.制裁):
+                        model.State = Enum.GetName(typeof(EnumState), club.State);
+                        model.Style = "red";
+                        break;
+                    default:
+                        model.State = "未知";
+                        model.Style = "yellow";
+                        break;
+                }
+                model.CreateDate = club.CreateDate == null ? "无" : club.CreateDate.ToString();
+                models.Add(model);
+            }
+            PageDataModel dataModel = new PageDataModel()
+            {
+                code = 0,
+                msg = "",
+                count = db.ClubNumbers.Count(),
+                data = models.AsQueryable()
+            };
+
+            return Json(dataModel, JsonRequestBehavior.AllowGet);
+        }
+        //查询社团调用
+        public ActionResult GetAllClubData(int page, int limit)
+        {
+            List<ClubListModel> datas = new List<ClubListModel>();
+            foreach (ClubNumber club in db.ClubNumbers.Where(c=>c.State>(int)EnumState.待审批).OrderBy(c => c.ClubId).Skip((page - 1) * limit).Take(limit).ToList())
+            {
+                ClubListModel data = new ClubListModel()
+                {
+                    cid = club.ClubId,
+                    name = club.Name ?? "无",
+                    Desc = club.Desc??"无",
+                    CreateDate=club.CreateDate2?.ToString(),
+                    CreateUser=club.User?.UserId,
+                    CreateUserName=club.User?.UserName
+                };
                 datas.Add(data);
             }
             PageDataModel dataModel = new PageDataModel()

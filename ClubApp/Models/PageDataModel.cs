@@ -10,6 +10,12 @@ namespace ClubApp.Models
         public string roles { get; set; }
         public bool ifup { get; set; }
     }
+    public class UserNumberModel
+    {
+        public string id { get; set; }
+        public string state { get; set; }
+        public string relname { get; set; }
+    }
     public class PageDataModel
     {
         public int code { get; set; }

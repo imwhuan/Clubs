@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -45,10 +46,21 @@ namespace ClubApp.Controllers
 
         AppDbContext db = new AppDbContext();
         // GET: User
-        public ActionResult Index()
+        public ActionResult Index(string uid)
         {
-            var userid = UserManager.FindById(User.Identity.GetUserId());
-            var userinfo = db.UserNumbers.Where(u => u.UserId == userid.UserName).FirstOrDefault();
+            UserNumber userinfo = new UserNumber();
+            if (string.IsNullOrEmpty(uid))
+            {
+                userinfo = db.UserNumbers.Where(u => u.UserId == User.Identity.Name).FirstOrDefault();
+            }
+            else
+            {
+                userinfo = db.UserNumbers.Where(u => u.UserId == uid).FirstOrDefault();
+            }
+            if (userinfo == null)
+            {
+                return HttpNotFound("加载用户主页信息失败");
+            }
             UserIndexModel model = new UserIndexModel()
             {
                 UserId = userinfo.UserId,
@@ -138,7 +150,29 @@ namespace ClubApp.Controllers
                 return View();
             }
         }
-
+        [HttpGet]
+        public ActionResult UserSet()
+        {
+            AppUser appUser = UserManager.FindById(User.Identity.GetUserId());
+            UserNumber u = db.UserNumbers.Find(User.Identity.Name);
+            UserSetModel model = new UserSetModel();
+            if (u != null)
+            {
+                model.Email = appUser.Email;
+                model.Phone = appUser.PhoneNumber;
+                model.RealName = u.RelName;
+                model.Cologe = u.Coloege?.Name;
+                model.Grade = u.Class;
+            }
+            model.Labels = new List<string>();
+            model.Cologes = db.Coloeges.ToList();
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult UserSet(UserSetModel model)
+        {
+            return View(model);
+        }
 
         private void AddErrors(IdentityResult result)
         {

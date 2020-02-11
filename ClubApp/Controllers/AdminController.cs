@@ -196,6 +196,48 @@ namespace ClubApp.Controllers
             }
             return View(db.UserNumbers.ToList());
         }
+        public string LockUserNum(string uid)
+        {
+            try
+            {
+                var u = db.UserNumbers.Find(uid);
+                if (u != null)
+                {
+                    u.State = (int)EnumState.系统锁定;
+                    db.SaveChanges();
+                    return "OK";
+                }
+                else
+                {
+                    return "用户" + uid + "不存在";
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+        public string UnLockUserNum(string uid)
+        {
+            try
+            {
+                var u = db.UserNumbers.Find(uid);
+                if (u != null)
+                {
+                    u.State = (int)EnumState.未使用;
+                    db.SaveChanges();
+                    return "OK";
+                }
+                else
+                {
+                    return "用户" + uid + "不存在";
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
         public ActionResult AddUserNumber()
         {
             AddUserNumModel model = new AddUserNumModel();
@@ -254,67 +296,49 @@ namespace ClubApp.Controllers
             {
                 ViewBag.Msg = Msg;
             }
-            ViewBag.Count = db.ClubNumbers.Count();
             return View();
         }
-        public ActionResult ClubsNumberData(int page, int limit)
+        public string LockClubNum(string cid)
         {
-            List<ClubsNumberModel> models = new List<ClubsNumberModel>();
-            foreach (ClubNumber club in db.ClubNumbers.OrderBy(c => c.ClubId).Skip((page - 1) * limit).Take(limit))
+            try
             {
-                ClubsNumberModel model = new ClubsNumberModel();
-                model.ClubId = club.ClubId;
-                switch (club.State)
+                var u = db.ClubNumbers.Find(cid);
+                if (u != null)
                 {
-                    case ((int)EnumState.未使用):
-                        model.State = Enum.GetName(typeof(EnumState), club.State);
-                        model.Style = "black";
-                        break;
-                    case ((int)EnumState.系统锁定):
-                        model.State = Enum.GetName(typeof(EnumState), club.State);
-                        model.Style = "gray";
-                        break;
-                    case ((int)EnumState.待提交):
-                        model.State = Enum.GetName(typeof(EnumState), club.State);
-                        model.Style = "red";
-                        break;
-                    case ((int)EnumState.正常):
-                        model.State = Enum.GetName(typeof(EnumState), club.State);
-                        model.Style = "green";
-                        break;
-                    case ((int)EnumState.待审批):
-                        model.State = Enum.GetName(typeof(EnumState), club.State);
-                        model.Style = "orange";
-                        break;
-                    case ((int)EnumState.查封):
-                        model.State = Enum.GetName(typeof(EnumState), club.State);
-                        model.Style = "pink";
-                        break;
-                    case ((int)EnumState.冻结):
-                        model.State = Enum.GetName(typeof(EnumState), club.State);
-                        model.Style = "bule";
-                        break;
-                    case ((int)EnumState.制裁):
-                        model.State = Enum.GetName(typeof(EnumState), club.State);
-                        model.Style = "red";
-                        break;
-                    default:
-                        model.State = "未知";
-                        model.Style = "yellow";
-                        break;
+                    u.State = (int)EnumState.系统锁定;
+                    db.SaveChanges();
+                    return "OK";
                 }
-                model.CreateDate = club.CreateDate == null ? "无" : club.CreateDate.ToString();
-                models.Add(model);
+                else
+                {
+                    return "社团" + cid + "不存在";
+                }
             }
-            PageDataModel dataModel = new PageDataModel()
+            catch (Exception ex)
             {
-                code = 0,
-                msg = "",
-                count = db.ClubNumbers.Count(),
-                data = models.AsQueryable()
-            };
-
-            return Json(dataModel, JsonRequestBehavior.AllowGet);
+                return ex.Message;
+            }
+        }
+        public string UnLockClubNum(string cid)
+        {
+            try
+            {
+                var u = db.ClubNumbers.Find(cid);
+                if (u != null)
+                {
+                    u.State = (int)EnumState.未使用;
+                    db.SaveChanges();
+                    return "OK";
+                }
+                else
+                {
+                    return "社团" + cid + "不存在";
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
         [HttpGet]
         public ActionResult AddClubNumber()

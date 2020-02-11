@@ -42,9 +42,48 @@ namespace ClubApp.Controllers
         {
             return View(db.ClubNumbers.Where(c => c.State == (int)EnumState.正常).ToList());
         }
-        public ActionResult Club()
+        public ActionResult Club(string cid)
         {
-            return View();
+            if (cid == null)
+            {
+                return RedirectToAction("MyClubs");
+            }
+            ClubNumber club = db.ClubNumbers.Find(cid);
+            if (club == null)
+            {
+                return HttpNotFound("未发现社团" + cid);
+            }
+            List<UserClubs> userClubs = db.UserClubs.Where(u => u.Club.ClubId == club.ClubId&&u.State>0).ToList();
+            List<Activities> activities = db.Activities.Where(a => a.Club.ClubId == club.ClubId && a.State == 1).OrderBy(a=>a.Id).Take(5).ToList();
+            List<AnnounceMent> announceMents = db.AnnounceMents.Where(a => a.Club.ClubId == club.ClubId && a.state == (int)EnumState.正常).OrderBy(a=>a.Id).Take(5).ToList();
+            List<Vote> votes = db.Votes.Where(v => v.Club.ClubId == club.ClubId).OrderBy(v=>v.Id).Take(5).ToList();
+            ClubViewModel model = new ClubViewModel()
+            {
+                ClubId = club.ClubId,
+                ClubType = club.Type.Name,
+                Labels = club.Label?.Split(',').ToList(),
+                Name = club.Name,
+                HeadImg = club.HeadImg?? "Content/images/head3.jpg",
+                ShortDesc = club.ShortDesc,
+                Desc = club.Desc,
+                State = club.State == null ? "" : Enum.GetName(typeof(EnumState), club.State),
+                CreateDate = club.CreateDate2 == null ? "未知" : club.CreateDate2.ToString(),
+                User = club.User,
+                UserCount = userClubs.Count,
+                Activities = activities,
+                announceMents = announceMents,
+                votes = votes,
+                status=0
+            };
+            if (User != null)
+            {
+                if (userClubs.Where(u => u.User.UserId == User.Identity.Name).Any())
+                {
+                    model.status = 1;
+                }
+            }
+
+            return View(model);
         }
         public ActionResult ApplyClub(string Msg = "")
         {
@@ -111,7 +150,7 @@ namespace ClubApp.Controllers
                         Club = newclub,
                         Status = db.UserStatuses.Find((int)UCStatus.社长),
                         CreateDate = DateTime.Now,
-                        Enable = 0
+                        State=(int)EnumState.正常
                     };
                     db.Entry(newclub).State = System.Data.Entity.EntityState.Modified;
                     db.UserClubs.Add(uc);
@@ -164,7 +203,7 @@ namespace ClubApp.Controllers
                     Status = uc.Status?.Name,
                     CreateDate = uc.CreateDate == null ? "未知" : uc.CreateDate.ToString(),
                     Desc = uc.Desc,
-                    Enable = uc.Enable == null ? 0 : 1,
+                    Enable = uc.State ,
                     state = uc.Club.State ?? 0
                 };
                 data.CState = Enum.GetName(typeof(EnumState), uc.Club.State);

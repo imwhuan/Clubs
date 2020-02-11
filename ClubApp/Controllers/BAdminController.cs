@@ -154,6 +154,7 @@ namespace ClubApp.Controllers
                 {
                     AppA.CheckState = (int)state;
                     club.State = (int)EnumState.正常;
+                    club.CreateDate2 = DateTime.Now;
                     db.Entry(club).State = System.Data.Entity.EntityState.Modified;
                 }
                 AppA.AuditDate = DateTime.Now;

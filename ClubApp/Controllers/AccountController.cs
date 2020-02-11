@@ -173,6 +173,15 @@ namespace ClubApp.Controllers
                     userinfo.UserName = userinfo.UserId;
                     userinfo.CreateDate = DateTime.Now;
                     userinfo.State = (int)EnumState.正常;
+                    userinfo.Gender = model.Gender;
+                    if (model.Gender == (int)Gender.女)
+                    {
+                        userinfo.HeadImg = "Content/images/head1.png";
+                    }
+                    else
+                    {
+                        userinfo.HeadImg = "Content/images/head2.png";
+                    }
                     db.SaveChanges();
                     if (userinfo.UserId == "Admin")
                     {
@@ -190,7 +199,15 @@ namespace ClubApp.Controllers
         [HttpGet]
         public ActionResult RegisterConfirm(string Email = "")
         {
+            if (Email == "")
+            {
+                return RedirectToAction("Register");
+            }
             ViewBag.Msg = Email + "欢迎您注册成功，系统已经自动给您发送注册确认信息，请在邮箱及时查收确认";
+            AppUser user = UserManager.FindByEmail(Email);
+            string code = UserManager.GenerateEmailConfirmationToken(user.Id);
+            var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code }, protocol: Request.Url.Scheme);
+            ViewBag.ConfirmUrl = callbackUrl;
             return View();
         }
         [HttpGet]
@@ -357,6 +374,11 @@ namespace ClubApp.Controllers
             {
                 return "信息发送失败，" + ex.Message;
             }
+        }
+        public string GetEmailCode()
+        {
+            string res=Session["EmailCode"]==null?"未找到邮箱验证码":"你的邮箱验证码为："+ Session["EmailCode"].ToString();
+            return res;
         }
         public ActionResult CheckImgCode(string ImgCode)
         {

@@ -1,40 +1,33 @@
-﻿@model IEnumerable<ClubApp.Models.ClubNumber>
+﻿
 @{
     ViewBag.Title = "社团";
 }
-
-    <h2>当前共有<span style="color:red;font-size:larger">@Model.Count()</span>个社团</h2>
-
-    <table class="layui-table">
-        <colgroup>
-            <col width="10%">
-            <col width="20%">
-            <col width="40%">
-            <col width="20%" />
-            <col width="10%" />
-        </colgroup>
-        <thead>
-            <tr>
-                <th>编号</th>
-                <th>名称</th>
-                <th>描述</th>
-                <th>创建时间</th>
-                <th>创建人</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.ClubId)</td>
-                <td><a href="~/Clubs/Club?cid=@item.ClubId">@Html.DisplayFor(modelItem => item.Name)</a> </td>
-                <td>@Html.DisplayFor(modelItem => item.ShortDesc)</td>
-                <td>@Html.DisplayFor(modelItem => item.CreateDate)</td>
-                <td>@Html.DisplayFor(modelItem => item.User.UserName)</td>
-            </tr>
-            }
-        </tbody>
-    </table>
+<table id="demo"></table>
+<script id="club" type="text/html">
+    <a href="/Clubs/Club?cid={{d.cid}}">{{ d.name }}</a>
+</script>
+<script id="createuserlink" type="text/html">
+    <a href="/User?uid={{d.CreateUser}}">{{ d.CreateUserName }}</a>
+</script>
 <script>
+    layui.use('table', function () {
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            , height: 312
+            , url: '/GetData/GetAllClubData' //数据接口
+            , page: true //开启分页
+            , cols: [[ //表头
+                { field: 'cid',title: '社团账号', sort: true }
+                , { field: 'name', title: '名称', sort: true,templet:'#club'  }
+                , { field: 'Desc', title: '描述'}
+                , { field: 'CreateDate', title: '创建日期', sort: true }
+                , { field: 'CreateUserName', title: '创建人',templet:'#createuserlink' } 
+            ]]
+        });
+
+    });
     $("#c1").addClass("layui-this");
 </script>

@@ -43,6 +43,8 @@ namespace ClubApp.Models
         [Display(Name = "确认密码")]
         [Compare("Password", ErrorMessage = "密码和确认密码不匹配。")]
         public string ConfirmPassword { get; set; }
+        [Display(Name ="性别")]
+        public int Gender { get; set; }
         [Required, Display(Name = "图片验证码")]
         [System.Web.Mvc.Remote("CheckImgCode", "Account", HttpMethod = "post", ErrorMessage = "验证码 错误")]
         public string ImgCode { get; set; }

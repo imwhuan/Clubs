@@ -15,8 +15,6 @@
     <legend>社团注册审批</legend>
 </fieldset>
 <div class="layui-form">
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
     <div class="layui-form-item">
         <div class="layui-inline">
             @Html.LabelFor(m => m.ClubId, new { @class = "layui-form-label" })
@@ -119,6 +117,7 @@
                         <div class="layui-form-item">
                             <input type="button" class="layui-btn" value="通过" onclick="subpass(@Model.AuditId)" />
                             <input type="button" class="layui-btn layui-btn-danger" value="拒绝" onclick="subnopass(@Model.AuditId)" />
+                            <input type="button" class="layui-btn layui-btn-primary" value="返回" onclick="JavaScript:history.back(-1)" />
                         </div>
                     </div>
                 </fieldset>
@@ -137,7 +136,7 @@
         title:'填写审批备注',
         skin: 'layui-layer-rim', //加上边框
       area: ['420px', '240px'], //宽高
-      content: '<form class="layui-form" action="/BAdmin/AuditClubAY" method="post"><input name="id" type="hidden" value="'+aid+'" /><div class="layui-form-item"><label class="layui-form-label">申请理由</label><div class="layui-input-block"><textarea name="AuditDesc" placeholder="请简述本次审批备注（最大500字符）" class="layui-textarea"></textarea></div></div><div class="layui-form-item"><div class="layui-input-block"><input type="submit" class="layui-btn" value="确认" /><input type="button" class="layui-btn layui-btn-primary" value="取消" onclick="closelay()" /></div></div></form>'
+      content: '<form class="layui-form" action="/BAdmin/AuditClubAY" method="post"><input name="id" type="hidden" value="'+aid+'" /><div class="layui-form-item"><label class="layui-form-label">审批备注</label><div class="layui-input-block"><textarea name="AuditDesc" placeholder="请简述本次审批备注（最大500字符）" class="layui-textarea"></textarea></div></div><div class="layui-form-item"><div class="layui-input-block"><input type="submit" class="layui-btn" value="确认" /><input type="button" class="layui-btn layui-btn-primary" value="取消" onclick="closelay()" /></div></div></form>'
     });
     }
     function subnopass(aid) {
@@ -146,7 +145,7 @@
         title:'填写审批备注',
         skin: 'layui-layer-rim', //加上边框
       area: ['420px', '240px'], //宽高
-      content: '<form class="layui-form" action="/BAdmin/AuditClubAN" method="post"><input name="id" type="hidden" value="'+aid+'" /><div class="layui-form-item"><label class="layui-form-label">申请理由</label><div class="layui-input-block"><textarea name="AuditDesc" placeholder="请简述本次审批备注（最大500字符）" class="layui-textarea"></textarea></div></div><div class="layui-form-item"><div class="layui-input-block"><input type="submit" class="layui-btn" value="确认" /><input type="button" class="layui-btn layui-btn-primary" value="取消" onclick="closelay()" /></div></div></form>'
+      content: '<form class="layui-form" action="/BAdmin/AuditClubAN" method="post"><input name="id" type="hidden" value="'+aid+'" /><div class="layui-form-item"><label class="layui-form-label">审批备注</label><div class="layui-input-block"><textarea name="AuditDesc" placeholder="请简述本次审批备注（最大500字符）" class="layui-textarea"></textarea></div></div><div class="layui-form-item"><div class="layui-input-block"><input type="submit" class="layui-btn" value="确认" /><input type="button" class="layui-btn layui-btn-primary" value="取消" onclick="closelay()" /></div></div></form>'
     });
     }
     function closelay() {
