@@ -159,6 +159,72 @@ namespace ClubApp.Controllers
                 return Json(data, JsonRequestBehavior.AllowGet);
             }
         }
+
+        public ActionResult JoinClubFile(string cid)
+        {
+            try
+            {
+                if (User == null)
+                {
+                    throw new Exception("用户未登录不允许上传文件");
+                }
+                HttpFileCollectionBase file = Request.Files;
+                JsonData data = new JsonData()
+                {
+                    code = 1,
+                    src = "",
+                    name = "",
+                    msg = ""
+                };
+                if (file == null)
+                {
+                    data.msg += "未成功接收文件";
+                }
+                else if (file.Count > 0)
+                {
+                    if (file[0].ContentLength > 2048000)
+                    {
+                        data.msg += "上传文件大小超过2M！不允许上传";
+                    }
+                    else if (string.IsNullOrEmpty(cid))
+                    {
+                        data.msg += "未识别到正确的社团账号，文件不被接收！";
+                    }
+                    else
+                    {
+                        string filepath = Server.MapPath("~/Content/upload/apply/");
+                        if (!Directory.Exists(filepath))
+                        {
+                            Directory.CreateDirectory(filepath);
+                        }
+                        string name = Path.GetFileName(file[0].FileName);
+                        //string ext = Path.GetExtension(name);
+                        file[0].SaveAs(filepath +"u_c_"+User.Identity.Name+"_"+ cid + "_" + name);
+                        data.src = "Content/upload/apply/" + "u_c_" + User.Identity.Name + "_" + cid + "_" + name;
+                        data.name = "u_c_" + User.Identity.Name + "_" + cid + "_" + name;
+                        data.code = 0;
+                        data.msg += "上传成功！";
+                    }
+                }
+                else
+                {
+                    data.msg = "错误！服务器接收到上载文件的个数为：" + file.Count;
+                }
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                JsonData data = new JsonData()
+                {
+                    code = 4,
+                    src = "",
+                    name = "",
+                    msg = ex.Message
+                };
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public class JsonData
         {
             public int code { get; set; }

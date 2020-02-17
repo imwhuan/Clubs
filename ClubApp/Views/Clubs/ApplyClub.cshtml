@@ -45,14 +45,14 @@
     <div class="layui-form-item">
         @Html.LabelFor(m => m.Name, new { @class = "layui-form-label" })
         <div class="layui-input-block">
-            @Html.TextBoxFor(m => m.Name, new { @class = "layui-input" })
+            @Html.TextBoxFor(m => m.Name, new { @class = "layui-input",autocomplete="off" })
         </div>
     </div>
 
     <div class="layui-form-item">
         @Html.LabelFor(m => m.ShortDesc, new { @class = "layui-form-label" })
         <div class="layui-input-block">
-            @Html.TextBoxFor(m => m.ShortDesc, new { @class = "layui-input" })
+            @Html.TextBoxFor(m => m.ShortDesc, new { @class = "layui-input",autocomplete="off" })
         </div>
     </div>
     <div class="layui-form-item">
@@ -83,4 +83,5 @@
         })
     });
     $("#c3").addClass("layui-this");
+    $("#c3").parents("li").addClass("layui-nav-itemed")
 </script>

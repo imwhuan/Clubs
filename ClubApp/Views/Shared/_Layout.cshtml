@@ -53,7 +53,7 @@
                 <ul class="layui-nav layui-nav-tree" lay-filter="test">
                     @if (User.IsInRole("Admin"))
                     {
-                        <li class="layui-nav-item layui-nav-itemed">
+                        <li class="layui-nav-item">
                             <a class="" href="javascript:;">超级管理员控制</a>
                             <dl class="layui-nav-child">
                                 <dd id="a1">@Html.ActionLink("用户账号池", "UserNumber", "Admin")</dd>
@@ -64,7 +64,7 @@
                     }
                     @if (User.IsInRole("Admin")||User.IsInRole("BAdmin"))
                     {
-                        <li class="layui-nav-item layui-nav-itemed">
+                        <li class="layui-nav-item">
                             <a class="" href="javascript:;">管理员控制</a>
                             <dl class="layui-nav-child">
                                 <dd id="b1">@Html.ActionLink("社团创建审批", "AuditClub", "BAdmin")</dd>
@@ -74,7 +74,7 @@
                         </li>
                     }
 
-                    <li class="layui-nav-item layui-nav-itemed">
+                    <li class="layui-nav-item">
                         <a href="javascript:;">社团</a>
                         <dl class="layui-nav-child">
                             <dd id="c1">@Html.ActionLink("社团查询", "Index", "Clubs")</dd>
@@ -83,7 +83,12 @@
                             <dd id="c4">@Html.ActionLink("管理我的社团", "MyClubs", "Clubs")</dd>
                         </dl>
                     </li>
-                    <li class="layui-nav-item"><a href="">我是社长</a></li>
+                    <li class="layui-nav-item">
+                        <a href="javascript:;">我是社长</a>
+                        <dl class="layui-nav-child">
+                            <dd id="d1">@Html.ActionLink("入社申请", "AuditJoinClub", "CAdmin")</dd>
+                        </dl>
+                    </li>
                     <li class="layui-nav-item"><a href="">活动投票</a></li>
                 </ul>
             </div>

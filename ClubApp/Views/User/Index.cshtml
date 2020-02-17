@@ -6,6 +6,10 @@
     .font-size-100{
         font-size:100px;
     }
+    .head-img{
+        max-width:150px;
+        max-height:150px;
+    }
 </style>
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
     <legend>账号： @Model.UserId </legend>
@@ -17,7 +21,7 @@
             <div class="layui-card">
                 <div class="layui-card-header">昵称： @Model.UserName 状态： @Model.Online</div>
                 <div class="layui-card-body">
-                    <img src="@Model.HeadImg" /> <br />
+                    <img class="head-img" src="@Model.HeadImg" /> <br />
                     真实姓名： @Model.RelName <br />
                     性别： @Model.Gender <br />
                 </div>

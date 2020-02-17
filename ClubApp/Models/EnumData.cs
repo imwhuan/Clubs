@@ -9,7 +9,7 @@
     /// </summary>
     public enum UCStatus
     {
-        未知, 社长, 秘书, 优秀会员, 会员
+        未知, 社长, 秘书, 优秀会员, 会员,申请中
     }
     public enum SQType
     {

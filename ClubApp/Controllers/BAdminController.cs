@@ -24,7 +24,7 @@ namespace ClubApp.Controllers
             }
             List<ApplyAudit> models = new List<ApplyAudit>();
             int st = (int)s;
-            if (s > 0 && s < 5)
+            if (s > 0 && s < 4)
             {
                 models = db.ApplyAudits.Where(a => a.Type.Id == (int)SQType.注册社团 && a.CheckState == st).OrderBy(a => a.Id).ToList();
             }

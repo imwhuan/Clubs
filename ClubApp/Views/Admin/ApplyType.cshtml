@@ -3,11 +3,11 @@
     ViewBag.Title = "申请类型";
 }
 <h2>@ViewBag.Msg</h2>
-<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+<fieldset class="layui-elem-field layui-field-title">
     <legend>当前共有<span style="color:red;font-size:larger"> @Model.Count() </span>个申请类型</legend>
 </fieldset>
 <p>
-    <a href="~/Admin/AddApplyType" class="layui-btn"><i class="layui-icon">&#xe608;</i> 添加</a>
+    <a href="~/Admin/AddApplyType" class="layui-btn layui-btn-sm"><i class="layui-icon">&#xe608;</i> 添加</a>
 </p>
 <div class="layui-form">
     <table class="layui-table">

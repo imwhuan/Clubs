@@ -63,7 +63,7 @@ namespace ClubApp.Controllers
                 ClubType = club.Type.Name,
                 Labels = club.Label?.Split(',').ToList(),
                 Name = club.Name,
-                HeadImg = club.HeadImg?? "Content/images/head3.jpg",
+                HeadImg = club.HeadImg?? "Content/images/head5.jpg",
                 ShortDesc = club.ShortDesc,
                 Desc = club.Desc,
                 State = club.State == null ? "" : Enum.GetName(typeof(EnumState), club.State),
@@ -168,17 +168,98 @@ namespace ClubApp.Controllers
             model.clubTypes = db.ClubTypes.ToList();
             return View(model);
         }
-        public ActionResult JoinClub()
+        [HttpGet]
+        public ActionResult JoinClub(string cid)
         {
-            return View();
-        }
-        public ActionResult MyClub(string Msg = "")
-        {
-            if (!string.IsNullOrEmpty(Msg))
+            if (cid == null)
             {
-                ViewBag.Msg = Msg;
+                return RedirectToAction("Index");
             }
-            return View();
+            ClubNumber club = db.ClubNumbers.Find(cid);
+            if (club == null)
+            {
+                return HttpNotFound("未发现社团" + cid);
+            }
+            JoinClubSubModel model = new JoinClubSubModel()
+            {
+                ClubId = club.ClubId,
+                Type = club.Type.Name,
+                Name = club.Name,
+                HeadImg = club.HeadImg,
+                ShortDesc = club.ShortDesc,
+                Desc = club.Desc,
+                State = Enum.GetName(typeof(EnumState), club.State),
+                CreateDate = club.CreateDate == null ? "未知" : club.CreateDate.ToString(),
+                User = club.User.UserName,
+                UserCount=db.UserClubs.Where(uc=>uc.Club.ClubId==cid).Count(),
+                CanJoin=!db.UserClubs.Where(uc=>uc.Club.ClubId==cid&&uc.User.UserId==User.Identity.Name).Any()
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult JoinClub([Bind(Include = "ClubId,ApplyDesc,ApplyFile")]JoinClubSubModel model)
+        {
+            try
+            {
+                ClubNumber club = db.ClubNumbers.Find(model.ClubId);
+                UserNumber me = db.UserNumbers.Find(User.Identity.Name);
+                if (string.IsNullOrWhiteSpace(model.ApplyFile))
+                {
+                    ModelState.AddModelError("", "申请任务未上传审批文件！");
+                    return View(model);
+                }
+                if (db.UserClubs.Where(uc => uc.Club.ClubId == model.ClubId && uc.User.UserId == User.Identity.Name).Any())
+                {
+                    ModelState.AddModelError("", "你已经是该社团成员或已申请加入该社团，不允许重复申请加入");
+                    return View(model);
+                }
+                if (club.State != (int)EnumState.正常&& club.State != (int)EnumState.待提交)
+                {
+                    string state = club.State == null ? "未知" : Enum.GetName(typeof(EnumState), club.State);
+                    ModelState.AddModelError("","社团"+club.ClubId+"状态为："+state+ " 不允许申请加入");
+                    return View(model);
+                }
+                ApplyAudit apply = new ApplyAudit()
+                {
+                    Type = db.ApplyTypes.Find((int)SQType.加入社团),
+                    ApplicationDesc = model.ApplyDesc,
+                    ApplicationFiled = model.ApplyFile,
+                    ApplyUser = me,
+                    Club = club,
+                    ApplyDate = DateTime.Now,
+                    CheckState = (int)EnumAuditState.创建,
+                    AuditTimes = 0
+                };
+                db.ApplyAudits.Add(apply);
+                db.SaveChanges();
+
+                AuditDetail audit = new AuditDetail()
+                {
+                    ApplyId = apply.Id,
+                    CheckState = (int)EnumAuditState.创建,
+                    AuditUser = me,
+                    AuditDate = DateTime.Now
+                };
+                db.AuditDetails.Add(audit);
+
+                UserClubs newuserClubs = new UserClubs()
+                {
+                    User = me,
+                    Club = club,
+                    State = (int)EnumState.待审批,
+                    CreateDate = DateTime.Now,
+                    Status=db.UserStatuses.Find((int)UCStatus.申请中),
+                    AuditID = apply.Id
+                };
+                db.UserClubs.Add(newuserClubs);
+                db.SaveChanges();
+                return RedirectToAction("MyClubs", new { Msg = "加入社团[" + club.ClubId + "]的一个申请已提交，牢记并使用申请任务凭证[" + apply.Id + "]查看申请进度" });
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
         }
         public ActionResult MyClubs(string Msg = "")
         {
@@ -219,82 +300,7 @@ namespace ClubApp.Controllers
 
             return Json(dataModel, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult JoinedClubData(int page, int limit)
-        {
-            List<UserClubDataModel> models = new List<UserClubDataModel>();
-            foreach (UserClubs clubs in db.UserClubs.OrderBy(c => c.Id).Skip((page - 1) * limit).Take(limit).ToList())
-            {
-                UserClubDataModel model = new UserClubDataModel()
-                {
-                    Id = clubs.Id,
-                    ClubId = clubs.Club.ClubId,
-                    Club = clubs.Club.Name,
-                    CreateDate = clubs.CreateDate == null ? "未知" : clubs.CreateDate.ToString(),
-                    Desc = clubs.Desc,
-                    Status = clubs.Status == null ? "普通成员" : clubs.Status.Name
-                };
-                models.Add(model);
-            }
-            PageDataModel dataModel = new PageDataModel()
-            {
-                code = 0,
-                msg = "",
-                count = db.UserClubs.Count(),
-                data = models.AsQueryable()
-            };
-
-            return Json(dataModel, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult JoiningClubData(int page, int limit)
-        {
-            List<ApplyAuditModel> models = new List<ApplyAuditModel>();
-
-            foreach (ApplyAudit apply in db.ApplyAudits.Where(a => a.ApplyUser.UserId == User.Identity.Name && a.Type.Id == (int)SQType.加入社团).OrderBy(c => c.Id).Skip((page - 1) * limit).Take(limit).ToList())
-            {
-                ApplyAuditModel model = new ApplyAuditModel()
-                {
-                    Id = apply.Id,
-                    ApplyUser = apply.ApplyUser.RelName,
-                    CheckState = apply.CheckState == null ? "未知" : Enum.GetName(typeof(EnumAuditState), apply.CheckState),
-                    ApplyDate = apply.ApplyDate == null ? "未知" : apply.ApplyDate.ToString()
-                };
-                models.Add(model);
-            }
-            PageDataModel dataModel = new PageDataModel()
-            {
-                code = 0,
-                msg = "",
-                count = db.UserClubs.Count(),
-                data = models.AsQueryable()
-            };
-
-            return Json(dataModel, JsonRequestBehavior.AllowGet);
-        }
-        public ActionResult ApplyingClubData(int page, int limit)
-        {
-            List<ApplyAuditModel> models = new List<ApplyAuditModel>();
-            foreach (ApplyAudit apply in db.ApplyAudits.Where(a => a.ApplyUser.UserId == User.Identity.Name && a.Type.Id == (int)SQType.注册社团).OrderBy(c => c.Id).Skip((page - 1) * limit).Take(limit).ToList())
-            {
-                ApplyAuditModel model = new ApplyAuditModel()
-                {
-                    Id = apply.Id,
-                    ApplyUser = apply.ApplyUser.RelName,
-                    CheckState = apply.CheckState == null ? "未知" : Enum.GetName(typeof(EnumAuditState), apply.CheckState),
-                    ApplyDate = apply.ApplyDate == null ? "未知" : apply.ApplyDate.ToString()
-                };
-                models.Add(model);
-            }
-            PageDataModel dataModel = new PageDataModel()
-            {
-                code = 0,
-                msg = "",
-                count = db.UserClubs.Count(),
-                data = models.AsQueryable()
-            };
-
-            return Json(dataModel, JsonRequestBehavior.AllowGet);
-        }
+        
         [HttpGet]
         public ActionResult ApplyClubSubmit(string cid)
         {
@@ -336,7 +342,7 @@ namespace ClubApp.Controllers
                 if (club.User.UserId != User.Identity.Name)
                 {
                     ModelState.AddModelError("", "非用户" + User.Identity.Name + "创建的申请不能由用户" + User.Identity.Name + "提交！");
-                    return View(club);
+                    return View(model);
                 }
                 if (club.State != (int)EnumState.待提交)
                 {
@@ -368,6 +374,10 @@ namespace ClubApp.Controllers
 
                 club.State = (int)EnumState.待审批;
                 club.AuditID = apply.Id;
+                if (string.IsNullOrEmpty(club.HeadImg))
+                {
+                    club.HeadImg = "Content/images/head5.jpg";//设置社团默认头像图片
+                }
                 db.Entry(club).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("MyClubs", new { Msg = "社团编号[" + club.ClubId + "]一个申请已提交，牢记并使用申请任务凭证[" + apply.Id + "]查看申请进度" });

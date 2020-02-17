@@ -567,7 +567,7 @@ namespace ClubApp.Controllers
             {
                 return HttpNotFound();
             }
-            var applys = db.ApplyAudits.Where(a => a.Type.Id == AppT.Id);
+            var applys = db.ApplyAudits.Where(a => a.Type.Id == AppT.Id&&a.CheckState==(int)EnumAuditState.创建);
             List<ApplyAuditModel> applymodels = new List<ApplyAuditModel>();
             foreach (ApplyAudit apply in applys)
             {

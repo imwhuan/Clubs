@@ -33,7 +33,7 @@
                 <td>@Html.DisplayFor(m => item.AuditTimes)</td>
                 @if (item.CheckState == 1)
                 {
-                    <td style="color:blue">待审批</td>
+                    <td style="color:blue">创建</td>
                     <td>
                         @Html.ActionLink("查看记录", "AuditClubDetail", new { id = item.Id }, new { @class = "layui-btn layui-btn-primary layui-btn-xs" })
                         @Html.ActionLink("开始审批", "AuditClubA", new { id = item.Id }, new { @class = "layui-btn layui-btn-xs" })
@@ -60,4 +60,5 @@
 </div>
 <script>
     $("#b1").addClass("layui-this");
+    $("#b1").parents("li").addClass("layui-nav-itemed")
 </script>

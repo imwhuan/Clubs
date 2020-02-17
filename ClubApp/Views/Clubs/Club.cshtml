@@ -49,7 +49,7 @@
             <td rowspan="3">
                 @if (Model.status == 0)
                 {
-                    @Html.ActionLink("申请加入", "JoinClub", "", new { @class = "text-blue" });
+                    @Html.ActionLink("申请加入", "JoinClub", new { cid=Model.ClubId}, new { @class = "text-blue" });
                 }
                 <p class="mar-tb">
                     @Html.DisplayNameFor(m => m.UserCount): @Html.DisplayFor(m => m.UserCount)

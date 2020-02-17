@@ -136,6 +136,7 @@
     <Content Include="Content\images\head1.png" />
     <Content Include="Content\images\head2.png" />
     <Content Include="Content\images\head3.jpg" />
+    <Content Include="Content\images\head5.jpg" />
     <Content Include="Content\images\home1.jpg" />
     <Content Include="Content\images\home2.png" />
     <Content Include="Content\images\home3.jpg" />
@@ -268,6 +269,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BAdminController.cs" />
+    <Compile Include="Controllers\CAdminController.cs" />
     <Compile Include="Controllers\ClubsController.cs" />
     <Compile Include="Controllers\GetDataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -330,7 +332,6 @@
     <Content Include="Views\Admin\AddClubNumber.cshtml" />
     <Content Include="Views\Clubs\ApplyClub.cshtml" />
     <Content Include="Views\Clubs\JoinClub.cshtml" />
-    <Content Include="Views\Clubs\MyClub.cshtml" />
     <Content Include="Views\Admin\ClubType.cshtml" />
     <Content Include="Views\Admin\AddClubType.cshtml" />
     <Content Include="Views\Admin\ClubTypeDelete.cshtml" />
@@ -349,6 +350,8 @@
     <Content Include="Views\Admin\AdminFirstSet.cshtml" />
     <Content Include="Views\Admin\EdUserRoles.cshtml" />
     <Content Include="Views\User\UserSet.cshtml" />
+    <Content Include="Views\CAdmin\AuditJoinClub.cshtml" />
+    <Content Include="Views\CAdmin\AuditJoinClubA.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
