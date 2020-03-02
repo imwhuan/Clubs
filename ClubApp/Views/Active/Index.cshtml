@@ -1,0 +1,156 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+<style>
+    .ul-list li{
+        position:relative;
+        padding:15px 52px 15px 80px;
+    }
+    .ul-list-badge{
+        position:absolute;
+        right:15px;
+        top:15px;
+    }
+    .head-img-a{
+        position:absolute;
+        left:15px;
+        top:15px;
+    }
+    .head-img-a img{
+        width:50px;
+        height:50px;
+    }
+    .ul-list h2 span {
+        line-height: 23px;
+        height: 23px;
+        font-size: 15px;
+    }
+    .div-desc-short {
+        padding: 5px 0;
+        color: gray;
+    }
+    .ul-list-info span {
+        margin: 0 5px;
+    }
+    .layui-icon-star-fill{
+        color:orange;
+    }
+    
+</style>
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>活动列表</legend>
+</fieldset>
+<input type="hidden" id="cid" value="@ViewBag.ClubId" />
+@*<ul class="ul-list">
+    <li>
+        <a title="我是一个名字特别长的社团" class="head-img-a" href="/u/44272200"> 
+            <img alt="CrazyYi" src="~/Content/images/head1.png">
+        </a>
+        <h2> <span class="layui-badge-rim">未开始</span><a href="/jie/62437/"> Layui Table 中使用 layerTable.js 实现在表格中展开/折叠面板中显示扩展表格</a> </h2>
+        <div class="div-desc-short">
+            <span class="layui-badge layui-bg-blue">王者荣耀</span>
+            <span class="layui-badge layui-bg-blue">体育竞技</span>
+            <span class="layui-badge layui-bg-blue">交友</span>
+            <span>活动简介：撒大大的撒达娃大的撒达娃阿达伟大啊达娃的撒到我阿达的阿文哇大达娃大大挖的啊</span>
+        </div>
+        <div class="ul-list-info">
+            <a href="/u/44272200" link=""> <cite>CrazyYi</cite> </a>
+            <span>时间：2020-1-7 到 2020-1-7  </span>
+            <span>地点：河南科技大小第一教学楼308教室</span>
+            <span title="评分"><i class="layui-icon layui-icon-star-fill"></i> 20</span>
+            <span><a href="#" title="评论"><i class="layui-icon layui-icon-dialogue"></i> 17 </a> </span>
+        </div>
+        <div class="ul-list-badge">
+            <span class="layui-badge layui-bg-red">置顶</span>
+        </div>
+    </li>
+    <li>
+        <a class="head-img-a" href="/u/44272200"> <img alt="CrazyYi" src="~/Content/images/head1.png"> </a>
+        <h2> <span class="layui-badge layui-bg-blue">已结束</span><a href="/jie/62437/"> Layui Table 中使用 layerTable.js 实现在表格中展开/折叠面板中显示扩展表格</a> </h2>
+        <div class="div-desc-short">
+            <span class="layui-badge layui-bg-orange">橙</span>
+            <span class="layui-badge layui-bg-green">绿</span>
+            <span class="layui-badge layui-bg-cyan">青</span>
+            <span class="layui-badge layui-bg-blue">蓝</span>
+            <span class="layui-badge layui-bg-black">黑</span>
+            <span class="layui-badge layui-bg-gray">灰</span>
+            <span>活动简介：撒大大的撒达娃大的撒达娃阿达伟大啊达娃的撒到我阿达的阿文哇大达娃大大挖的啊</span>
+        </div>
+        <div class="ul-list-info">
+            <a href="/u/44272200" link=""> <cite>CrazyYi</cite> </a>
+            <span>活动时间：2020-1-7 到 2020-1-7  </span>
+            <span title="评分"><i class="layui-icon layui-icon-star-fill"></i> 20</span>
+            <span><a href="#" title="评论"><i class="layui-icon layui-icon-dialogue"></i> 17 </a> </span>
+        </div>
+        <div class="ul-list-badge">
+            <span class="layui-badge layui-bg-red">置顶</span>
+        </div>
+    </li>
+    <li>
+        <a class="head-img-a" href="/u/44272200"> <img alt="CrazyYi" src="~/Content/images/head2.png"> </a>
+        <h2> <span class="layui-badge layui-bg-green">进行中</span><a href="/jie/62437/"> Layui Table 中使用 layerTable.js 实现在表格中展开/折叠面板中显示扩展表格</a> </h2>
+        <div class="div-desc-short">
+            <span class="layui-badge layui-bg-orange">橙</span>
+            <span class="layui-badge layui-bg-green">绿</span>
+            <span class="layui-badge layui-bg-cyan">青</span>
+            <span class="layui-badge layui-bg-blue">蓝</span>
+            <span class="layui-badge layui-bg-black">黑</span>
+            <span class="layui-badge layui-bg-gray">灰</span>
+            <span>活动简介：撒大大的撒达娃大的撒达娃阿达伟大啊达娃的撒到我阿达的阿文哇大达娃大大挖的啊</span>
+        </div>
+        <div class="ul-list-info">
+            <a href="/u/44272200" link=""> <cite>CrazyYi</cite> </a>
+            <span>活动时间：2020-1-7 到 2020-1-7  </span>
+            <span title="评分"><i class="layui-icon layui-icon-star-fill"></i> 20</span>
+            <span><a href="#" title="评论"><i class="layui-icon layui-icon-dialogue"></i> 17 </a> </span>
+        </div>
+        <div class="ul-list-badge">
+            <span class="layui-badge layui-bg-red">置顶</span>
+        </div>
+    </li>
+    
+</ul>*@
+<ul class="ul-list" id="LAY_demo1"></ul>
+
+<script>
+    layui.use('flow', function () {
+        var flow = layui.flow;
+
+          flow.load({
+            elem: '#LAY_demo1' //指定列表容器
+            ,done: function(page, next){ //到达临界点（默认滚动触发），触发下一页
+                var lis = [];
+                var cid = $("#cid").val();
+                var posturl = '/GetData/GetActiveListData?page=' + page;
+                if (cid.length > 0) {
+                    posturl = '/GetData/GetActiveListData?page=' + page + '&cid=' + cid;
+                }
+              //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
+              $.get('/GetData/GetActiveListData?page='+page, function(res){
+                //假设你的列表返回在data集合中
+                  layui.each(res.data, function (index, item) {
+                      var badge1 = '<span class="layui-badge-rim">未开始</span>';
+                      if (item.State == "进行中") {
+                          badge1='<span class="layui-badge layui-bg-green">进行中</span>'
+                      }
+                      else if (item.State == "已结束") {
+                          badge1='<span class="layui-badge layui-bg-blue">已结束</span>'
+                      }
+                      var lables = "";
+                      layui.each(item.Labels, function (index, lab) {
+                          lables=lables+'<span class="layui-badge layui-bg-blue">'+lab+'</span> '
+                      })
+                    var dom='<li><a title="'+item.ClubName+'" class="head-img-a" href="/Clubs/Club?cid='+item.ClubID+'"><img alt="'+item.ClubName+'" src="/'+item.HeadImg+'"></a><h2>'+badge1+'<a href="/Active/Detail?aid='+item.Id+'"> '+item.Title1+'</a></h2><div class="div-desc-short">'+lables+'<span> 活动简介：'+item.Title2+'</span></div><div class="ul-list-info"><a href="/User?uid='+item.UserID+'"><cite>'+item.UserName+'</cite></a> <span>时间：'+item.Time1+'到'+item.Time2+'</span><span>地点：'+item.Area+'</span><span title="评分"><i class="layui-icon layui-icon-star-fill"></i>'+item.Votes0+'</span><span><a href="#" title="评论"><i class="layui-icon layui-icon-dialogue"></i> '+item.VoteCount+' </a> </span></div><div class="ul-list-badge"><span class="layui-badge layui-bg-red">置顶</span></div></li>'
+                  lis.push(dom);
+                }); 
+        
+        //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+        //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+        next(lis.join(''), page < res.count);    
+      });
+    }
+  });
+
+    })
+</script>

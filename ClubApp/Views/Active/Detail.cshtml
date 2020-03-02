@@ -1,0 +1,10 @@
+﻿@model ClubApp.Models.Activities
+@{
+    ViewBag.Title = "Detail";
+}
+
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>@Model.Title1</legend>
+</fieldset>
+
+<div>@(new HtmlString(Model.Content))</div>

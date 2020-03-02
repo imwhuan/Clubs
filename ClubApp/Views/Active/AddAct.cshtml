@@ -1,0 +1,177 @@
+﻿@model ClubApp.Models.ActiveListModel
+@{
+    ViewBag.Title = "AddAct";
+}
+
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>@Model.ClubName | 填写活动信息</legend>
+</fieldset>
+@using (Html.BeginForm("AddAct", "Active", FormMethod.Post, new { @class = "layui-form layui-form-pane" }))
+{
+    <div class="layui-form-item layui-row layui-col-space8">
+        <div class="layui-col-sm4">
+            <label class="layui-form-label">活动类型</label>
+            <div class="layui-input-block">
+                <select name="ActType" lay-verify="required" lay-filter="aihao">
+                    <option value=""></option>
+                    <option value="0">写作</option>
+                    <option value="1" selected="">阅读</option>
+                    <option value="2">游戏</option>
+                    <option value="3">音乐</option>
+                    <option value="4">旅行</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-col-sm8">
+            @Html.LabelFor(m => m.Title1, new { @class = "layui-form-label" })
+            <div class="layui-input-block">
+                <input type="text" name="Title1" id="Title1" lay-verify="required" class = "layui-input", autocomplete = "off" />
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Title2, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            <input type="text" name="Title2" id="Title2" lay-verify="required" class="layui-input" autocomplete="off" placeholder = "副标题/简介：50字以内" />
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <textarea placeholder="请输入内容" id="Content" name="Content" class="layui-textarea"></textarea>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Area, new { @class = "layui-form-label" })
+        <div class="layui-input-inline">
+            <select name="Area" lay-verify="required" lay-filter="aihao">
+                <option value=""></option>
+                <option value="0">写作</option>
+                <option value="1">阅读</option>
+                <option value="2">游戏</option>
+                <option value="3">音乐</option>
+                <option value="4">旅行</option>
+            </select>
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+            请查看该地点的预约信息以防止与其他活动冲突
+            <a href="#" style="color:red">（点击查看）</a>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            @Html.LabelFor(m => m.Time1, new { @class = "layui-form-label" })
+            <div class="layui-input-block">
+                <input type="text" name="Time1" id="Time1" lay-verify="required" class="layui-input" readonly>
+            </div>
+        </div>
+        <div class="layui-inline">
+            @Html.LabelFor(m => m.Time2, new { @class = "layui-form-label" })
+            <div class="layui-input-block">
+                <input type="text" name="Time2" id="Time2" lay-verify="required" class="layui-input" readonly>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <input type="button" class="layui-btn" value="点击选择时间" alt="活动预约时间只能为一天后的30天内" id="opendateselect" />
+            <div class="layui-input-block layui-hide">
+                <input type="text" class="layui-input" id="test10" placeholder=" - ">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.LabelStr, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            <input type="checkbox" name="label" value="write" title="写作">
+            <input type="checkbox" name="label" value="read" title="阅读">
+            <input type="checkbox" name="label" value="game" title="游戏">
+            <input type="checkbox" name="label" value="write" title="写作">
+            <input type="checkbox" name="label" value="read" title="阅读">
+            <input type="checkbox" name="label" value="game" title="游戏">
+            <input type="checkbox" name="label" value="write" title="写作">
+            <input type="checkbox" name="label" value="read" title="阅读">
+            <input type="checkbox" name="label" value="game" title="游戏">
+            <input type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="addlabel()" value="更多" />
+            @Html.TextBoxFor(m => m.LabelStr, new { @class = "layui-input layui-hide" })
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <button class="layui-btn" lay-submit lay-filter="demo2">跳转式提交</button>
+        <button type="button" class="layui-btn" onclick="getcontent()"><i class="layui-icon layui-icon-play"></i>预览</button>
+        <input type="button" class="layui-btn" onclick="gettext()" value="获取纯文本" />
+        @Html.TextBoxFor(m => m.ClubID, new { @class = "layui-input layui-hide" })
+    </div>
+}
+<script>
+//Demo
+var index;
+var getcontent;
+var gettext;
+layui.use(['form', 'laydate', 'layedit'], function () {
+    var form = layui.form,
+        laydate = layui.laydate,
+        layedit = layui.layedit;
+
+      //监听提交
+    form.on('submit(demo2)', function (data) {
+        if (layedit.getContent(index).length < 1) {
+            layer.msg("活动内容不能为空");
+            return false;
+        }
+        if ($('input[name="label"]:checked').length > 3) {
+            layer.msg("标签最多选择3个");
+            return false;
+        }
+        var label="";
+        $('input[name="label"]:checked').each(function () {
+             label= label + "," + this.title;
+        });
+        $("#LabelStr").val(label);
+    });
+
+    layedit.set({
+      uploadImage: {
+        url: '/Upload/UploadImg?cid='+@Model.ClubID,
+      }
+    });
+    index = layedit.build('Content'); //建立编辑器
+
+    getcontent = function () {
+        layer.open({
+            type: 1 //此处以iframe举例
+                    ,title: '预览'
+                    ,area: ['50%', '100%'],
+            offset:'r'
+                    ,shade: 0
+                    ,maxmin: true
+                    ,content: layedit.getContent(index)
+
+        });
+    }
+    gettext = function () {
+        alert(layedit.getText(index))
+    }
+    //日期时间范围
+        laydate.render({
+            elem: '#test10'
+            , type: 'datetime'
+            , zIndex: 10000
+            , range: true
+            , calendar: true
+            , eventElem: '#opendateselect'
+            , trigger: 'click'
+            , min: 1 //1天后
+            , max: 30 //7天后
+            , done: function (value, date, endDate) {
+                if (date.year) {
+                    $("#Time1").val(date.year + "-" + date.month + "-" + date.date + " " + date.hours + ":" + date.minutes + ":" + date.seconds);
+                    $("#Time2").val(endDate.year + "-" + endDate.month + "-" + endDate.date + " " + endDate.hours + ":" + endDate.minutes + ":" + endDate.seconds);
+                }
+                else {
+                    $("#Time1").val("")
+                    $("#Time2").val("")
+                }
+            }
+        });
+});
+function addlabel() {
+    layer.msg('暂不支持自定义标签');
+}
+
+</script>
