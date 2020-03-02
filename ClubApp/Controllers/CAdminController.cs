@@ -135,7 +135,7 @@ namespace ClubApp.Controllers
                     AppA.CheckState = (int)state;
                     uc.State = (int)EnumState.正常;
                     uc.CreateDate = DateTime.Now;
-                    uc.Status = db.UserStatuses.Find((int)UCStatus.会员);
+                    uc.Status = (int)UCStatus.会员;
                     db.Entry(uc).State = System.Data.Entity.EntityState.Modified;
                 }
                 AppA.AuditDate = DateTime.Now;

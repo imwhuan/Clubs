@@ -53,10 +53,9 @@ namespace ClubApp.Controllers
             {
                 return HttpNotFound("未发现社团" + cid);
             }
-            List<UserClubs> userClubs = db.UserClubs.Where(u => u.Club.ClubId == club.ClubId&&u.State>0).ToList();
+            List<UserClubs> ucs = db.UserClubs.Where(u => u.Club.ClubId == club.ClubId&&u.State>0).ToList();
             List<Activities> activities = db.Activities.Where(a => a.Club.ClubId == club.ClubId && a.State == 1).OrderBy(a=>a.Id).Take(5).ToList();
             List<AnnounceMent> announceMents = db.AnnounceMents.Where(a => a.Club.ClubId == club.ClubId && a.state == (int)EnumState.正常).OrderBy(a=>a.Id).Take(5).ToList();
-            List<Vote> votes = db.Votes.Where(v => v.Club.ClubId == club.ClubId).OrderBy(v=>v.Id).Take(5).ToList();
             ClubViewModel model = new ClubViewModel()
             {
                 ClubId = club.ClubId,
@@ -69,17 +68,17 @@ namespace ClubApp.Controllers
                 State = club.State == null ? "" : Enum.GetName(typeof(EnumState), club.State),
                 CreateDate = club.CreateDate2 == null ? "未知" : club.CreateDate2.ToString(),
                 User = club.User,
-                UserCount = userClubs.Count,
+                UserCount = ucs.Count,
                 Activities = activities,
                 announceMents = announceMents,
-                votes = votes,
-                status=0
+                status="0"
             };
             if (User != null)
             {
-                if (userClubs.Where(u => u.User.UserId == User.Identity.Name).Any())
+                UserClubs uc = ucs.Where(u => u.User.UserId == User.Identity.Name).FirstOrDefault();
+                if (uc!=null)
                 {
-                    model.status = 1;
+                    model.status =Enum.GetName(typeof(UCStatus),uc.Status);
                 }
             }
 
@@ -148,7 +147,7 @@ namespace ClubApp.Controllers
                     {
                         User = thisuser,
                         Club = newclub,
-                        Status = db.UserStatuses.Find((int)UCStatus.社长),
+                        Status = (int)UCStatus.社长,
                         CreateDate = DateTime.Now,
                         State=(int)EnumState.正常
                     };
@@ -248,7 +247,7 @@ namespace ClubApp.Controllers
                     Club = club,
                     State = (int)EnumState.待审批,
                     CreateDate = DateTime.Now,
-                    Status=db.UserStatuses.Find((int)UCStatus.申请中),
+                    Status=(int)UCStatus.申请中,
                     AuditID = apply.Id
                 };
                 db.UserClubs.Add(newuserClubs);
@@ -281,7 +280,7 @@ namespace ClubApp.Controllers
                     User = uc.User.UserName,
                     ClubId = uc.Club.ClubId,
                     Club = uc.Club.Name,
-                    Status = uc.Status?.Name,
+                    Status = Enum.GetName(typeof(UCStatus),uc.Status),
                     CreateDate = uc.CreateDate == null ? "未知" : uc.CreateDate.ToString(),
                     Desc = uc.Desc,
                     Enable = uc.State ,
@@ -388,6 +387,7 @@ namespace ClubApp.Controllers
                 return View(model);
             }
         }
+        [HttpGet]
         public ActionResult ApplyClubInfo(int? id)
         {
             if (id == null)
@@ -410,13 +410,11 @@ namespace ClubApp.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
         }
+        [HttpPost]
         public ActionResult ApplyClubInfo(ClubNumber model)
         {
             return View(model);
         }
-
-
-
 
 
 
@@ -434,7 +432,7 @@ namespace ClubApp.Controllers
             if (count > 0)
             {
                 int index = r1.Next(0, count);
-                var club = db.ClubNumbers.Where(u => u.State == (int)EnumState.未使用).OrderBy(u => u.ClubId).Skip(count - 1).FirstOrDefault();
+                var club = db.ClubNumbers.Where(u => u.State == (int)EnumState.未使用).OrderBy(u => u.ClubId).Skip(index - 1).FirstOrDefault();
                 return club;
             }
             else

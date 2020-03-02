@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web;
+using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace ClubApp
@@ -9,6 +11,15 @@ namespace ClubApp
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+        }
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            Exception ex = Server.GetLastError();
+            if(ex is HttpException && ((HttpException)ex).GetHttpCode() == 404)
+            {
+                Server.ClearError();
+                Response.Redirect("/Home/Error404");
+            }
         }
     }
 }

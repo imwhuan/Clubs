@@ -46,10 +46,8 @@ namespace ClubApp.Models
         public List<Activities> Activities { get; set; }
         [Display(Name="最新公告")]
         public List<AnnounceMent> announceMents { get; set; }
-        [Display(Name="最新投票")]
-        public List<Vote> votes { get; set; }
         [Display(Name="当前用户与社团关系")]
-        public int status { get; set; }
+        public string status { get; set; }
     }
     public class UserClubModel
     {

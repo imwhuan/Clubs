@@ -9,6 +9,9 @@
     <script src="~/Content/layui/layui.js"></script>
     <script src="~/Scripts/jquery-3.4.1.min.js"></script>
     <style>
+        .them-color{
+            color:#009688;
+        }
         .text-danger{
             color:red;
         }
@@ -62,7 +65,7 @@
                             </dl>
                         </li>
                     }
-                    @if (User.IsInRole("Admin")||User.IsInRole("BAdmin"))
+                    @if (User.IsInRole("Admin") || User.IsInRole("BAdmin"))
                     {
                         <li class="layui-nav-item">
                             <a class="" href="javascript:;">管理员控制</a>
@@ -89,7 +92,13 @@
                             <dd id="d1">@Html.ActionLink("入社申请", "AuditJoinClub", "CAdmin")</dd>
                         </dl>
                     </li>
-                    <li class="layui-nav-item"><a href="">活动投票</a></li>
+                    <li class="layui-nav-item">
+                        <a href="javascript:;">活动管理</a>
+                        <dl class="layui-nav-child">
+                            <dd id="e1">@Html.ActionLink("活动投票", "Index", "Active")</dd>
+                        </dl>
+                    </li>
+                    <li id="vote-nav-item" class="layui-nav-item">@Html.ActionLink("活动投票", "Index", "Active")</li>
                 </ul>
             </div>
         </div>

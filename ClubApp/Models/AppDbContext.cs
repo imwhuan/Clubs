@@ -52,17 +52,17 @@ namespace ClubApp.Models
         /// </summary>
         public virtual DbSet<UserClubs> UserClubs { get; set; }
         /// <summary>
-        /// 职位
+        /// 关系:用户-门票
         /// </summary>
-        public virtual DbSet<UserStatus> UserStatuses { get; set; }
+        public virtual DbSet<UserTicket> UserTickets { get; set; }
         /// <summary>
         /// 公告
         /// </summary>
         public virtual DbSet<AnnounceMent> AnnounceMents { get; set; }
         /// <summary>
-        /// 投票活动
+        /// 图片
         /// </summary>
-        public virtual DbSet<Vote> Votes { get; set; }
+        public virtual DbSet<ImgList> ImgLists { get; set; }
         /// <summary>
         /// 投票记录
         /// </summary>
@@ -266,28 +266,30 @@ namespace ClubApp.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        [Display(Name = "活动类型")]
+        public int Type { get; set; }
         [Display(Name = "标签"), MaxLength(100)]
         public string Label { get; set; }
         [Display(Name = "主标题"), MaxLength(100)]
         public string Title1 { get; set; }
         [Display(Name = "副标题"), MaxLength(100)]
         public string Title2 { get; set; }
-        [Display(Name = "内容"), MaxLength(1000)]
+        [Display(Name = "内容")]
         public string Content { get; set; }
-        [MaxLength(50)]
-        public string ImgList { get; set; }
+        [Display(Name = "人数限制")]
+        public int? MaxUser { get; set; }
         [Display(Name ="活动地点")]
         public virtual Area Area { get; set; }
-        [Display(Name = "活动地点")]
-        public virtual Area Area0 { get; set; }
+        [Display(Name = "活动地点"),MaxLength(100)]
+        public string Area0 { get; set; }
         [Display(Name = "开始时间")]
-        public DateTime? Time1 { get; set; }
+        public DateTime Time1 { get; set; }
         [Display(Name = "结束时间")]
-        public DateTime? Time2 { get; set; }
+        public DateTime Time2 { get; set; }
         [Display(Name = "活动时长")]
         public int? Time3 { get; set; }
         [Display(Name = "发布时间"), DataType(DataType.DateTime)]
-        public DateTime? CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
         [Display(Name = "发布用户")]
         public virtual UserNumber User { get; set; }
         [Display(Name = "发布社团")]
@@ -296,6 +298,8 @@ namespace ClubApp.Models
         public int State { get; set; }
         [Display(Name = "审批编号")]
         public int AuditID { get; set; }
+        [Display(Name = "评分"),MaxLength(4)]
+        public string Votes0 { get; set; }
     }
     //用户-社团
     public class UserClubs
@@ -308,7 +312,7 @@ namespace ClubApp.Models
         [Display(Name = "社团")]
         public virtual ClubNumber Club { get; set; }
         [Display(Name = "职位/状态")]
-        public virtual UserStatus Status { get; set; }
+        public int Status { get; set; }
         [Display(Name = "创建时间")]
         public DateTime? CreateDate { get; set; }
         [Display(Name = "备注"), MaxLength(500)]
@@ -329,47 +333,59 @@ namespace ClubApp.Models
         [Display(Name = "是否启用")]
         public int? Enable { get; set; }
     }
-    public class UserStatus
-    {
-        [Key, Display(Name = "职位ID")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        [MaxLength(50), Display(Name = "职位名称")]
-        public string Name { get; set; }
-        [Display(Name = "是否启用")]
-        public int? Enable { get; set; }
-    }
-    public class Vote
-    {
-        [Key, Display(Name = "编号"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        [MaxLength(100), Display(Name = "标题")]
-        public string Title { get; set; }
-        [MaxLength(200), Display(Name = "简介")]
-        public string ShortDesc { get; set; }
-        [MaxLength(500), Display(Name = "说明")]
-        public string LongDesc { get; set; }
-        [Display(Name = "支持票")]
-        public int Votes1 { get; set; }
-        [Display(Name = "反对票")]
-        public int Votes2 { get; set; }
-        [Display(Name = "开始日期")]
-        public DateTime BeginDate { get; set; }
-        [Display(Name = "截至日期")]
-        public DateTime EndDate { get; set; }
-        public virtual UserNumber User { get; set; }
-        public virtual ClubNumber Club { get; set; }
-        [Display(Name ="状态")]
-        public int State { get; set; }
-    }
+    //public class UserStatus
+    //{
+    //    [Key, Display(Name = "职位ID")]
+    //    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    //    public int Id { get; set; }
+    //    [MaxLength(50), Display(Name = "职位名称")]
+    //    public string Name { get; set; }
+    //    [Display(Name = "是否启用")]
+    //    public int? Enable { get; set; }
+    //}
+    //public class Vote
+    //{
+    //    [Key, Display(Name = "编号"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    //    public int Id { get; set; }
+    //    [MaxLength(100), Display(Name = "标题")]
+    //    public string Title { get; set; }
+    //    [MaxLength(200), Display(Name = "简介")]
+    //    public string ShortDesc { get; set; }
+    //    [MaxLength(500), Display(Name = "说明")]
+    //    public string LongDesc { get; set; }
+    //    [Display(Name = "一星")]
+    //    public int Votes1 { get; set; }
+    //    [Display(Name = "二星")]
+    //    public int Votes2 { get; set; }
+    //    [Display(Name = "三星")]
+    //    public int Votes3 { get; set; }
+    //    [Display(Name = "四星")]
+    //    public int Votes4 { get; set; }
+    //    [Display(Name = "五星")]
+    //    public int Votes5 { get; set; }
+    //    [Display(Name = "开始日期")]
+    //    public DateTime BeginDate { get; set; }
+    //    [Display(Name = "截至日期")]
+    //    public DateTime EndDate { get; set; }
+    //    public virtual UserNumber User { get; set; }
+    //    public virtual ClubNumber Club { get; set; }
+    //    [Display(Name ="状态")]
+    //    public int State { get; set; }
+    //}
     public class Voting
     {
         [Key,Display(Name ="编号"),DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Display(Name ="活动")]
-        public int VoteId { get; set; }
-        [MaxLength(10),Display(Name ="用户")]
-        public string UserId { get; set; }
+        public virtual Activities Active { get; set; }
+        [Display(Name ="用户")]
+        public virtual UserNumber User { get; set; }
+        [Display(Name = "分数")]
+        public int Votes { get; set; }
+        [Display(Name = "评论"), MaxLength(100)]
+        public string Desc { get; set; }
+        [Display(Name = "状态")]
+        public int State { get; set; }
         [Display(Name ="创建日期")]
         public DateTime CreateDate { get; set; }
     }
@@ -406,5 +422,41 @@ namespace ClubApp.Models
         public int? Time3 { get; set; }
         [Display(Name = "状态")]
         public int? State { get; set; }
+    }
+    public class UserTicket
+    {
+        [Key, Display(Name = "编号"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        [Display(Name = "活动")]
+        public virtual Activities Active { get; set; }
+        [Display(Name = "用户")]
+        public virtual UserNumber User { get; set; }
+        [Display(Name = "描述"),MaxLength(100)]
+        public string Desc { get; set; }
+        [Display(Name = "状态")]
+        public int State { get; set; }
+        [Display(Name = "创建日期")]
+        public DateTime CreateDate { get; set; }
+    }
+    public class ImgList
+    {
+        [Key, Display(Name = "编号"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        [Display(Name = "相对路径")]
+        public string ImgUrl { get; set; }
+        [Display(Name = "绝对路径")]
+        public string Path { get; set; }
+        [Display(Name = "图片类型")]
+        public int Type { get; set; }
+        [Display(Name = "图片名称"),MaxLength(50)]
+        public string Name { get; set; }
+        [Display(Name = "状态")]
+        public int State { get; set; }
+        [Display(Name = "创建时间")]
+        public DateTime CreateDate { get; set; }
+        [Display(Name = "创建人"),MaxLength(10)]
+        public string CreateUser { get; set; }
+        [Display(Name = "创建社团"), MaxLength(10)]
+        public string CreateClub { get; set; }
     }
 }

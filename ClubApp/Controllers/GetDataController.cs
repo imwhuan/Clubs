@@ -216,5 +216,77 @@ namespace ClubApp.Controllers
 
             return Json(dataModel, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult GetActiveListData(int page,string cid)
+        {
+            int count = 6;//单页显示数量
+            List<ActiveListModel> models = new List<ActiveListModel>();
+            IQueryable<Activities> actlist;
+            if (string.IsNullOrEmpty(cid))
+            {
+                actlist = db.Activities.OrderByDescending(a => a.Id).Skip((page - 1) * count).Take(count);
+            }
+            else
+            {
+                actlist = db.Activities.Where(a=>a.Club.ClubId==cid).OrderByDescending(a => a.Id).Skip((page - 1) * count).Take(count);
+            }
+            foreach (Activities act in actlist)
+            {
+                ActiveListModel model = new ActiveListModel()
+                {
+                    Id = act.Id,
+                    Labels = act.Label.Split(',').ToList(),
+                    HeadImg=act.Club.HeadImg,
+                    Title1 = act.Title1,
+                    Title2 = act.Title2,
+                    Content = act.Content,
+                    MaxUser = act.MaxUser == null ? "无限制" : act.MaxUser.ToString() + "人",
+                    Area = act.Area?.Name,
+                    Time1 = act.Time1.ToString("yyyy/MM/dd hh:mm"),
+                    Time2 = act.Time2.ToString("yyyy/MM/dd hh:mm"),
+                    CreateDate = act.CreateDate.ToString(),
+                    UserID = act.User.UserId,
+                    UserName=act.User.UserName,
+                    ClubID = act.Club.ClubId,
+                    ClubName=act.Club.Name,
+                    VoteCount=db.Votings.Where(v=>v.Active.Id==act.Id).Count().ToString(),
+                   // State = Enum.GetName(typeof(ActiveState), act.State),
+                    Votes0 = string.IsNullOrEmpty(act.Votes0)?"0":act.Votes0
+                };
+                if (act.Time1 > DateTime.Now)
+                {
+                    model.State = "未开始";
+                }
+                else if (act.Time2 > DateTime.Now)
+                {
+                    model.State = "进行中";
+                }
+                else
+                {
+                    model.State = "已结束";
+                }
+                if (act.Area == null)
+                {
+                    if (string.IsNullOrEmpty(act.Area0))
+                    {
+                        model.Area = "未知";
+                    }
+                    else
+                    {
+                        model.Area= act.Area0;
+                    }
+                }
+
+                models.Add(model);
+            }
+            PageDataModel dataModel = new PageDataModel()
+            {
+                code = 0,
+                msg = "",
+                count = (int)Math.Ceiling((double)db.Activities.Count()/count),
+                data = models.AsQueryable()
+            };
+
+            return Json(dataModel, JsonRequestBehavior.AllowGet);
+        }
     }
 }

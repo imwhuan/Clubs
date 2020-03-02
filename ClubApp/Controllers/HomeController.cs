@@ -9,5 +9,9 @@ namespace ClubApp.Controllers
         {
             return View();
         }
+        public ActionResult Error404()
+        {
+            return View();
+        }
     }
 }

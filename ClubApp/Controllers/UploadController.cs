@@ -225,6 +225,83 @@ namespace ClubApp.Controllers
             }
         }
 
+        public ActionResult UploadImg(string cid)
+        {
+            EditData data1 = new EditData()
+            {
+                src = "",
+                title = ""
+            };
+            EditJson data = new EditJson()
+            {
+                code = 1,
+                msg = "",
+                data = data1
+            };
+            try
+            {
+                List<string> imgtype = new List<string>(new string[] { ".jpg", ".gif", ".png" });
+                HttpFileCollectionBase file = Request.Files;
+                
+                ClubNumber club = db.ClubNumbers.Find(cid);
+                if (club == null)
+                {
+                    data.msg += "未发现有效的社团";
+                }
+                else if (file == null || file.Count < 1)
+                {
+                    data.msg += "未成功接收文件";
+                }
+                else if (!imgtype.Contains(Path.GetExtension(file[0].FileName)))
+                {
+                    data.msg = "文件格式错误（jpg/gif/png）";
+                }
+                else if (file[0].ContentLength > 2048000)
+                {
+                    data.msg += "文件大小不允许超过2M";
+                }
+                else
+                {
+                    string filepath = Server.MapPath("~/Content/upload/act/");
+                    if (!Directory.Exists(filepath))
+                    {
+                        Directory.CreateDirectory(filepath);
+                    }
+                    string name = Path.GetFileName(file[0].FileName);
+                    if (name.Length > 10)
+                    {
+                        name = name.Substring(name.Length - 10);
+                    }
+                    Random r1 = new Random();
+                    name = DateTime.Now.ToString("yyyyMMddhhmmss")+r1.Next(10).ToString() + name;
+                    //string ext = Path.GetExtension(name);
+                    file[0].SaveAs(filepath + cid + "_" + name);
+                    data.code = 0;
+                    data.data.title = cid + "_" + name;
+                    data.data.src = "../Content/upload/act/" + cid + "_" + name;
+                    data.msg += "保存成功";
+                }
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                data.msg = ex.Message;
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public class EditJson
+        {
+            public int code { get; set; }
+            public string msg { get; set; }
+            public EditData data { get; set; }
+        }
+        public class EditData
+        {
+            public string src { get; set; }
+            public string title { get; set; }
+        }
+
         public class JsonData
         {
             public int code { get; set; }
@@ -232,5 +309,6 @@ namespace ClubApp.Controllers
             public string name { get; set; }
             public string msg { get; set; }
         }
+
     }
 }

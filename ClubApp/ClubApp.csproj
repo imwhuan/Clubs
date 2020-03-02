@@ -267,6 +267,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ActiveController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BAdminController.cs" />
     <Compile Include="Controllers\CAdminController.cs" />
@@ -290,7 +291,16 @@
     <Compile Include="Migrations\202002090658232_edit1.designer.cs">
       <DependentUpon>202002090658232_edit1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202002181604047_rebuild2.cs" />
+    <Compile Include="Migrations\202002181604047_rebuild2.designer.cs">
+      <DependentUpon>202002181604047_rebuild2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002201506274_edit2.cs" />
+    <Compile Include="Migrations\202002201506274_edit2.designer.cs">
+      <DependentUpon>202002201506274_edit2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\ActiveModel.cs" />
     <Compile Include="Models\AdminViewModels.cs" />
     <Compile Include="Models\AppDbContext.cs" />
     <Compile Include="Models\ClubViewModel.cs" />
@@ -352,6 +362,11 @@
     <Content Include="Views\User\UserSet.cshtml" />
     <Content Include="Views\CAdmin\AuditJoinClub.cshtml" />
     <Content Include="Views\CAdmin\AuditJoinClubA.cshtml" />
+    <Content Include="Views\Active\Index.cshtml" />
+    <Content Include="Views\Active\Add.cshtml" />
+    <Content Include="Views\Active\AddAct.cshtml" />
+    <Content Include="Views\Active\Detail.cshtml" />
+    <Content Include="Views\Home\Error404.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -361,6 +376,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\upload\act\" />
     <Folder Include="Content\upload\apply\" />
     <Folder Include="Content\upload\clubimg\" />
     <Folder Include="Views\GetData\" />
@@ -375,6 +391,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202002090658232_edit1.resx">
       <DependentUpon>202002090658232_edit1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002181604047_rebuild2.resx">
+      <DependentUpon>202002181604047_rebuild2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002201506274_edit2.resx">
+      <DependentUpon>202002201506274_edit2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

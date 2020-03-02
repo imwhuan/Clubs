@@ -3,148 +3,121 @@
     ViewBag.Title = Model.Name;
 }
 <style>
-    .layui-form-item {
-        padding-right: 15px;
-    }
-    .layui-table tbody tr:hover {
-        background-color: transparent
-    }
-    .text-blue{
-        color:blue;
-    }
-    .mar-tb{
-        margin:15px 0;
+    .color-theme{
+        color:#009688;
     }
     .float-right{
         float:right;
     }
-    .Announcement a{
+    a{
         color:#009688;
     }
     .Announcement ul li{
         padding:10px;
     }
-    .pad-l-30{
-        padding-left:30px;
+    .head-img-row{
+        padding-left:115px;
+        min-height:100px;
     }
-    .pad-l-15{
-        padding-left:15px;
+    .head-img-row .head-img{
+        position:absolute;
+        top:0;
+        left:0;
+        width:100px;
+        height:100px;
     }
-    .pad-r-15{
-        padding-right:15px;
+    .head-img-row .head-div ul li{
+        line-height:30px;
     }
 </style>
 <fieldset class="layui-elem-field layui-field-title">
     <legend>社团 @Model.Name</legend>
 </fieldset>
 <div class="layui-fluid">
-    <table class="layui-table" lay-skin="nob">
-        <colgroup>
-            <col width="100">
-            <col>
-            <col width="300">
-        </colgroup>
-        <tr>
-            <td rowspan="3"><img src="~/@Model.HeadImg" id="clubimg" style="height:100px;width:100px" /></td>
-            <td rowspan="3">
-                @if (Model.status == 0)
-                {
-                    @Html.ActionLink("申请加入", "JoinClub", new { cid=Model.ClubId}, new { @class = "text-blue" });
-                }
-                <p class="mar-tb">
-                    @Html.DisplayNameFor(m => m.UserCount): @Html.DisplayFor(m => m.UserCount)
-                </p>
-                @Html.DisplayNameFor(m => m.User): @Html.DisplayFor(m => m.User.UserName)
-            </td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>@Html.DisplayNameFor(m=>m.CreateDate):@Html.DisplayFor(m=>m.CreateDate)</td>
-        </tr>
-        <tr>
-            <td rowspan="4">
-                <div class="site-demo-laydate">
-                    <div class="layui-inline" id="test-n1"></div>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <fieldset class="layui-elem-field">
-                    <legend>@Html.DisplayNameFor(m => m.ShortDesc)</legend>
-                    <div class="layui-field-box">
-                        @Html.DisplayFor(m => m.ShortDesc)
-                    </div>
-                </fieldset>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <fieldset class="layui-elem-field">
-                    <legend>@Html.DisplayNameFor(m => m.Desc)</legend>
-                    <div class="layui-field-box">
-                        @Html.DisplayFor(m => m.Desc)
-                    </div>
-                </fieldset>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <hr />
-            </td>
-        </tr>
-        <tr class="Announcement">
-            <td colspan="3">
-                <div class="layui-fluid">
-                    <div class="layui-row" style="margin:0 -15px">
-                        <div class="layui-col-md6 pad-r-15">
-                            @Html.DisplayNameFor(m => m.announceMents)
-                            <hr />
-                            <ul class="pad-l-30">
-                                <li><a href="#">第一条测试公告</a><span class="float-right">2020年2月10日</span></li>
-                                @foreach (var item in Model.announceMents)
-                                {
-                                    <li><a href="#">@item.Title1</a><span class="float-right">（@item.CreateDate）</span></li>
-                                }
-                            </ul>
-                        </div>
-                        <div class="layui-col-md6 pad-l-15">
-                            @Html.DisplayNameFor(m => m.Activities)
-                            <hr />
-                            <ul class="pad-l-30">
-                                <li><a href="#">第一条活动</a><span class="float-right">2020年2月10日</span></li>
-                                @foreach (var item in Model.announceMents)
-                                {
-                                    <li><a href="#">@item.Title1</a><span class="float-right">（@item.CreateDate）</span></li>
-                                }
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </td>
-            <td></td>
-        </tr>
-        <tr class="Announcement">
-            <td colspan="3">
-                <div>
-                    @Html.DisplayNameFor(m => m.votes)
-                    <hr />
-                    <ul class="pad-l-30">
-                        <li><a href="#">第一条测试公告</a><span class="float-right"><span>支持（3）</span><span>反对（2）</span></span></li>
-                        <li><a href="#">第二条测试公告</a><span class="float-right"><span>支持（3）</span><span>反对（2）</span></span></li>
-                        <li><a href="#">第一条测试公告</a><span class="float-right"><span>支持（3）</span><span>反对（2）</span></span></li>
-                        @foreach (var item in Model.votes)
+    <div class="layui-row">
+        <div class="layui-col-md12 head-img-row">
+            <img src="~/@Model.HeadImg" id="clubimg" class="head-img" />
+            <div class="head-div layui-row">
+                <div class="layui-col-md6">
+                    <ul>
+                        @if (Model.status == "0")
                         {
-                            <li><a href="#">@item.Title</a><span class="float-right"><span>支持（@item.Votes1）</span><span>反对（@item.Votes2）</span></span></li>
+                            <li>@Html.ActionLink("申请加入", "JoinClub", new { cid = Model.ClubId }, new { @class = "text-blue" })</li>
                         }
+                        else
+                        {
+                            if (Model.status == "社长")
+                            {
+                                <li>我的职位：@Model.status | <a href="#">编辑社团资料</a></li>
+                            }
+                            else
+                            {
+                                <li>我的职位：@Model.status</li>
+                            }
+                        }
+                        <li>@Html.DisplayNameFor(m => m.UserCount)：@Html.DisplayFor(m => m.UserCount)</li>
+                        <li>@Html.DisplayNameFor(m => m.User)：@Html.DisplayFor(m => m.User.UserName)</li>
                     </ul>
                 </div>
-            </td>
-            <td></td>
-        </tr>
-    </table>
-</div>
+                <div class="layui-col-md6">
+                    <ul>
+                        <li>@Html.DisplayNameFor(m => m.CreateDate):@Html.DisplayFor(m => m.CreateDate)</li>
+                        <li>@Html.ActionLink("创建活动","AddAct","Active",new { cid=Model.ClubId },new { })</li>
+                        <li>发布公告</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md8 layui-col-sm12">
+            <fieldset class="layui-elem-field" style="margin-top:15px">
+                <legend>@Html.DisplayNameFor(m => m.ShortDesc)</legend>
+                <div class="layui-field-box">
+                    @Html.DisplayFor(m => m.ShortDesc)
+                </div>
+            </fieldset>
+            <fieldset class="layui-elem-field">
+                <legend>@Html.DisplayNameFor(m => m.Desc)</legend>
+                <div class="layui-field-box">
+                    @Html.DisplayFor(m => m.Desc)
+                </div>
+            </fieldset>
+        </div>
+        <div class="layui-col-md4 layui-show-md-block layui-hide">
+            <div class="site-demo-laydate float-right">
+                <div class="layui-inline" id="test-n1"></div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row layui-col-space15 Announcement" style="margin-top:15px">
+        <div class="layui-col-md6">
+            @Html.DisplayNameFor(m => m.announceMents)
+            <span class="float-right">更多</span>
+            <hr />
+            <ul class="pad-l-30">
+                <li><a href="#">第一条测试公告</a><span class="float-right">2020年2月10日</span></li>
+                @foreach (var item in Model.announceMents)
+                {
+                    <li><a href="#">@item.Title1</a><span class="float-right">（@item.CreateDate）</span></li>
+                }
+            </ul>
+        </div>
+        <div class="layui-col-md6">
+            @Html.DisplayNameFor(m => m.Activities)
+            @Html.ActionLink("更多","Index","Active",new {cid=Model.ClubId }, new { @class="float-right"})
+            <hr />
+            <ul class="pad-l-30">
+                <li><a href="#">第一条活动</a><span class="float-right">2020年2月10日</span></li>
+                @foreach (var item in Model.announceMents)
+                {
+                    <li><a href="#">@item.Title1</a><span class="float-right">（@item.CreateDate）</span></li>
+                }
+            </ul>
+        </div>
+    </div>
 
+</div>
 <script>
     //Demo
     layui.use(['form','laydate'], function () {
@@ -154,8 +127,9 @@
         //直接嵌套显示
         laydate.render({
             elem: '#test-n1'
-            , showBottom: false
-            ,position: 'static'
+            , position: 'static'
+            , calendar: true
+            ,btns: ['now']
         });
     });
 </script>

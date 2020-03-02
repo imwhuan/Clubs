@@ -177,20 +177,19 @@
 
                     //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
                     obj.preview(function (index, file, result) {
-                        $("#clubimg").attr("src", result);
                         //示范一个公告层
                         layer.open({
                             type: 1
-                            , title: false //不显示标题栏
+                            , title: '确认上传' //不显示标题栏
                             , closeBtn: false
-                            , area: '300px;'
+                            , maxHeight:400
                             , shade: 0.8
                             , id: 'LAY_layuipro' //设定一个id，防止重复弹出
                             , btn: ['确认', '取消']
                             , btnAlign: 'c'
-                            , moveType: 1 //拖拽模式，0或者1
-                            , content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;"><img src="' + result + '" id="clubimg1" /></div>'
+                            , content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;"><img style="width:100%" src="' + result + '" id="clubimg1" /></div>'
                             , success: function (layero) {
+                                $("#clubimg").attr("src", result);
                                 var btn = layero.find('.layui-layer-btn');
                                 btn.find('.layui-layer-btn0').click(function () {
                                     $("#upimgbtn").trigger('click');

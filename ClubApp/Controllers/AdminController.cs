@@ -121,23 +121,6 @@ namespace ClubApp.Controllers
             {
                 ViewBag.Msg += "社团类型初始化失败；";
             }
-            //社团职位
-            if (db.UserStatuses.Count() == 0)
-            {
-                List<UserStatus> types = new List<UserStatus>()
-                {
-                    new UserStatus(){Name = "社长", Enable = 1},
-                    new UserStatus(){Name = "秘书", Enable = 1},
-                    new UserStatus(){Name = "优秀会员", Enable = 1},
-                    new UserStatus(){Name = "会员", Enable = 1},
-                };
-                db.UserStatuses.AddRange(types);
-                ViewBag.Msg += "社团职位初始化成功；";
-            }
-            else
-            {
-                ViewBag.Msg += "社团职位初始化失败；";
-            }
             db.SaveChanges();
             return View();
         }

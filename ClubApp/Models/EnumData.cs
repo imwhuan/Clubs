@@ -19,6 +19,10 @@
     {
         未使用, 系统锁定, 待提交, 待审批, 正常, 冻结, 查封, 制裁, 已失效
     }
+    public enum ActiveState
+    {
+        已创建,待提交,待审批,未开始,进行中,已结束
+    }
     public enum OnlineState
     {
         离线, 在线
