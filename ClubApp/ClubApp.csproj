@@ -299,6 +299,10 @@
     <Compile Include="Migrations\202002201506274_edit2.designer.cs">
       <DependentUpon>202002201506274_edit2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202003041318376_act.cs" />
+    <Compile Include="Migrations\202003041318376_act.designer.cs">
+      <DependentUpon>202003041318376_act.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ActiveModel.cs" />
     <Compile Include="Models\AdminViewModels.cs" />
@@ -367,6 +371,9 @@
     <Content Include="Views\Active\AddAct.cshtml" />
     <Content Include="Views\Active\Detail.cshtml" />
     <Content Include="Views\Home\Error404.cshtml" />
+    <Content Include="Views\Clubs\Manage.cshtml" />
+    <Content Include="Views\Active\Submit.cshtml" />
+    <Content Include="Views\Home\Error.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -397,6 +404,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202002201506274_edit2.resx">
       <DependentUpon>202002201506274_edit2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003041318376_act.resx">
+      <DependentUpon>202003041318376_act.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

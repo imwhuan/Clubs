@@ -290,6 +290,80 @@ namespace ClubApp.Controllers
             }
         }
 
+        public ActionResult ApplyActFile(string aid)
+        {
+            try
+            {
+                HttpFileCollectionBase file = Request.Files;
+                JsonData data = new JsonData()
+                {
+                    code = 1,
+                    src = "",
+                    name = "",
+                    msg = ""
+                };
+                if (file == null)
+                {
+                    data.msg += "未成功接收文件";
+                }
+                else if (file.Count > 0)
+                {
+                    if (file[0].ContentLength > 2048000)
+                    {
+                        data.msg += "上传文件大小超过2M！不允许上传";
+                    }
+                    else if (string.IsNullOrEmpty(aid)||(int.TryParse(aid,out int intaid))==false)
+                    {
+                        data.msg += "未识别到正确的活动编号，文件不被接收！";
+                    }
+                    else
+                    {
+                        Activities act = db.Activities.Find(intaid);
+                        if (act == null)
+                        {
+                            data.msg = "未识别到正确的活动编号，文件不被接收！";
+                        }
+                        else if (act.State != (int)ActiveState.待提交)
+                        {
+                            data.msg = aid + "活动当前状态不允许上传审批文件";
+                        }
+                        else
+                        {
+                            string filepath = Server.MapPath("~/Content/upload/apply/act/");
+                            if (!Directory.Exists(filepath))
+                            {
+                                Directory.CreateDirectory(filepath);
+                            }
+                            string name = Path.GetFileName(file[0].FileName);
+                            //string ext = Path.GetExtension(name);
+                            file[0].SaveAs(filepath + aid + "_" + name);
+                            data.src = "Content/upload/apply/act/" + aid + "_" + name;
+                            data.name = aid + "_" + name;
+                            data.code = 0;
+                            data.msg += "上传成功！";
+                        }
+                    }
+                }
+                else
+                {
+                    data.msg = "错误！服务器接收到上载文件的个数为：" + file.Count;
+                }
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                JsonData data = new JsonData()
+                {
+                    code = 4,
+                    src = "",
+                    name = "",
+                    msg = ex.Message
+                };
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
         public class EditJson
         {
             public int code { get; set; }

@@ -1,0 +1,196 @@
+﻿@model ClubApp.Models.ActiveSubModel
+@{
+    ViewBag.Title = "提交活动申请";
+}
+<style>
+    .form-diy-r {
+        padding: 9px 15px;
+        display: block;
+    }
+
+    .layui-form-text {
+        border: 1px solid #e6e6e6;
+        border-radius: 2px;
+        padding: 15px 0;
+    }
+    .layui-checkbox-disbaled span {
+        background-color: #5FB878 !important;
+    }
+</style>
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>@Model.ClubName | 提交活动申请</legend>
+</fieldset>
+@using (Html.BeginForm("Submit", "Active", FormMethod.Post, new { @class = "layui-form layui-form-pane" }))
+{
+    @Html.TextBoxFor(m => m.Id, new { @class = "layui-input layui-hide", @readonly = true })
+    <div class="layui-form-item layui-row layui-col-space8">
+        <div class="layui-col-sm4">
+            @Html.LabelFor(m => m.Type, new { @class = "layui-form-label" })
+            <div class="layui-input-block">
+                @Html.TextBoxFor(m => m.Type, new { @class = "layui-input", @readonly = true })
+            </div>
+        </div>
+        <div class="layui-col-sm8">
+            @Html.LabelFor(m => m.Title1, new { @class = "layui-form-label" })
+            <div class="layui-input-block">
+                @Html.TextBoxFor(m => m.Title1, new { @class = "layui-input", @readonly = true })
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Title2, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            @Html.TextBoxFor(m => m.Title2, new { @class = "layui-input", @readonly = true })
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        @(new HtmlString(Model.Content))
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Area, new { @class = "layui-form-label" })
+        <div class="layui-input-inline">
+            @Html.TextBoxFor(m => m.Area, new { @class = "layui-input", @readonly = true })
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+            请查看该地点的预约信息以防止与其他活动冲突
+            <a href="#" style="color:red">（点击查看）</a>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            @Html.LabelFor(m => m.Time1, new { @class = "layui-form-label" })
+            <div class="layui-input-block">
+                @Html.TextBoxFor(m => m.Time1, new { @class = "layui-input", @readonly = true })
+            </div>
+        </div>
+        <div class="layui-inline">
+            @Html.LabelFor(m => m.Time2, new { @class = "layui-form-label" })
+            <div class="layui-input-block">
+                @Html.TextBoxFor(m => m.Time2, new { @class = "layui-input", @readonly = true })
+            </div>
+        </div>
+        <div class="layui-inline">
+            <input type="button" class="layui-btn layui-btn-disabled" value="点击选择时间" alt="活动预约时间只能为一天后的30天内" id="opendateselect" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Labels, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            @foreach (string lab in Model.Labels)
+            {
+                <input type="checkbox" name="label" checked disabled value="@lab" title="@lab">
+            }
+        </div>
+    </div>
+    if (Model.State == "待提交")
+    {
+        <div class="layui-form-item">
+            <label class="layui-form-label">申请理由<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <textarea name="ApplyDesc" required lay-verify="required|maxlength" placeholder="请简述你创建社团的原因及意义（最大500字符）" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">附件<span style="color:red">*</span></label>
+            <div class="layui-input-inline">
+                <div class="layui-upload-drag" id="uploadDemo">
+                    <i class="layui-icon"></i>
+                    <p>点击上传，或将文件拖拽到此处</p>
+                </div>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                请将文档图片等材料打包压缩后上传（.zip/.rar/最大2M）<br />
+                申请材料清单(<span class="text-danger">以下内容必须包括，否则申请不予通过</span>。可附上其他有效材料)：<br />
+                <ul>
+                    <li>《活动申请书.doc》阐述创建该活动的意义或原因</li>
+                    <li>《活动参与人员名单.doc》列出预参与活动的人员信息</li>
+                    <li>其他资料或证明</li>
+                </ul>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">已上传附件</label>
+            <div class="layui-input-block">
+                <a href="#" id="file_link" class="form-diy-r">无</a>
+                <input type="text" id="file_upver" lay-verify="uprequired" name="ApplyFile" class="layui-input layui-hide" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="submit" id="subbtn" class="layui-btn" lay-submit value="确认提交" />
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="layui-form-item">
+            <label class="layui-form-label">申请材料</label>
+            <div class="layui-input-block">
+                <blockquote class="layui-elem-quote layui-quote-nm">
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                        <legend>密封线内 - 不准答题</legend>
+                    </fieldset>
+                </blockquote>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                @Html.ActionLink("返回社团管理", "Manage", "Club", new { cid = Model.ClubID }, new { @class = "layui-btn" })
+                <label class="form-diy-r layui-bg-red">不可执行提交的状态：@Model.State</label>
+            </div>
+        </div>
+    }
+
+
+}
+<script>
+     //Demo
+        layui.use(['form', 'upload'], function () {
+            var form = layui.form
+                , upload = layui.upload;
+            form.verify({
+                maxlength: function (value, item) {
+                    if (value.length > 500) {
+                        return '超过最大长度[500]个字符！'
+                    }
+                }
+                , uprequired: function (value) {
+                    if (value.length < 1) {
+                        return '未上传审批文件的申请不允许提交'
+                    }
+                }
+            })
+
+            //上传
+            upload.render({
+                elem: '#uploadDemo'
+                , url: '/Upload/ApplyActFile' //上传接口
+                , accept: 'file'
+                , exts: 'zip|rar|7z'
+                , size: 2048
+                , data: {
+                    aid: function () {
+                        return $("#Id").val();
+                    }
+                }
+                , before: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                    layer.load(); //上传loading
+                }
+                , done: function (res) {
+                    layer.closeAll('loading'); //关闭loading
+                    if (res.code == 0) {
+                        $("#file_link").attr("href", "/" + res.src);
+                        $("#file_link").html(res.name);
+                        $("#file_upver").val(res.src)
+                    }
+                    else {
+                        alert(res.msg);
+                    }
+                }
+                , error: function (index, upload) {
+                    alert("文件上传失败（非服务器异常）")
+                }
+            });
+        });
+</script>

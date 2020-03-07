@@ -17,7 +17,7 @@
     <a href="/Clubs/ApplyClubSubmit?cid={{d.ClubId}}" class="layui-btn layui-btn-xs">提交审批</a>
     {{#  } }}
     {{#  if(d.Status ==="社长"){ }}
-    <a class="layui-btn layui-btn-xs" lay-event="check">管理</a>
+    <a class="layui-btn layui-btn-xs" href="/Clubs/Manage?cid={{d.ClubId}}">管理</a>
     {{# } else { }}
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="outclub">申请退出</a>
     {{#  } }}
@@ -51,7 +51,7 @@ layui.use('table', function(){
       layer.msg('社长舍不得你，请原地写30000字退社申请，否则暂不允许你退社');
     } else if(layEvent === 'check'){
       layer.confirm('真的要进入管理模式么', function(index){
-        layer.msg(data+"暂未开发管理模式")
+        layer.msg(data.ClubId+"暂未开发管理模式")
         layer.close(index);
         //向服务端发送删除指令
       });

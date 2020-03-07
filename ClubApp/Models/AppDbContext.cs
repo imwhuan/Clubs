@@ -397,7 +397,7 @@ namespace ClubApp.Models
         public string Name { get; set; }
         [MaxLength(150), Display(Name = "地址描述")]
         public string Desc { get; set; }
-        [MaxLength(50),Display(Name="所有者")]
+        [MaxLength(50),Display(Name="联系方式")]
         public string Owner { get; set; }
         [Display(Name="状态")]
         public int? State { get; set; }
@@ -410,10 +410,8 @@ namespace ClubApp.Models
         public virtual Area Area { get; set; }
         [MaxLength(150), Display(Name = "备注")]
         public string Desc { get; set; }
-        [MaxLength(50), Display(Name = "使用者")]
-        public string Owner { get; set; }
-        [Display(Name = "标识")]
-        public int uorc { get; set; }
+        [Display(Name = "活动")]
+        public virtual Activities Act { get; set; }
         [Display(Name = "占用时间")]
         public DateTime? Time1 { get; set; }
         [Display(Name = "占用结束时间")]

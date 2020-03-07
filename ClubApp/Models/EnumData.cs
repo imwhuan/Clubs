@@ -13,7 +13,7 @@
     }
     public enum SQType
     {
-        注册社团 = 1, 注销社团, 加入社团, 退出社团
+        注册社团 = 1, 注销社团, 加入社团, 退出社团,创建活动
     }
     public enum EnumState
     {
@@ -21,7 +21,7 @@
     }
     public enum ActiveState
     {
-        已创建,待提交,待审批,未开始,进行中,已结束
+        待提交,待审批,已取消,未开始,进行中,已结束
     }
     public enum OnlineState
     {

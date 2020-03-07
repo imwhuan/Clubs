@@ -416,6 +416,21 @@ namespace ClubApp.Controllers
             return View(model);
         }
 
+        public ActionResult Manage(string cid)
+        {
+            if (cid == null)
+            {
+                return RedirectToAction("MyClubs");
+            }
+            ClubNumber club = db.ClubNumbers.Find(cid);
+            if (club == null)
+            {
+                return HttpNotFound("未发现社团" + cid);
+            }
+            ViewBag.ClubId = cid;
+            return View();
+        }
+
 
 
 

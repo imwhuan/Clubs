@@ -288,5 +288,62 @@ namespace ClubApp.Controllers
 
             return Json(dataModel, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetActiveListData2(int page, int limit, string cid)
+        {
+            List<ActiveListModel> models = new List<ActiveListModel>();
+            IQueryable<Activities> actlist;
+            if (string.IsNullOrEmpty(cid))
+            {
+                actlist = db.Activities.OrderByDescending(a => a.Id).Skip((page - 1) * limit).Take(limit);
+            }
+            else
+            {
+                actlist = db.Activities.Where(a => a.Club.ClubId == cid).OrderByDescending(a => a.Id).Skip((page - 1) * limit).Take(limit);
+            }
+            foreach (Activities act in actlist)
+            {
+                ActiveListModel model = new ActiveListModel()
+                {
+                    Id = act.Id,
+                    Title1 = act.Title1,
+                    Title2 = act.Title2,
+                    Time1 = act.Time1.ToString("yyyy/MM/dd hh:mm"),
+                    Time2 = act.Time2.ToString("yyyy/MM/dd hh:mm"),
+                    CreateDate = act.CreateDate.ToString(),
+                    UserID = act.User.UserId,
+                    UserName = act.User.UserName,
+                    VoteCount = db.Votings.Where(v => v.Active.Id == act.Id).Count().ToString(),
+                    State = Enum.GetName(typeof(ActiveState), act.State),
+                    Votes0 = string.IsNullOrEmpty(act.Votes0) ? "0" : act.Votes0
+                };
+                if (act.State > (int)ActiveState.已取消)
+                {
+                    if (act.Time1 > DateTime.Now)
+                    {
+                        model.State = "未开始";
+                    }
+                    else if (act.Time2 > DateTime.Now)
+                    {
+                        model.State = "进行中";
+                    }
+                    else
+                    {
+                        model.State = "已结束";
+                    }
+                }                
+
+                models.Add(model);
+            }
+            PageDataModel dataModel = new PageDataModel()
+            {
+                code = 0,
+                msg = "",
+                count = db.Activities.Count(),
+                data = models.AsQueryable()
+            };
+
+            return Json(dataModel, JsonRequestBehavior.AllowGet);
+        }
     }
 }

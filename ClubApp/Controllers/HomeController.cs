@@ -9,8 +9,18 @@ namespace ClubApp.Controllers
         {
             return View();
         }
+        public ActionResult Error()
+        {
+            return View();
+        }
         public ActionResult Error404()
         {
+            if (Session["Error"] == null || Session["Error"].ToString() == "0")
+            {
+                return RedirectToAction("Error");
+            }
+            ViewBag.Msg = Session["Error"].ToString();
+            Session["Error"] = "0";
             return View();
         }
     }

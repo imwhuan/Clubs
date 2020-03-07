@@ -146,11 +146,6 @@
         layui.use(['form', 'upload'], function () {
             var form = layui.form
                 , upload = layui.upload;
-            //监听提交
-            form.on('submit(formDemo)', function (data) {
-                layer.msg(JSON.stringify(data.field));
-                return false;
-            });
             form.verify({
                 maxlength: function (value, item) {
                     if (value.length > 500) {

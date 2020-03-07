@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "Manage";
+}
+
+<h2>Manage</h2>
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>社团活动</legend>
+</fieldset>
+<table id="demo" lay-filter="test"></table>
+<script type="text/html" id="actTpl">
+    <a href="/Active/Detail?aid={{d.Id}}" class="layui-table-link">{{d.Title1}}</a>
+</script>
+<script type="text/html" id="barDemo">
+    <!-- 这里同样支持 laytpl 语法，如： -->
+    {{#  if(d.State ==="待提交"){ }}
+    <a href="/Active/Submit?aid={{d.Id}}" class="layui-btn layui-btn-xs">提交审批</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    {{#  } }}
+</script>
+<script>
+layui.use('table', function(){
+  var table = layui.table;
+
+  //第一个实例
+  table.render({
+    elem: '#demo'
+    ,height: 312
+    ,url: '/GetData/GetActiveListData2' //数据接口
+      , page: true //开启分页
+      , where: {cid:@ViewBag.ClubId}
+    ,cols: [[ //表头
+      { field: 'Id', title: '活动编号',  sort: true}
+      , { field: 'Title1', title: '名称' , templet: '#actTpl'}
+      , { field: 'State', title: '状态',  sort: true }
+      , { field: 'UserName', title: '创建人', sort: true}
+      , { field: 'Time1', title: '活动时间', sort: true}
+      , { field: 'CreateDate', title: '创建日期', sort: true }
+      , { fixed: 'right', align:'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+    ]]
+  });
+
+      //监听行工具事件
+  table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+    var data = obj.data //获得当前行数据
+    ,layEvent = obj.event; //获得 lay-event 对应的值
+    if(layEvent === 'del'){
+      layer.confirm('真的要删除么', function(index){
+        layer.msg(data.Title1+"活动暂不允许删除")
+        layer.close(index);
+        //向服务端发送删除指令
+      });
+    }
+  });
+
+});
+</script>

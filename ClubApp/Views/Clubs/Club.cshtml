@@ -48,7 +48,7 @@
                         {
                             if (Model.status == "社长")
                             {
-                                <li>我的职位：@Model.status | <a href="#">编辑社团资料</a></li>
+                    <li>我的职位：@Model.status | <a href="#">编辑社团资料</a> | @Html.ActionLink("创建活动", "AddAct", "Active", new { cid = Model.ClubId }, new { })</li>
                             }
                             else
                             {
@@ -62,7 +62,6 @@
                 <div class="layui-col-md6">
                     <ul>
                         <li>@Html.DisplayNameFor(m => m.CreateDate):@Html.DisplayFor(m => m.CreateDate)</li>
-                        <li>@Html.ActionLink("创建活动","AddAct","Active",new { cid=Model.ClubId },new { })</li>
                         <li>发布公告</li>
                     </ul>
                 </div>
