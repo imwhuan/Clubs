@@ -1,0 +1,182 @@
+﻿@model  ClubApp.Models.RelNameRegisterViewModel
+@{
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+    ViewBag.Title = "注册";
+}
+<style type="text/css">
+    .text-danger {
+        color: red;
+    }
+
+    .diy-div > input {
+        width: 50%;
+        display: inline-block;
+    }
+
+    @@keyframes brandimg {
+        0% {
+            top: 0
+        }
+
+        50% {
+            top: -100px
+        }
+
+        100% {
+            top: 0
+        }
+    }
+
+    .text-danger {
+        color: #f00;
+        font-size: smaller;
+    }
+
+    .brand-fa {
+        margin: 0 auto;
+        height: 50px;
+        width: 100px;
+        position: relative;
+    }
+
+    .brand {
+        height: 100px;
+        width: 100px;
+        border-radius: 50%;
+        position: absolute;
+        top: 0;
+        z-index: 30;
+    }
+
+    .brand-jump {
+        animation: brandimg 1s normal;
+    }
+
+    .brand img {
+        width: 100%;
+    }
+
+    .login-div {
+        z-index: 20;
+        box-shadow: lightgray 0 0 20px;
+        border-radius: 6px;
+        background-color: #fff;
+        position: relative;
+        transition: all 1s;
+        padding: 50px 15px 15px 0;
+    }
+
+    .login-other {
+        padding-left: 15px;
+    }
+
+        .login-other a {
+            margin: 10px;
+        }
+
+    .login-style1 {
+        z-index: 10;
+        width: 80%;
+        height: 20px;
+        margin: -10px auto 0;
+        box-shadow: lightgray 0 0 20px;
+        border-radius: 6px;
+        background-color: #fff;
+        position: relative;
+        transition: all 1s
+    }
+</style>
+<div class="layui-row">
+    <div class="layui-col-md4 layui-col-md-offset4 layui-col-sm6 layui-col-sm-offset3">
+        <div class="brand-fa">
+            <div id="brand" class="brand">
+                <img src="~/Content/images/kodinger.jpg" />
+            </div>
+        </div>
+        <div class="login-div">
+            @using (Html.BeginForm("RelReg", "Account", FormMethod.Post, new { @class = "layui-form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="layui-form-item">
+                    @Html.LabelFor(m => m.RelName, new { @class = "layui-form-label" })
+                    <div class="layui-input-block">
+                        @Html.TextBoxFor(m => m.RelName, new { @class = "layui-input" })
+                        @Html.ValidationMessageFor(m => m.RelName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    @Html.LabelFor(m => m.Password, new { @class = "layui-form-label" })
+                    <div class="layui-input-block">
+                        @Html.PasswordFor(m => m.Password, new { @class = "layui-input" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    @Html.LabelFor(m => m.ConfirmPassword, new { @class = "layui-form-label" })
+                    <div class="layui-input-block">
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "layui-input" })
+                        @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    @Html.LabelFor(m => m.Gender, new { @class = "layui-form-label" })
+                    <div class="layui-input-block">
+                        @Html.RadioButtonFor(m => m.Gender, 0, new { id = "s1", title = "保密", @checked = true })
+                        @Html.RadioButtonFor(m => m.Gender, 1, new { id = "s2", title = "男" })
+                        @Html.RadioButtonFor(m => m.Gender, 2, new { id = "s3", title = "女" })
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    @Html.LabelFor(m => m.ImgCode, new { @class = "layui-form-label" })
+                    <div class="layui-input-block">
+                        <div class="diy-div">
+                            @Html.TextBoxFor(m => m.ImgCode, new { @class = "layui-input" })
+                            <img id="Img-imgcode" style="cursor:pointer;max-width:50%;height:40px; float:right" src="@Url.Action("GetImgCode","Account")" alt="图片验证码" title="看不清？点击换一张" />
+                        </div>
+                        @Html.ValidationMessageFor(m => m.ImgCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="submit" value="注册" class="layui-btn" />
+                    </div>
+                </div>
+                <div class="login-other">
+                    <blockquote class="layui-elem-quote">使用其他方式注册</blockquote>
+                    <blockquote class="layui-elem-quote layui-quote-nm">
+                        <div class="layui-row">
+                            <a href="~/Account/Register" class="layui-col-md4 layui-col-sm6"><i class="layui-icon layui-icon-template"></i>邮箱</a>
+                            <a href="#" class="layui-col-md4 layui-col-sm6"><i class="layui-icon layui-icon-cellphone"></i>电话号码</a>
+                            <a href="#" class="layui-col-md4 layui-col-sm6"><i class="layui-icon layui-icon-login-qq"></i>腾讯QQ</a>
+                            <a href="#" class="layui-col-md4 layui-col-sm6"><i class="layui-icon layui-icon-login-wechat"></i>微信</a>
+                            <a href="#" class="layui-col-md4 layui-col-sm6"><i class="layui-icon layui-icon-login-weibo"></i>微博</a>
+                            <a href="#" class="layui-col-md4 layui-col-sm6"><i class="layui-icon layui-icon-water"></i>其他</a>
+                        </div>
+                    </blockquote>
+                </div>
+            }
+        </div>
+        <div class="login-style1">
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    layui.use('form', function () {
+        var form = layui.form;
+    });
+    $("#reg-link").removeAttr("href").text("").append("<cite>注册</cite>")
+    function brandjump() {
+        $("#brand").addClass("brand-jump");
+        setTimeout(function () {
+            $("#brand").removeClass("brand-jump");
+        }, 1000);
+    }
+    $("#Img-imgcode").click(function () {
+        brandjump();
+        this.src = "@Url.Action("GetImgCode","Account")?t=" + (new Date()).getTime();
+    })
+</script>

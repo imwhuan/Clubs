@@ -1,0 +1,16 @@
+﻿@model ClubApp.Models.RegisterConfirmModel
+@{
+    ViewBag.Title = "注册成功";
+}
+
+<h2>注册成功！</h2>
+<blockquote class="layui-elem-quote">
+    欢迎您注册成功！系统已为您申请到本站通行账号：
+    <br /><i class="layui-icon layui-icon-star"></i> @Model.Num<br />
+    请牢记此账号用于本系统的登陆。当然，您也可以使用注册时使用的邮箱或者电话号码进行登陆。
+    <br />
+    从 @Model.Date 起，因为您的到来，我们的大家庭从 @(Model.Index - 1) 人变成了 @Model.Index 人，
+    这是我们的一小步，也是全人类的一大步，<br />
+    让我们怀着对明天的期望一起——
+    @Html.ActionLink("出发吧", "Login") ！
+</blockquote>
