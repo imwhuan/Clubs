@@ -349,6 +349,8 @@
     <Content Include="Views\Clubs\Manage.cshtml" />
     <Content Include="Views\Active\Submit.cshtml" />
     <Content Include="Views\Home\Error.cshtml" />
+    <Content Include="Views\Account\RelReg.cshtml" />
+    <Content Include="Views\Account\RegSuc.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

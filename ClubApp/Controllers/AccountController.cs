@@ -90,12 +90,25 @@ namespace ClubApp.Controllers
             {
                 return View(model);
             }
-            //可以使用邮箱/手机号/用户名登陆
-            var user = (from u in db.Users where u.Email.ToUpper() == model.UserName.ToUpper() || u.PhoneNumber == model.UserName || u.UserName == model.UserName select u).FirstOrDefault();
+            //可以使用邮箱/手机号/用户名/学号登陆
+            var user = (from u in db.Users where u.Email.ToUpper() == model.UserName.ToUpper() || u.PhoneNumber == model.UserName || u.UserName.ToUpper() == model.UserName.ToUpper() select u).FirstOrDefault();
             if (user == null)
             {
-                ModelState.AddModelError("", "账户不存在！");
-                return View(model);
+                UserNumber user1 = db.UserNumbers.Where(u => u.RelName == model.UserName).FirstOrDefault();
+                if (user1 == null)
+                {
+                    ModelState.AddModelError("", "账户不存在！");
+                    return View(model);
+                }
+                else
+                {
+                    user = db.Users.Where(u => u.UserName == user1.UserId).FirstOrDefault();
+                    if (user == null)
+                    {
+                        ModelState.AddModelError("", "账户不存在！");
+                        return View(model);
+                    }
+                }
             }
             //var userinfo=(from u in db)
             //var identity = UserManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
@@ -128,6 +141,7 @@ namespace ClubApp.Controllers
         #endregion
 
         #region 注册
+        //使用邮箱注册时调用验证该邮箱是否已经注册
         public ActionResult EmailRegisterValidate(string Email)
         {
             var user = UserManager.FindByEmail(Email);
@@ -140,11 +154,124 @@ namespace ClubApp.Controllers
                 return Content("false");
             }
         }
+        //使用学号注册时调用验证该学号是否已经注册
+        public ActionResult RelNameRegisterValidate(string RelName)
+        {
+            var user = db.UserNumbers.Where(u => u.RelName == RelName).FirstOrDefault();
+            if (user == null)
+            {
+                return Content("true");
+            }
+            else
+            {
+                return Content("false");
+            }
+        }
+
         [HttpGet]
         public ActionResult Register()
         {
             return View();
         }
+
+        [HttpGet]
+        public ActionResult RelReg()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> RelReg(RelNameRegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                string userid = GetRandomUserNumber();
+                if (string.IsNullOrEmpty(userid))
+                {
+                    ModelState.AddModelError("", "账号池可注册账号为空，系统暂不允许注册，请联系管理员解决");
+                    return View(model);
+                }
+                var userinfo = db.UserNumbers.Where(u => u.UserId == userid).FirstOrDefault();
+                if (userinfo == null || userinfo.State != (int)EnumState.未使用)
+                {
+                    ModelState.AddModelError("", "账号池可注册账号为空，系统暂不允许注册，请联系管理员解决");
+                    return View(model);
+                }
+                AppUser user = new AppUser()
+                {
+                    UserName = userinfo.UserId
+                };
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    userinfo.UserName = userinfo.UserId;
+                    userinfo.RelName = model.RelName;
+                    userinfo.CreateDate = DateTime.Now;
+                    userinfo.State = (int)EnumState.正常;
+                    userinfo.Gender = model.Gender;
+                    if (model.Gender == (int)Gender.女)
+                    {
+                        userinfo.HeadImg = "Content/images/head1.png";
+                    }
+                    else
+                    {
+                        userinfo.HeadImg = "Content/images/head2.png";
+                    }
+                    db.SaveChanges();
+                    if (userinfo.UserId == "Admin")
+                    {
+                        await UserManager.AddToRoleAsync(user.Id, "Admin");
+                    }
+                    return RedirectToAction("RegSuc",new { uid=user.Id});
+                }
+                else
+                {
+                    AddErrors(result);
+                }
+            }
+            return View(model);
+        }
+        [HttpGet]
+        public ActionResult RegSuc(string uid)
+        {
+            if (uid == null)
+            {
+                return View("Error");
+            }
+            var userident = UserManager.FindById(uid);
+            if (userident == null)
+            {
+                return View("Error");
+            }
+
+            var user = (from u in db.UserNumbers where u.UserId == userident.UserName select u).FirstOrDefault();
+            if (user == null)
+            {
+                return View("Error");
+            }
+            if (user.CreateDate == null)
+            {
+                user.CreateDate = DateTime.Now;
+                db.SaveChanges();
+            }
+            else
+            {
+                DateTime d1 = (DateTime)user.CreateDate;
+                TimeSpan t1= DateTime.Now.Subtract(d1);
+                if (t1.Minutes > 1)
+                {
+                    return View("Error");
+                }
+            }
+            RegisterConfirmModel model = new RegisterConfirmModel()
+            {
+                Date = DateTime.Now.ToString("yyyy年MM月dd日hh时mm分ss秒"),
+                Num = user.UserId,
+                Index = db.Users.Count()
+            };
+            return View(model);
+        }
+
         [HttpPost, ActionName("Register")]
         public async Task<ActionResult> RegisterAsync(EmailRegisterViewModel model)
         {
@@ -280,6 +407,17 @@ namespace ClubApp.Controllers
 
 
         #region 帮助程序
+
+        public enum MsgStr
+        {
+            注册成功请登录,登录失败
+        }
+
+
+
+
+
+
         public ActionResult Error()
         {
             return View();

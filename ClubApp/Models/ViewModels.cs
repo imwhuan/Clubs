@@ -52,6 +52,32 @@ namespace ClubApp.Models
         [System.Web.Mvc.Remote("CheckEmailCode", "Account", HttpMethod = "post", ErrorMessage = "邮箱验证码 错误")]
         public string EmailCode { get; set; }
     }
+
+    public class RelNameRegisterViewModel
+    {
+        [Required]
+        [StringLength(maximumLength:12,MinimumLength =6, ErrorMessage = "{0} 长度应为{2}至{1}个字符。")]
+        [Display(Name = "学号")]
+        [System.Web.Mvc.Remote("RelNameRegisterValidate", "Account", HttpMethod = "post", ErrorMessage = "该邮箱已被注册")]
+        public string RelName { get; set; }
+
+        [Required]
+        [StringLength(20, ErrorMessage = "{0} 必须至少包含 {2} 个字符。", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "密码")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "确认密码")]
+        [Compare("Password", ErrorMessage = "密码和确认密码不匹配。")]
+        public string ConfirmPassword { get; set; }
+        [Display(Name = "性别")]
+        public int Gender { get; set; }
+        [Required, Display(Name = "图片验证码")]
+        [System.Web.Mvc.Remote("CheckImgCode", "Account", HttpMethod = "post", ErrorMessage = "验证码 错误")]
+        public string ImgCode { get; set; }
+    }
+
     public class PhoneRegisterViewModel
     {
         [Required]
