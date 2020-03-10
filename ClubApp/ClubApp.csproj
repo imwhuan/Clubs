@@ -279,31 +279,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202002060156318_InitialCreate.cs" />
-    <Compile Include="Migrations\202002060156318_InitialCreate.designer.cs">
-      <DependentUpon>202002060156318_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202002071511230_rebuild.cs" />
-    <Compile Include="Migrations\202002071511230_rebuild.designer.cs">
-      <DependentUpon>202002071511230_rebuild.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202002090658232_edit1.cs" />
-    <Compile Include="Migrations\202002090658232_edit1.designer.cs">
-      <DependentUpon>202002090658232_edit1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202002181604047_rebuild2.cs" />
-    <Compile Include="Migrations\202002181604047_rebuild2.designer.cs">
-      <DependentUpon>202002181604047_rebuild2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202002201506274_edit2.cs" />
-    <Compile Include="Migrations\202002201506274_edit2.designer.cs">
-      <DependentUpon>202002201506274_edit2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202003041318376_act.cs" />
-    <Compile Include="Migrations\202003041318376_act.designer.cs">
-      <DependentUpon>202003041318376_act.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ActiveModel.cs" />
     <Compile Include="Models\AdminViewModels.cs" />
     <Compile Include="Models\AppDbContext.cs" />
@@ -388,26 +363,6 @@
     <Folder Include="Content\upload\clubimg\" />
     <Folder Include="Views\GetData\" />
     <Folder Include="Views\Upload\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\202002060156318_InitialCreate.resx">
-      <DependentUpon>202002060156318_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202002071511230_rebuild.resx">
-      <DependentUpon>202002071511230_rebuild.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202002090658232_edit1.resx">
-      <DependentUpon>202002090658232_edit1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202002181604047_rebuild2.resx">
-      <DependentUpon>202002181604047_rebuild2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202002201506274_edit2.resx">
-      <DependentUpon>202002201506274_edit2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202003041318376_act.resx">
-      <DependentUpon>202003041318376_act.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
