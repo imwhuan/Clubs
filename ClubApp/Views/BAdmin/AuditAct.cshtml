@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "活动审批";
+}
+
+<h2>@ViewBag.Msg</h2>
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>活动审批</legend>
+</fieldset>
+<table id="demo" lay-filter="test"></table>
+<script type="text/html" id="applystate">
+    {{#  if (d.CheckState ==="通过"){ }}
+    <span style="color:green;">{{d.CheckState}}</span>
+    {{# } else if (d.CheckState ==="拒绝"){ }}
+    <span style="color:red;">{{d.CheckState}}</span>
+    {{# } else{ }}
+    <span>{{d.CheckState}}</span>
+    {{# } }}
+</script>
+<script type="text/html" id="barDemo">
+    <!-- 这里同样支持 laytpl 语法，如： -->
+    <a class="layui-btn layui-btn-primary layui-btn-xs" href="/BAdmin/AuditClubDetail?id={{d.Id}}">查看记录</a>
+    {{#  if(d.CheckState ==="创建"){ }}
+    <a class="layui-btn layui-btn-xs" href="/BAdmin/AuditActA?id={{d.Id}}">审批</a>
+    {{# } }}
+</script>
+<script>
+layui.use('table', function(){
+  var table = layui.table;
+
+  //第一个实例
+  table.render({
+    elem: '#demo'
+    ,height: 400
+    ,url: '/GetData/GetApplyData' //数据接口
+    ,page: true //开启分页
+    ,cols: [[ //表头
+      { field: 'Id', title: '申请编号',  sort: true}
+      , { field: 'Club', title: '申请社团',  sort: true }
+      , { field: 'ApplyUser', title: '申请人', sort: true}
+      , { field: 'ApplyDate', title: '申请日期', sort: true}
+        , { field: 'AuditDate', title: '处理日期', sort: true }
+        , { field: 'AuditTimes', title: '审批次数', sort: true }
+      , { field: 'CheckState', title: '审批进度', sort: true , templet: '#applystate'}
+      , { fixed: 'right', title: '操作', align:'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+    ]]
+  });
+
+      //监听行工具事件
+  table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+    var data = obj.data //获得当前行数据
+    ,layEvent = obj.event; //获得 lay-event 对应的值
+    if(layEvent === 'outclub'){
+      layer.msg('社长舍不得你，请原地写30000字退社申请，否则暂不允许你退社');
+    }
+  });
+
+});
+    $("#b2").addClass("layui-this");
+    $("#b2").parents("li").addClass("layui-nav-itemed")
+</script>

@@ -1,0 +1,165 @@
+﻿@model ClubApp.Models.ActiveSubModel
+@{
+    ViewBag.Title = "提交活动申请";
+}
+<style>
+    .form-diy-r {
+        padding: 9px 15px;
+        display: block;
+    }
+
+    .layui-form-text {
+        border: 1px solid #e6e6e6;
+        border-radius: 2px;
+        padding: 15px 0;
+    }
+
+    .layui-checkbox-disbaled span {
+        background-color: #5FB878 !important;
+    }
+</style>
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>@Model.ClubName | 提交活动申请</legend>
+</fieldset>
+<div class="layui-form">
+    <div class="layui-form-item layui-row layui-col-space8">
+        <div class="layui-col-sm4">
+            @Html.LabelFor(m => m.Type, new { @class = "layui-form-label" })
+            <div class="layui-input-block">
+                @Html.TextBoxFor(m => m.Type, new { @class = "layui-input", @readonly = true })
+            </div>
+        </div>
+        <div class="layui-col-sm8">
+            @Html.LabelFor(m => m.Title1, new { @class = "layui-form-label" })
+            <div class="layui-input-block">
+                @Html.TextBoxFor(m => m.Title1, new { @class = "layui-input", @readonly = true })
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Title2, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            @Html.TextBoxFor(m => m.Title2, new { @class = "layui-input", @readonly = true })
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        @(new HtmlString(Model.Content))
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Area, new { @class = "layui-form-label" })
+        <div class="layui-input-inline">
+            @Html.TextBoxFor(m => m.Area, new { @class = "layui-input", @readonly = true })
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+            请查看该地点的预约信息以防止与其他活动冲突
+            <a href="#" style="color:red">（点击查看）</a>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            @Html.LabelFor(m => m.Time1, new { @class = "layui-form-label" })
+            <div class="layui-input-block">
+                @Html.TextBoxFor(m => m.Time1, new { @class = "layui-input", @readonly = true })
+            </div>
+        </div>
+        <div class="layui-inline">
+            @Html.LabelFor(m => m.Time2, new { @class = "layui-form-label" })
+            <div class="layui-input-block">
+                @Html.TextBoxFor(m => m.Time2, new { @class = "layui-input", @readonly = true })
+            </div>
+        </div>
+        <div class="layui-inline">
+            <input type="button" class="layui-btn layui-btn-disabled" value="点击选择时间" alt="活动预约时间只能为一天后的30天内" id="opendateselect" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Labels, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            @if (Model.Labels != null)
+            {
+                foreach (string lab in Model.Labels)
+                {
+                    <input type="checkbox" name="label" checked disabled value="@lab" title="@lab">
+                }
+            }
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">申请理由</label>
+        <div class="layui-input-block">
+            <textarea name="ApplyDesc" readonly placeholder="请简述你创建活动的原因及意义（最大500字符）" class="layui-textarea">@(Model.ApplyDesc?? "")</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.ApplyFile, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            @if (string.IsNullOrEmpty(Model.ApplyFile))
+            {
+                <label class="form-diy-r">该用户未上传相关审核文件，建议拒绝该申请</label>
+            }
+            else
+            {
+                <a href="~/@Model.ApplyFile" class="form-diy-r" style="color:#009688;">请点击下载查看</a>
+            }
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            @if (Model.State != "待审批")
+            {
+                <label class="form-diy-r layui-bg-red">该申请任务状态为非允许审批：@Model.State</label>
+            }
+            else
+            {
+                <fieldset class="layui-elem-field">
+                    <legend>审批</legend>
+                    <div class="layui-field-box">
+                        <div class="layui-form-item">
+                            @Html.LabelFor(m => m.AuditTime, new { @class = "layui-form-label" })
+                            <div class="layui-input-inline">
+                                @Html.TextBoxFor(m => m.AuditTime, new { @class = "layui-input", @readonly = "true" })
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">
+                                原则上需要不同的管理员总计审批三次以上才能最后通过。
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <input type="button" class="layui-btn" value="通过" onclick="subpass(@Model.AuditId)" />
+                            <input type="button" class="layui-btn layui-btn-danger" value="拒绝" onclick="subnopass(@Model.AuditId)" />
+                            <input type="button" class="layui-btn layui-btn-primary" value="返回" onclick="JavaScript:history.back(-1)" />
+                        </div>
+                    </div>
+                </fieldset>
+            }
+        </div>
+    </div>
+</div>
+
+    }
+    <script>
+        //Demo
+    layui.use('form', function () {
+        var form = layui.form;   
+    });
+    function subpass(aid) {
+    layer.open({
+        type: 1,
+        title:'填写审批备注',
+        skin: 'layui-layer-rim', //加上边框
+      area: ['420px', '240px'], //宽高
+      content: '<form class="layui-form" action="/BAdmin/AuditActAY" method="post"><input name="id" type="hidden" value="'+aid+'" /><div class="layui-form-item"><label class="layui-form-label">审批备注</label><div class="layui-input-block"><textarea name="AuditDesc" placeholder="请简述本次审批备注（最大500字符）" class="layui-textarea"></textarea></div></div><div class="layui-form-item"><div class="layui-input-block"><input type="submit" class="layui-btn" value="确认" /><input type="button" class="layui-btn layui-btn-primary" value="取消" onclick="closelay()" /></div></div></form>'
+    });
+    }
+    function subnopass(aid) {
+    layer.open({
+        type: 1,
+        title:'填写审批备注',
+        skin: 'layui-layer-rim', //加上边框
+      area: ['420px', '240px'], //宽高
+      content: '<form class="layui-form" action="/BAdmin/AuditActAN" method="post"><input name="id" type="hidden" value="'+aid+'" /><div class="layui-form-item"><label class="layui-form-label">审批备注</label><div class="layui-input-block"><textarea name="AuditDesc" placeholder="请简述本次审批备注（最大500字符）" class="layui-textarea"></textarea></div></div><div class="layui-form-item"><div class="layui-input-block"><input type="submit" class="layui-btn" value="确认" /><input type="button" class="layui-btn layui-btn-primary" value="取消" onclick="closelay()" /></div></div></form>'
+    });
+    }
+    function closelay() {
+        layer.closeAll();
+    }
+    </script>
