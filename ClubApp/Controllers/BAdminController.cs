@@ -16,6 +16,12 @@ namespace ClubApp.Controllers
         {
             return View();
         }
+
+        public ActionResult Notice()
+        {
+            return View();
+        }
+
         public ActionResult AuditClub(string Msg = "", int s = 0)
         {
             if (!string.IsNullOrEmpty(Msg))
@@ -39,17 +45,20 @@ namespace ClubApp.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "未找到指定的社团申请");
+                Session["Error"] = "未找到指定的社团申请";
+                return RedirectToAction("Error404", "Home");
             }
             ApplyAudit AppA = db.ApplyAudits.Find(id);
             if (AppA == null)
             {
-                return HttpNotFound();
+                Session["Error"] = "未找到指定的社团申请" + id;
+                return RedirectToAction("Error404", "Home");
             }
             ClubNumber club = AppA.Club;
             if (club == null)
             {
-                return HttpNotFound("未从申请任务[" + id + "]中发现社团信息");
+                Session["Error"] = "未从申请任务[" + id + "]中发现社团信息";
+                return RedirectToAction("Error404", "Home");
             }
             ApplyClubSubModel model = new ApplyClubSubModel()
             {
@@ -90,8 +99,24 @@ namespace ClubApp.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            if (AuditClubFun(id ?? 0, EnumAuditState.通过, AuditDesc))
+            ClubNumber club = db.ClubNumbers.Where(c => c.AuditID == id).FirstOrDefault();
+            if (club == null)
             {
+                Session["Error"] = "未发现社团";
+                return RedirectToAction("Error404", "Home");
+            }
+            int res = AuditFun(id ?? 0, EnumAuditState.通过, AuditDesc);
+            if (res == 1)
+            {
+                return RedirectToAction("AuditClub", new { Msg = "社团申请任务[" + id + "]审批成功" });
+            }
+            else if (res == 2) 
+            {
+
+                club.State = (int)EnumState.正常;
+                club.CreateDate2 = DateTime.Now;
+                db.Entry(club).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
                 return RedirectToAction("AuditClub", new { Msg = "社团申请任务[" + id + "]审批成功" });
             }
             else
@@ -105,34 +130,40 @@ namespace ClubApp.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            if (AuditClubFun(id ?? 0, EnumAuditState.拒绝, AuditDesc))
+            ClubNumber club = db.ClubNumbers.Where(c => c.AuditID == id).FirstOrDefault();
+            if (club == null)
             {
-                return RedirectToAction("AuditClub", new { Msg = "社团申请任务[" + id + "]拒绝成功" });
+                Session["Error"] = "未发现社团";
+                return RedirectToAction("Error404", "Home");
+            }
+            int res = AuditFun(id ?? 0, EnumAuditState.拒绝, AuditDesc);
+            if (res==1)
+            {
+                club.State = (int)EnumState.已失效;
+                db.Entry(club).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("AuditClub", new { Msg = "社团申请任务[" + id + "]拒绝成功" }); ;
             }
             else
             {
                 return RedirectToAction("AuditClub", new { Msg = "失败！社团申请任务[" + id + "]拒绝失败" });
             }
         }
-        public bool AuditClubFun(int id, EnumAuditState state, string AuditDesc = "")
+        public int AuditFun(int id, EnumAuditState state, string AuditDesc = "")
         {
             ApplyAudit AppA = db.ApplyAudits.Find(id);
             if (AppA == null)
             {
-                return false;
+                return 0;
             }
             else if (AppA.CheckState != (int)EnumAuditState.创建)
             {
-                return false;
+                return 0;
             }
-            ClubNumber club = AppA.Club;
+            //ClubNumber club = AppA.Club;
             if (AppA.Type == null)
             {
-                return false;
-            }
-            if (club == null || club.Type == null)
-            {
-                return false;
+                return 0;
             }
             AuditDetail audit = new AuditDetail()
             {
@@ -150,18 +181,19 @@ namespace ClubApp.Controllers
             if (state == EnumAuditState.通过)
             {
                 AppA.AuditTimes += 1;
+                AppA.AuditDate = DateTime.Now;
                 if (AppA.AuditTimes > 2)
                 {
                     AppA.CheckState = (int)state;
-                    club.State = (int)EnumState.正常;
-                    club.CreateDate2 = DateTime.Now;
-                    db.Entry(club).State = System.Data.Entity.EntityState.Modified;
                 }
-                AppA.AuditDate = DateTime.Now;
                 db.Entry(AppA).State = System.Data.Entity.EntityState.Modified;
                 db.AuditDetails.Add(audit);
                 db.SaveChanges();
-                return true;
+                if (AppA.AuditTimes > 2)
+                {
+                    return 2;
+                }
+                return 1;
             }
             else if (state == EnumAuditState.拒绝)
             {
@@ -169,18 +201,119 @@ namespace ClubApp.Controllers
 
                 AppA.CheckState = (int)state;
                 AppA.AuditDate = DateTime.Now;
-                club.State = (int)EnumState.已失效;
-                db.Entry(club).State = System.Data.Entity.EntityState.Modified;
                 db.Entry(AppA).State = System.Data.Entity.EntityState.Modified;
                 db.AuditDetails.Add(audit);
                 db.SaveChanges();
-                return true;
+                return 1;
             }
             else
             {
-                return false;
+                return 0;
             }
 
+        }
+        public ActionResult AuditAct(string Msg = "", int s = 0) 
+        {
+            if (!string.IsNullOrEmpty(Msg))
+            {
+                ViewBag.Msg = Msg;
+            }
+            return View();
+        }
+        public ActionResult AuditActA(string id)
+        {
+            if (id == null || (int.TryParse(id, out int intaid) == false))
+            {
+                return RedirectToAction("Manage");
+            }
+            Activities act = db.Activities.Where(a => a.AuditID == intaid).FirstOrDefault();
+            if (act == null)
+            {
+                Session["Error"] = "未发现活动" + id;
+                return RedirectToAction("Error404", "Home");
+            }
+            if (act.User.UserId != User.Identity.Name)
+            {
+                Session["Error"] = "访问被拒绝！编号为" + id + "的活动非当前登陆用户创建";
+                return RedirectToAction("Error404", "Home");
+            }
+            ApplyAudit AppA = db.ApplyAudits.Find(intaid);
+            ActiveSubModel model = new ActiveSubModel()
+            {
+                Id = act.Id,
+                Type = act.Type.ToString(),
+                State = Enum.GetName(typeof(ActiveState), act.State),
+                Title1 = act.Title1,
+                Title2 = act.Title2,
+                Content = act.Content,
+                Area = act.Area == null ? act.Area0 : act.Area.Name,
+                Time1 = act.Time1.ToString(),
+                Time2 = act.Time2.ToString(),
+                MaxUser = act.MaxUser == null ? "无限制" : act.MaxUser.ToString(),
+                Labels = act.Label?.Split(',').ToList(),
+                ApplyDesc = AppA.ApplicationDesc,
+                ApplyFile = AppA.ApplicationFiled,
+                AuditDate = AppA.AuditDate == null ? "未知" : AppA.AuditDate.ToString(),
+                AuditTime = AppA.AuditTimes ?? 0,
+                AuditId = AppA.Id
+            };
+
+            return View(model);
+        }
+        public ActionResult AuditActAY(int? id, string AuditDesc = "")
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Activities act = db.Activities.Where(a => a.AuditID == id).FirstOrDefault();
+            if (act == null)
+            {
+                Session["Error"] = "未发现活动";
+                return RedirectToAction("Error404", "Home");
+            }
+            int res = AuditFun(id ?? 0, EnumAuditState.通过, AuditDesc);
+            if (res == 1)
+            {
+                return RedirectToAction("AuditAct", new { Msg = "活动申请任务[" + id + "]审批成功" });
+            }
+            else if (res == 2)
+            {
+
+                act.State = (int)ActiveState.未开始;
+                db.Entry(act).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("AuditAct", new { Msg = "活动申请任务[" + id + "]审批成功" });
+            }
+            else
+            {
+                return RedirectToAction("AuditAct", new { Msg = "失败！活动申请任务[" + id + "]审批失败" });
+            }
+        }
+        public ActionResult AuditActAN(int? id, string AuditDesc)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Activities act = db.Activities.Where(a => a.AuditID == id).FirstOrDefault();
+            if (act == null)
+            {
+                Session["Error"] = "未发现社团";
+                return RedirectToAction("Error404", "Home");
+            }
+            int res = AuditFun(id ?? 0, EnumAuditState.拒绝, AuditDesc);
+            if (res == 1)
+            {
+                act.State = (int)ActiveState.已取消;
+                db.Entry(act).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("AuditAct", new { Msg = "社团申请任务[" + id + "]拒绝成功" }); ;
+            }
+            else
+            {
+                return RedirectToAction("AuditAct", new { Msg = "失败！社团申请任务[" + id + "]拒绝失败" });
+            }
         }
     }
 }

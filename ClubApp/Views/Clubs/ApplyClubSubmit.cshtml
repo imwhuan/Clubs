@@ -162,6 +162,8 @@
                 elem: '#uploadimg'
                 , url: '/Upload/ClubHeadImg'
                 , auto: false //选择文件后不自动上传
+                , size: 2048
+                ,acceptMime: 'image/*'
                 , bindAction: '#upimgbtn' //指向一个按钮触发上传
                 , data: {
                     cid: function () {
@@ -176,9 +178,9 @@
                         layer.open({
                             type: 1
                             , title: '确认上传' //不显示标题栏
-                            , closeBtn: false
-                            , maxHeight:400
+                            , area: ['60%', '90%']
                             , shade: 0.8
+                            ,shadeClose:true
                             , id: 'LAY_layuipro' //设定一个id，防止重复弹出
                             , btn: ['确认', '取消']
                             , btnAlign: 'c'

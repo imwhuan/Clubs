@@ -102,6 +102,7 @@ namespace ClubApp.Controllers
                     new ApplyType(){Name = "注销社团", Enable = 1},
                     new ApplyType(){Name = "加入社团", Enable = 1},
                     new ApplyType(){Name = "退出社团", Enable = 1},
+                    new ApplyType(){Name = "创建活动", Enable = 1},
                 };
                 db.ApplyTypes.AddRange(types);
                 ViewBag.Msg += "申请通道初始化成功；";

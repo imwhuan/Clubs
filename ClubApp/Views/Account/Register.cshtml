@@ -96,7 +96,7 @@
                 <div class="layui-form-item">
                     @Html.LabelFor(m => m.Email, new { @class = "layui-form-label" })
                     <div class="layui-input-block">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "layui-input" })
+                        @Html.TextBoxFor(m => m.Email, new { @class = "layui-input" ,autocomplete="off" })
                         @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -126,7 +126,7 @@
                     @Html.LabelFor(m => m.ImgCode, new { @class = "layui-form-label" })
                     <div class="layui-input-block">
                         <div class="diy-div">
-                            @Html.TextBoxFor(m => m.ImgCode, new { @class = "layui-input" })
+                            @Html.TextBoxFor(m => m.ImgCode, new { @class = "layui-input" ,autocomplete="off" })
                             <img id="Img-imgcode" style="cursor:pointer;max-width:50%;height:40px; float:right" src="@Url.Action("GetImgCode","Account")" alt="图片验证码" title="看不清？点击换一张" />
                         </div>
                         @Html.ValidationMessageFor(m => m.ImgCode, "", new { @class = "text-danger" })

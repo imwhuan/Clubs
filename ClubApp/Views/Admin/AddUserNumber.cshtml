@@ -4,7 +4,16 @@
     ViewBag.Title = "AddUserNumber";
 }
 
-<h2>AddUserNumber</h2>
+<fieldset class="layui-elem-field">
+    <legend>新增用户账号</legend>
+    <div class="layui-field-box">
+        本功能将扩充系统账号池（用户注册时将从账号池中抽取未分配的账号作为用户注册申请所得账号，
+        当系统账号池中未分配的账号为空时将不能注册新用户）<br />
+        本功能使用方法：系统账号仅允许为纯数字，系统将根据指定的起始数字开始以1为递增的顺序创建指定个账号<br />
+        例如：起始序号设为1000，最大序号设为1010，系统则会创建（1000，1001，1002，1003....1009,1010）11个账号<br />
+        起始序号不得小于当前账号池中序号最大的账号
+    </div>
+</fieldset>
 
 @using (Html.BeginForm("AddUserNumber", "Admin", FormMethod.Post, new { @class = "layui-form" }))
 {
@@ -37,7 +46,3 @@
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>

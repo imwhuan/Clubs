@@ -53,8 +53,8 @@ namespace ClubApp.Controllers
             {
                 return HttpNotFound("未发现社团" + cid);
             }
-            List<UserClubs> ucs = db.UserClubs.Where(u => u.Club.ClubId == club.ClubId&&u.State>0).ToList();
-            List<Activities> activities = db.Activities.Where(a => a.Club.ClubId == club.ClubId && a.State == 1).OrderBy(a=>a.Id).Take(5).ToList();
+            List<UserClubs> ucs = db.UserClubs.Where(u => u.Club.ClubId == club.ClubId&&u.State>0&&u.State<5).ToList();
+            List<Activities> activities = db.Activities.Where(a => a.Club.ClubId == club.ClubId).OrderBy(a=>a.Id).Take(5).ToList();
             List<AnnounceMent> announceMents = db.AnnounceMents.Where(a => a.Club.ClubId == club.ClubId && a.state == (int)EnumState.正常).OrderBy(a=>a.Id).Take(5).ToList();
             ClubViewModel model = new ClubViewModel()
             {
@@ -179,6 +179,7 @@ namespace ClubApp.Controllers
             {
                 return HttpNotFound("未发现社团" + cid);
             }
+            List<UserClubs> ucs = db.UserClubs.Where(u => u.Club.ClubId == club.ClubId && u.State > 0 && u.State < 5).ToList();
             JoinClubSubModel model = new JoinClubSubModel()
             {
                 ClubId = club.ClubId,
@@ -190,8 +191,8 @@ namespace ClubApp.Controllers
                 State = Enum.GetName(typeof(EnumState), club.State),
                 CreateDate = club.CreateDate == null ? "未知" : club.CreateDate.ToString(),
                 User = club.User.UserName,
-                UserCount=db.UserClubs.Where(uc=>uc.Club.ClubId==cid).Count(),
-                CanJoin=!db.UserClubs.Where(uc=>uc.Club.ClubId==cid&&uc.User.UserId==User.Identity.Name).Any()
+                UserCount=ucs.Count(),
+                CanJoin= !ucs.Where(u => u.User.UserId == User.Identity.Name).Any()
             };
             return View(model);
         }
@@ -207,7 +208,7 @@ namespace ClubApp.Controllers
                     ModelState.AddModelError("", "申请任务未上传审批文件！");
                     return View(model);
                 }
-                if (db.UserClubs.Where(uc => uc.Club.ClubId == model.ClubId && uc.User.UserId == User.Identity.Name).Any())
+                if (db.UserClubs.Where(uc => uc.Club.ClubId == model.ClubId && uc.User.UserId == User.Identity.Name && uc.State > 0 && uc.State < 5).Any())
                 {
                     ModelState.AddModelError("", "你已经是该社团成员或已申请加入该社团，不允许重复申请加入");
                     return View(model);
@@ -271,7 +272,7 @@ namespace ClubApp.Controllers
         public ActionResult MyClubsData(int page, int limit)
         {
             List<UserClubModel> datas = new List<UserClubModel>();
-            foreach (UserClubs uc in db.UserClubs.Where(u => u.User.UserId == User.Identity.Name).OrderBy(c => c.Id).Skip((page - 1) * limit).Take(limit).ToList())
+            foreach (UserClubs uc in db.UserClubs.Where(u => u.User.UserId == User.Identity.Name&&u.State<(int)EnumState.已失效).OrderBy(c => c.Id).Skip((page - 1) * limit).Take(limit).ToList())
             {
                 UserClubModel data = new UserClubModel()
                 {

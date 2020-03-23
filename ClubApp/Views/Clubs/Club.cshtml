@@ -95,7 +95,6 @@
             <span class="float-right">更多</span>
             <hr />
             <ul class="pad-l-30">
-                <li><a href="#">第一条测试公告</a><span class="float-right">2020年2月10日</span></li>
                 @foreach (var item in Model.announceMents)
                 {
                     <li><a href="#">@item.Title1</a><span class="float-right">（@item.CreateDate）</span></li>
@@ -107,10 +106,9 @@
             @Html.ActionLink("更多","Index","Active",new {cid=Model.ClubId }, new { @class="float-right"})
             <hr />
             <ul class="pad-l-30">
-                <li><a href="#">第一条活动</a><span class="float-right">2020年2月10日</span></li>
-                @foreach (var item in Model.announceMents)
+                @foreach (var item in Model.Activities)
                 {
-                    <li><a href="#">@item.Title1</a><span class="float-right">（@item.CreateDate）</span></li>
+                    <li><a href="/Active/Detail?aid=@item.Id">@item.Title1</a><span class="float-right">（@item.CreateDate）</span></li>
                 }
             </ul>
         </div>

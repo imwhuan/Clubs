@@ -2,7 +2,7 @@
 
 @if (Request.IsAuthenticated)
 {
-    string img = "/Content/layui/images/face/1.gif";
+    string img = "Content/layui/images/face/1.gif";
     string name = User.Identity.Name;
     if (((System.Security.Claims.ClaimsIdentity)User.Identity).FindFirst(System.Security.Claims.ClaimTypes.UserData) != null)
     {
@@ -15,7 +15,7 @@
     <ul class="layui-nav layui-layout-right">
         <li class="layui-nav-item">
             <a href="javascript:;">
-                <img src="@img" class="layui-nav-img">
+                <img src="/@img" class="layui-nav-img">
                 @name
             </a>
             <dl class="layui-nav-child">

@@ -49,12 +49,6 @@ layui.use('table', function(){
     ,layEvent = obj.event; //获得 lay-event 对应的值
     if(layEvent === 'outclub'){
       layer.msg('社长舍不得你，请原地写30000字退社申请，否则暂不允许你退社');
-    } else if(layEvent === 'check'){
-      layer.confirm('真的要进入管理模式么', function(index){
-        layer.msg(data.ClubId+"暂未开发管理模式")
-        layer.close(index);
-        //向服务端发送删除指令
-      });
     }
   });
 

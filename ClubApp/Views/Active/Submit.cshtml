@@ -13,6 +13,7 @@
         border-radius: 2px;
         padding: 15px 0;
     }
+
     .layui-checkbox-disbaled span {
         background-color: #5FB878 !important;
     }
@@ -22,6 +23,7 @@
 </fieldset>
 @using (Html.BeginForm("Submit", "Active", FormMethod.Post, new { @class = "layui-form layui-form-pane" }))
 {
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.TextBoxFor(m => m.Id, new { @class = "layui-input layui-hide", @readonly = true })
     <div class="layui-form-item layui-row layui-col-space8">
         <div class="layui-col-sm4">
@@ -76,9 +78,12 @@
     <div class="layui-form-item">
         @Html.LabelFor(m => m.Labels, new { @class = "layui-form-label" })
         <div class="layui-input-block">
-            @foreach (string lab in Model.Labels)
+            @if (Model.Labels != null)
             {
-                <input type="checkbox" name="label" checked disabled value="@lab" title="@lab">
+                foreach (string lab in Model.Labels)
+                {
+                    <input type="checkbox" name="label" checked disabled value="@lab" title="@lab">
+                }
             }
         </div>
     </div>
@@ -87,7 +92,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">申请理由<span style="color:red">*</span></label>
             <div class="layui-input-block">
-                <textarea name="ApplyDesc" required lay-verify="required|maxlength" placeholder="请简述你创建社团的原因及意义（最大500字符）" class="layui-textarea"></textarea>
+                <textarea name="ApplyDesc" required lay-verify="required|maxlength" placeholder="请简述你创建活动的原因及意义（最大500字符）" class="layui-textarea"></textarea>
             </div>
         </div>
         <div class="layui-form-item">
@@ -145,52 +150,52 @@
 
 }
 <script>
-     //Demo
-        layui.use(['form', 'upload'], function () {
-            var form = layui.form
-                , upload = layui.upload;
-            form.verify({
-                maxlength: function (value, item) {
-                    if (value.length > 500) {
-                        return '超过最大长度[500]个字符！'
-                    }
+    //Demo
+    layui.use(['form', 'upload'], function () {
+        var form = layui.form
+            , upload = layui.upload;
+        form.verify({
+            maxlength: function (value, item) {
+                if (value.length > 500) {
+                    return '超过最大长度[500]个字符！'
                 }
-                , uprequired: function (value) {
-                    if (value.length < 1) {
-                        return '未上传审批文件的申请不允许提交'
-                    }
+            }
+            , uprequired: function (value) {
+                if (value.length < 1) {
+                    return '未上传审批文件的申请不允许提交'
                 }
-            })
+            }
+        })
 
-            //上传
-            upload.render({
-                elem: '#uploadDemo'
-                , url: '/Upload/ApplyActFile' //上传接口
-                , accept: 'file'
-                , exts: 'zip|rar|7z'
-                , size: 2048
-                , data: {
-                    aid: function () {
-                        return $("#Id").val();
-                    }
+        //上传
+        upload.render({
+            elem: '#uploadDemo'
+            , url: '/Upload/ApplyActFile' //上传接口
+            , accept: 'file'
+            , exts: 'zip|rar|7z'
+            , size: 2048
+            , data: {
+                aid: function () {
+                    return $("#Id").val();
                 }
-                , before: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
-                    layer.load(); //上传loading
+            }
+            , before: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                layer.load(); //上传loading
+            }
+            , done: function (res) {
+                layer.closeAll('loading'); //关闭loading
+                if (res.code == 0) {
+                    $("#file_link").attr("href", "/" + res.src);
+                    $("#file_link").html(res.name);
+                    $("#file_upver").val(res.src)
                 }
-                , done: function (res) {
-                    layer.closeAll('loading'); //关闭loading
-                    if (res.code == 0) {
-                        $("#file_link").attr("href", "/" + res.src);
-                        $("#file_link").html(res.name);
-                        $("#file_upver").val(res.src)
-                    }
-                    else {
-                        alert(res.msg);
-                    }
+                else {
+                    alert(res.msg);
                 }
-                , error: function (index, upload) {
-                    alert("文件上传失败（非服务器异常）")
-                }
-            });
+            }
+            , error: function (index, upload) {
+                alert("文件上传失败（非服务器异常）")
+            }
         });
+    });
 </script>

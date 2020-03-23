@@ -58,7 +58,7 @@ namespace ClubApp.Models
         [Required]
         [StringLength(maximumLength:12,MinimumLength =6, ErrorMessage = "{0} 长度应为{2}至{1}个字符。")]
         [Display(Name = "学号")]
-        [System.Web.Mvc.Remote("RelNameRegisterValidate", "Account", HttpMethod = "post", ErrorMessage = "该邮箱已被注册")]
+        [System.Web.Mvc.Remote("RelNameRegisterValidate", "Account", HttpMethod = "post", ErrorMessage = "该学号已被注册")]
         public string RelName { get; set; }
 
         [Required]
@@ -227,5 +227,24 @@ namespace ClubApp.Models
         public string CreateDate { get; set; }
         [Display(Name = "备注"), MaxLength(500)]
         public string Desc { get; set; }
+    }
+    public class ApplyView
+    {
+        [Display(Name = "申请编号")]
+        public string Id { get; set; }
+        [Display(Name = "申请类型"), Required]
+        public string Type { get; set; }
+        [Display(Name = "申请社团")]
+        public string Club { get; set; }
+        [Display(Name = "申请人")]
+        public string ApplyUser { get; set; }
+        [Display(Name = "申请日期")]
+        public string ApplyDate { get; set; }
+        [Display(Name = "审批进度")]
+        public string CheckState { get; set; }
+        [Display(Name = "处理日期")]
+        public string AuditDate { get; set; }
+        [Display(Name = "审批次数")]
+        public int AuditTimes { get; set; }
     }
 }

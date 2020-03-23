@@ -351,6 +351,10 @@
     <Content Include="Views\Home\Error.cshtml" />
     <Content Include="Views\Account\RelReg.cshtml" />
     <Content Include="Views\Account\RegSuc.cshtml" />
+    <Content Include="Views\BAdmin\AuditAct.cshtml" />
+    <Content Include="Views\BAdmin\AuditActA.cshtml" />
+    <Content Include="Views\BAdmin\Notice.cshtml" />
+    <Content Include="Views\Home\Notices.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

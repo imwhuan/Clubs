@@ -124,7 +124,7 @@ namespace ClubApp.Controllers
             {
                 code = 0,
                 msg = "",
-                count = db.Users.Count(),
+                count = db.UserNumbers.Count(),
                 data = datas.AsQueryable()
             };
 
@@ -223,7 +223,7 @@ namespace ClubApp.Controllers
             IQueryable<Activities> actlist;
             if (string.IsNullOrEmpty(cid))
             {
-                actlist = db.Activities.OrderByDescending(a => a.Id).Skip((page - 1) * count).Take(count);
+                actlist = db.Activities.Where(a=>a.State>2).OrderByDescending(a => a.Id).Skip((page - 1) * count).Take(count);
             }
             else
             {
@@ -341,6 +341,45 @@ namespace ClubApp.Controllers
                 msg = "",
                 count = db.Activities.Count(),
                 data = models.AsQueryable()
+            };
+
+            return Json(dataModel, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetApplyData(int page, int limit, string state)
+        {
+            List<ApplyAudit> models = new List<ApplyAudit>();
+            int st = 0;
+            if (!string.IsNullOrEmpty(state)&& int.TryParse(state,out st))
+            {
+                models = db.ApplyAudits.Where(a => a.Type.Id == (int)SQType.创建活动 && a.CheckState == st).OrderBy(a => a.Id).ToList();
+            }
+            else
+            {
+                models = db.ApplyAudits.Where(a => a.Type.Id == (int)SQType.创建活动).OrderBy(a => a.Id).ToList();
+            }
+            List<ApplyView> datas = new List<ApplyView>();
+            foreach (ApplyAudit applys in models)
+            {
+                ApplyView apply = new ApplyView
+                {
+                    Id = applys.Id.ToString(),
+                    Type = applys.Type.Name,
+                    Club = applys.Club?.Name,
+                    ApplyUser = applys.ApplyUser.UserName,
+                    CheckState = Enum.GetName(typeof(EnumAuditState), applys.CheckState),
+                    ApplyDate = applys.ApplyDate.ToString(),
+                    AuditDate = applys.AuditDate.ToString(),
+                    AuditTimes = applys.AuditTimes ?? 0
+                };
+                datas.Add(apply);
+            }
+            PageDataModel dataModel = new PageDataModel()
+            {
+                code = 0,
+                msg = "",
+                count = models.Count(),
+                data = datas.AsQueryable()
             };
 
             return Json(dataModel, JsonRequestBehavior.AllowGet);

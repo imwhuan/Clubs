@@ -31,8 +31,8 @@
             </div>
             <!-- 头部区域（可配合layui已有的水平导航） -->
             <ul class="layui-nav layui-layout-left">
-                <li class="layui-nav-item"><a href="">控制台</a></li>
-                <li class="layui-nav-item"><a href="">商品管理</a></li>
+                <li class="layui-nav-item">@Html.ActionLink("公告", "Notices", "Home")</li>
+                <li class="layui-nav-item"><a href="">关于</a></li>
                 @if (User.IsInRole("Admin"))
                 {
                     <li class="layui-nav-item"><a href="">用户</a></li>
@@ -71,8 +71,8 @@
                             <a class="" href="javascript:;">管理员控制</a>
                             <dl class="layui-nav-child">
                                 <dd id="b1">@Html.ActionLink("社团创建审批", "AuditClub", "BAdmin")</dd>
-                                <dd id="b2">@Html.ActionLink("社团活动审批", "ClubNumber", "Admin")</dd>
-                                <dd id="b3">@Html.ActionLink("系统公告", "ClubType", "Admin")</dd>
+                                <dd id="b2">@Html.ActionLink("社团活动审批", "AuditAct", "BAdmin")</dd>
+                                <dd id="b3">@Html.ActionLink("发布公告", "Notice", "BAdmin")</dd>
                             </dl>
                         </li>
                     }

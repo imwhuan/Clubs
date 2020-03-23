@@ -9,6 +9,10 @@ namespace ClubApp.Controllers
         {
             return View();
         }
+        public ActionResult Notices()
+        {
+            return View();
+        }
         public ActionResult Error()
         {
             return View();

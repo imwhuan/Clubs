@@ -150,8 +150,8 @@ namespace ClubApp.Controllers
 
                 AppA.CheckState = (int)state;
                 AppA.AuditDate = DateTime.Now;
-                uc.State = (int)EnumState.已失效;
-                db.Entry(uc).State = System.Data.Entity.EntityState.Modified;
+
+                db.Entry(uc).State = System.Data.Entity.EntityState.Deleted;
                 db.Entry(AppA).State = System.Data.Entity.EntityState.Modified;
                 db.AuditDetails.Add(audit);
                 db.SaveChanges();
