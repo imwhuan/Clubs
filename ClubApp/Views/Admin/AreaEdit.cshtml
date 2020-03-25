@@ -1,0 +1,65 @@
+﻿@model ClubApp.Models.Area
+@{
+    ViewBag.Title = "编辑活动区域";
+}
+
+<h2>入档区域编辑：@ViewBag.Msg</h2>
+@using (Html.BeginForm("AreaEdit", "Admin", FormMethod.Post, new { @class = "layui-form" }))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Id, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            @Html.TextBoxFor(m => m.Id, new { @class = "layui-input", @readonly = true })
+            @Html.ValidationMessageFor(m => m.Id, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Name, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            @Html.TextBoxFor(m => m.Name, new { @class = "layui-input", autocomplete = "off" })
+            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Owner, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            @Html.TextBoxFor(m => m.Owner, new { @class = "layui-input", autocomplete = "off" })
+            @Html.ValidationMessageFor(m => m.Owner, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.Desc, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            <textarea name="Desc" required lay-verify="required|maxlength" placeholder="区域描述（最大500字符）" class="layui-textarea">@(Model?.Desc??"")</textarea>
+            @Html.ValidationMessageFor(m => m.Desc, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.State, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            <input type="radio" name="State" value="0" title="未使用" checked="@(Model.State==0)">
+            <input type="radio" name="State" value="1" title="系统锁定" checked="@(Model.State==1)">
+            <input type="radio" name="State" value="4" title="正常" checked="@(Model.State==4)">
+            <input type="radio" name="State" value="" title="未知" checked="@(Model.State!=0&&Model.State!=1&&Model.State!=4)" disabled="">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="submit" class="layui-btn" lay-submit value="确认提交" />
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            @Html.ActionLink("返回", "Areas","",new { @class= "layui-btn layui-btn-primary" })
+        </div>
+    </div>
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    layui.use('form', function () {
+        var form = layui.form;
+
+        //监听提交
+    });
+    $("#a4").addClass("layui-this");
+    $("#a4").parents("li").addClass("layui-nav-itemed")
+</script>

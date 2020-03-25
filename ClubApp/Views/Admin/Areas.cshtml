@@ -1,0 +1,86 @@
+﻿@model IEnumerable<ClubApp.Models.Area>
+@{
+    ViewBag.Title = "在档活动区域";
+}
+<h2>@ViewBag.Msg</h2>
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>当前共有<span style="color:red;font-size:larger"> @Model.Count() </span>个活动区域</legend>
+</fieldset>
+<p>
+    <a href="~/Admin/AddArea" class="layui-btn layui-btn-sm"><i class="layui-icon">&#xe608;</i> 添加</a>
+</p>
+<div class="layui-form">
+    <table class="layui-table">
+        <colgroup>
+            <col width="150">
+            <col width="200">
+            <col width="200">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(m => m.Id)</th>
+                <th>@Html.DisplayNameFor(m => m.Name)</th>
+                <th>@Html.DisplayNameFor(m => m.State)</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>@Html.DisplayFor(m => item.Id)</td>
+                <td>@Html.DisplayFor(m => item.Name)</td>
+                @if (item.State == 4)
+                {
+                    <td style="color:green">正常</td>
+                    <td>
+                        @Html.ActionLink("系统锁定", "AreaManaer", new { id = item.Id, type = 1 }, new { @class = "layui-btn layui-btn-primary layui-btn-xs" })
+                        <span style="margin:0 10px">|</span>
+                        @Html.ActionLink("编辑", "AreaEdit", new { id = item.Id }, new { @class = "layui-btn layui-btn-danger  layui-btn-xs" })
+                    </td>
+                }
+                else if (item.State == 1)
+                {
+                    <td style="color:red">系统锁定</td>
+                    <td>
+                        @Html.ActionLink("启用", "AreaManaer", new { id = item.Id, type = 4 }, new { @class = "layui-btn layui-btn-xs" })
+                        <span style="margin:0 10px">|</span>
+                        @Html.ActionLink("编辑", "AreaEdit", new { id = item.Id }, new { @class = "layui-btn layui-btn-danger  layui-btn-xs" })
+                    </td>
+                }
+                else if (item.State == 0)
+                {
+                    <td>未使用</td>
+                    <td>
+                        @Html.ActionLink("激活", "AreaManaer", new { id = item.Id, type = 4 }, new { @class = "layui-btn layui-btn-xs" })
+                        <span style="margin:0 10px">|</span>
+                        @Html.ActionLink("编辑", "AreaEdit", new { id = item.Id }, new { @class = "layui-btn layui-btn-danger  layui-btn-xs" })
+                    </td>
+                }
+                else
+                {
+                    <td>@item.State</td>
+                    <td>
+                        <input type="button" value="状态异常" onclick="tip()" class="layui-btn layui-btn-xs layui-btn-danger" />
+                        <span style="margin:0 10px">|</span>
+                        @Html.ActionLink("编辑", "AreaEdit", new { id = item.Id }, new { @class = "layui-btn layui-btn-danger  layui-btn-xs" })
+                    </td>
+                }
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    layui.use('layer', function () {
+        var form = layui.form;
+
+        //监听提交
+    });
+    function tip() {
+        layer.msg("请查阅枚举值了解意料之外的状态")
+    };
+    $("#a4").addClass("layui-this");
+    $("#a4").parents("li").addClass("layui-nav-itemed")
+</script>
