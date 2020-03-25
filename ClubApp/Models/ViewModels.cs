@@ -247,4 +247,17 @@ namespace ClubApp.Models
         [Display(Name = "审批次数")]
         public int AuditTimes { get; set; }
     }
+    public class AreaView
+    {
+        [Key, Display(Name = "编号")]
+        public int Id { get; set; }
+        [MaxLength(30), Display(Name = "地址")]
+        public string Name { get; set; }
+        [MaxLength(150), Display(Name = "地址描述")]
+        public string Desc { get; set; }
+        [MaxLength(50), Display(Name = "联系方式")]
+        public string Owner { get; set; }
+        [Display(Name = "状态")]
+        public string State { get; set; }
+    }
 }

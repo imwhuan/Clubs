@@ -636,5 +636,80 @@ namespace ClubApp.Controllers
 
             return Json(model, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult Areas()
+        {
+            List<Area> areas = db.Areas.OrderBy(a=>a.Id).ToList();
+            
+            return View(areas);
+        }
+        public ActionResult AreaManaer(int id,int type)
+        {
+            Area Are = db.Areas.Find(id);
+            if (Are == null)
+            {
+                return RedirectToAction("Areas");
+            }
+            if (Are.State== type)
+            {
+                return Content("<script>alert('状态重复更新');window.location.href='../Areas';</script>");
+            }
+            Are.State = type;
+            db.SaveChanges();
+            return RedirectToAction("Areas");
+        }
+        public ActionResult AreaEdit(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Areas");
+            }
+            Area Are = db.Areas.Find(id);
+            if (Are == null)
+            {
+                return RedirectToAction("Areas");
+            }
+            return View(Are);
+        }
+        [HttpPost]
+        public ActionResult AreaEdit(Area model)
+        {
+            db.Entry(model).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            ViewBag.Msg = "区域编号："+model.Id.ToString()+"_信息更新成功！";
+            return View(model);
+        }
+        public ActionResult AddArea()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult AddArea(Area model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    Area area = db.Areas.Where(a => a.Name == model.Name).FirstOrDefault();
+                    if (area == null)
+                    {
+                        model.State = (int)EnumState.未使用;
+                        db.Areas.Add(model);
+                        int res = db.SaveChanges();
+                        return RedirectToAction("Areas", new { Msg = "成功添加" + res + "个区域" });
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "已存在名为" + model.Name + "的区域，不可重复添加！");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
+            }
+            return View(model);
+        }
+
     }
 }

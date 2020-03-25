@@ -279,6 +279,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202003101201238_InitialCreate.cs" />
+    <Compile Include="Migrations\202003101201238_InitialCreate.designer.cs">
+      <DependentUpon>202003101201238_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202003241436159_areaname.cs" />
+    <Compile Include="Migrations\202003241436159_areaname.designer.cs">
+      <DependentUpon>202003241436159_areaname.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ActiveModel.cs" />
     <Compile Include="Models\AdminViewModels.cs" />
     <Compile Include="Models\AppDbContext.cs" />
@@ -355,6 +364,9 @@
     <Content Include="Views\BAdmin\AuditActA.cshtml" />
     <Content Include="Views\BAdmin\Notice.cshtml" />
     <Content Include="Views\Home\Notices.cshtml" />
+    <Content Include="Views\Admin\Areas.cshtml" />
+    <Content Include="Views\Admin\AddArea.cshtml" />
+    <Content Include="Views\Admin\AreaEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -369,6 +381,14 @@
     <Folder Include="Content\upload\clubimg\" />
     <Folder Include="Views\GetData\" />
     <Folder Include="Views\Upload\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202003101201238_InitialCreate.resx">
+      <DependentUpon>202003101201238_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003241436159_areaname.resx">
+      <DependentUpon>202003241436159_areaname.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

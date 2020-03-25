@@ -95,6 +95,12 @@ namespace ClubApp.Controllers
             ActiveListModel model = new ActiveListModel();
             model.ClubID = club.ClubId;
             model.ClubName = club.Name;
+            List<Area> areas = db.Areas.Where(a=>a.State==(int)EnumState.正常).ToList();
+            model.Areas = new Dictionary<string, string>();
+            foreach(Area a in areas)
+            {
+                model.Areas.Add(a.Id.ToString(), a.Name);
+            }
             return View(model);
         }
         [HttpPost,ValidateInput(false),Authorize]

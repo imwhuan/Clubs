@@ -393,7 +393,7 @@ namespace ClubApp.Models
     {
         [Key, Display(Name = "编号"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        [MaxLength(30),Display(Name="地址")]
+        [MaxLength(30),Required,Display(Name="地址")]
         public string Name { get; set; }
         [MaxLength(150), Display(Name = "地址描述")]
         public string Desc { get; set; }

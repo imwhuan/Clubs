@@ -14,11 +14,14 @@
             <div class="layui-input-block">
                 <select name="Type" lay-verify="required" lay-filter="aihao">
                     <option value=""></option>
-                    <option value="0">写作</option>
-                    <option value="1" selected="">阅读</option>
-                    <option value="2">游戏</option>
-                    <option value="3">音乐</option>
-                    <option value="4">旅行</option>
+                    <option value="1">私人</option>
+                    <option value="2" selected="">社团</option>
+                    <option value="3">社联</option>
+                    <option value="4">院级</option>
+                    <option value="5">校级</option>
+                    <option value="6">校级官方</option>
+                    <option value="7">校外</option>
+                    <option value="0">其他</option>
                 </select>
             </div>
         </div>
@@ -42,12 +45,10 @@
         @Html.LabelFor(m => m.Area, new { @class = "layui-form-label" })
         <div class="layui-input-inline">
             <select name="Area" lay-verify="required" lay-filter="aihao">
-                <option value=""></option>
-                <option value="0">写作</option>
-                <option value="1">阅读</option>
-                <option value="2">游戏</option>
-                <option value="3">音乐</option>
-                <option value="4">旅行</option>
+                @foreach (var item in Model.Areas)
+                {
+                    <option value="@item.Key">@item.Value</option>
+                }
             </select>
         </div>
         <div class="layui-form-mid layui-word-aux">
