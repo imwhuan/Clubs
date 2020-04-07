@@ -287,6 +287,10 @@
     <Compile Include="Migrations\202003241436159_areaname.designer.cs">
       <DependentUpon>202003241436159_areaname.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202004051737390_addvote.cs" />
+    <Compile Include="Migrations\202004051737390_addvote.designer.cs">
+      <DependentUpon>202004051737390_addvote.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ActiveModel.cs" />
     <Compile Include="Models\AdminViewModels.cs" />
@@ -388,6 +392,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202003241436159_areaname.resx">
       <DependentUpon>202003241436159_areaname.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004051737390_addvote.resx">
+      <DependentUpon>202004051737390_addvote.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -77,7 +77,95 @@ namespace ClubApp.Controllers
             {
                 return HttpNotFound("未发现活动" + aid);
             }
-            return View(act);
+            ActDetail model = new ActDetail();
+            model.Id = act.Id;
+            if (act.Time1 > DateTime.Now)
+            {
+                model.State = "未开始";
+            }
+            else if (act.Time2 > DateTime.Now)
+            {
+                model.State = "进行中";
+            }
+            else
+            {
+                model.State = "已结束";
+            }
+            model.time1 = act.Time1.ToString("yyyy年MM月dd日：HH时mm分ss秒");
+            model.time2 = act.Time2.ToString("yyyy年MM月dd日：HH时mm分ss秒");
+            if (act.Area == null)
+            {
+                if (string.IsNullOrEmpty(act.Area0))
+                {
+                    model.area = "未知";
+                }
+                else
+                {
+                    model.area = act.Area0;
+                }
+            }
+            else
+            {
+                model.area = act.Area.Name;
+            }
+            model.Title1 = act.Title1;
+            model.Title2 = act.Title2;
+            model.MaxUser = act.MaxUser == null ? "无限制" : act.MaxUser.ToString()+"人";
+            model.Labels = act.Label.Split(',').ToList();
+            model.Content = act.Content;
+            model.CreateDate = act.CreateDate.ToString("yyyy年MM月dd日：HH时mm分ss秒");
+            //统计不同打分的评论个数
+            List<Voting> votings = db.Votings.Where(v => v.Active.Id == act.Id).ToList();
+            if (votings == null)
+            {
+                model.Votings = new List<Voting>();
+            }
+            else
+            {
+                model.Votings = votings;
+            }
+            
+            int v1=0, v2=0, v3=0, v4=0, v5=0;
+            foreach(Voting v in votings)
+            {
+                if (v.Votes < 1)
+                {
+                    //小于1分的为无效值
+                }
+                else if (v.Votes < 2)
+                {
+                    v1 += 1;
+                }
+                else if (v.Votes < 3)
+                {
+                    v2 += 1;
+                }
+                else if (v.Votes < 4)
+                {
+                    v3 += 1;
+                }
+                else if (v.Votes < 5)
+                {
+                    v4 += 1;
+                }
+                else if (v.Votes < 6)
+                {
+                    v5 += 1;
+                }
+            }
+            double av1 = v1 * 1 + v2 * 2 + v3 * 3 + v4 * 4 + v5 * 5;//总分数
+            int av2 = v1 + v2 + v3 + v4 + v5;//总评论数
+            model.Vote0 =av2==0?0: Math.Round(av1/av2,1);//平均分数，保留一位小数
+            model.Vote1 = v1.ToString() + "/" + av2.ToString();
+            model.Vote2 = v2.ToString() + "/" + av2.ToString();
+            model.Vote3 = v3.ToString() + "/" + av2.ToString();
+            model.Vote4 = v4.ToString() + "/" + av2.ToString();
+            model.Vote5 = v5.ToString() + "/" + av2.ToString();
+            //下述代码为更新活动平均分
+            //act.Votes0 = model.Vote0.ToString();
+            //db.Entry(act).State = System.Data.Entity.EntityState.Modified;
+            //db.SaveChanges();
+            return View(model);
         }
         [HttpGet]
         public ActionResult AddAct(string cid)
@@ -268,6 +356,53 @@ namespace ClubApp.Controllers
         public ActionResult Add(ActiveListModel model)
         {
             return View(model);
+        }
+        [HttpPost, ValidateInput(false), Authorize]
+        public ActionResult AddVote(int aid,string Content,int vote)
+        {
+            try
+            {
+                Activities act = db.Activities.Find(aid);
+                if (act == null)
+                {
+                    Session["Error"] = "未发现活动" + aid;
+                    return RedirectToAction("Error404", "Home");
+                }
+                UserNumber u = db.UserNumbers.Find(User.Identity.Name);
+                //Voting oldvote = db.Votings.Where(v => v.Active.Id == act.Id && v.User.UserId == u.UserId).FirstOrDefault();
+                //if (oldvote != null)
+                //{
+                //    throw new Exception("超过评论次数限制——你已评论/打分过该活动");
+                //}
+                int votenum = db.Votings.Where(v => v.Active.Id == act.Id).Count();
+                double v1 = 0.0;
+                double.TryParse(act.Votes0, out v1);//当前平均分v1
+                double v2 = v1 * votenum;//当前总分v2
+                double v3 = Math.Round((v2 + vote) / (votenum + 1), 1);//当前总分+本次评分/当前总评论数+1，为更新后的平均分
+                act.Votes0 = v3.ToString();
+                Voting newvote = new Voting
+                {
+                    Active = act,
+                    User = u,
+                    Desc = Content,
+                    Votes = vote,
+                    CreateDate = DateTime.Now,
+                    State = 1,
+                    Good=0,
+                    Bad=0,
+                    ToId=0
+                };
+                db.Votings.Add(newvote);
+                db.Entry(act).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Detail", new { aid = aid });
+            }
+            catch (Exception ex)
+            {
+                Session["Error"] = ex.Message;
+                return RedirectToAction("Error404", "Home");
+            }
+            
         }
     }
 }

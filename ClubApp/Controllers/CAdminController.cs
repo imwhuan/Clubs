@@ -22,15 +22,21 @@ namespace ClubApp.Controllers
             {
                 ViewBag.Msg = Msg;
             }
+            List<UserClubs> clubs = db.UserClubs.Where(u => u.User.UserId == User.Identity.Name && u.Status == (int)UCStatus.社长&&u.State==(int)EnumState.正常).ToList();
+            List<string> clubid = new List<string>();
+            foreach(UserClubs uc in clubs)
+            {
+                clubid.Add(uc.Club.ClubId);
+            }
             List<ApplyAudit> models = new List<ApplyAudit>();
             int st = (int)s;
             if (s > 0 && s < 4)
             {
-                models = db.ApplyAudits.Where(a => a.Type.Id == (int)SQType.加入社团 && a.CheckState == st).OrderBy(a => a.Id).ToList();
+                models = db.ApplyAudits.Where(a => a.Type.Id == (int)SQType.加入社团 && a.CheckState == st && clubid.Contains(a.Club.ClubId)).OrderBy(a => a.Id).ToList();
             }
             else
             {
-                models = db.ApplyAudits.Where(a => a.Type.Id == (int)SQType.加入社团).OrderBy(a => a.Id).ToList();
+                models = db.ApplyAudits.Where(a => a.Type.Id == (int)SQType.加入社团&&clubid.Contains(a.Club.ClubId)).OrderBy(a => a.Id).ToList();
             }
 
             return View(models);

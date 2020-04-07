@@ -376,14 +376,20 @@ namespace ClubApp.Models
     {
         [Key,Display(Name ="编号"),DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        [Display(Name = "回复对象")]
+        public int ToId { get; set; }
         [Display(Name ="活动")]
         public virtual Activities Active { get; set; }
         [Display(Name ="用户")]
         public virtual UserNumber User { get; set; }
         [Display(Name = "分数")]
         public int Votes { get; set; }
-        [Display(Name = "评论"), MaxLength(100)]
+        [Display(Name = "评论"), MaxLength(1000)]
         public string Desc { get; set; }
+        [Display(Name = "赞同")]
+        public int Good { get; set; }
+        [Display(Name = "反对")]
+        public int Bad { get; set; }
         [Display(Name = "状态")]
         public int State { get; set; }
         [Display(Name ="创建日期")]

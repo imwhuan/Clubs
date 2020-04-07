@@ -103,4 +103,34 @@ namespace ClubApp.Models
         [Display(Name = "审批编号")]
         public int AuditId { get; set; }
     }
+    public class AddVote
+    {
+        [Display(Name = "活动")]
+        public int Active { get; set; }
+        [Display(Name = "分数")]
+        public int Votes { get; set; }
+        [Display(Name = "评论"), MaxLength(100)]
+        public string Desc { get; set; }
+    }
+    public class ActDetail
+    {
+        public int Id { get; set; }
+        public string State { get; set; }
+        public string time1 { get; set; }
+        public string time2 { get; set; }
+        public string area { get; set; }
+        public string Title1 { get; set; }
+        public string Title2 { get; set; }
+        public string MaxUser { get; set; }
+        public string Content { get; set; }
+        public string CreateDate { get; set; }
+        public double Vote0 { get; set; }
+        public string Vote1 { get; set; }
+        public string Vote2 { get; set; }
+        public string Vote3 { get; set; }
+        public string Vote4 { get; set; }
+        public string Vote5 { get; set; }
+        public List<string> Labels { get; set; }
+        public List<Voting> Votings { get; set; }
+    }
 }

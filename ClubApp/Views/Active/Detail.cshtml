@@ -1,10 +1,258 @@
-﻿@model ClubApp.Models.Activities
+﻿@model ClubApp.Models.ActDetail
 @{
-    ViewBag.Title = "Detail";
+    ViewBag.Title = Model.Title1;
 }
+<style>
+    .content img{
+        max-width:80%;
+    }
+    .ul-list li {
+        position: relative;
+        padding: 10px 50px 10px 80px;
+        border-bottom: 1px dashed
+    }
 
-<fieldset class="layui-elem-field layui-field-title">
+    .ul-list-badge {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+    }
+    .layui-icon-star-fill {
+        color: orange;
+    }
+
+    .head-img-a {
+        position: absolute;
+        left: 15px;
+        top: 10px;
+    }
+
+    .head-img-a img {
+        width: 50px;
+        height: 50px;
+    }
+    .head-name {
+        font-weight:bolder;
+        text-decoration:underline;
+    }
+    .div-desc-short {
+        padding: 5px 0;
+        color: gray;
+    }
+
+    .ul-list-info span {
+        margin: 0 5px;
+    }
+
+    .about {
+        text-align: center;
+        margin: 20px 0;
+    }
+    .about span {
+        margin: 0 10px;
+    }
+    #rate2{
+        text-align:center;
+    }
+    #rate2 i {
+        font-size: x-small
+    }
+    .allstar li{
+        position:relative;
+    }
+</style>
+<fieldset class="layui-elem-field">
     <legend>@Model.Title1</legend>
+    <div class="layui-field-box">
+        活动简介： @Model.Title2 <br />
+        活动开始时间：@Model.time1 | 活动结束时间：@Model.time2 <br /> 
+        活动状态：@Model.State | 活动地点：@Model.area <br />
+        参与人数限制：@Model.MaxUser
+        @if (Model.MaxUser != "无限制")
+        {
+    <span class="layui-badge layui-bg-blue">获取门票</span>
+        }
+    </div>
 </fieldset>
+<div class="content">@(new HtmlString(Model.Content))</div>
+<hr />
+<div class="about">
+    @foreach (string lab in Model.Labels)
+    {
+        <span class="layui-badge layui-bg-blue">@lab</span>
+    }
+    <span><a href="#" title="评论"><i class="layui-icon layui-icon-dialogue"></i> @Model.Votings.Count </a> </span>
+    <p style="padding:10px">@Model.CreateDate</p>
+</div>
+<div class="layui-col-md6 layui-col-md-offset3 layui-row" style="border:1px solid #808080;border-radius:20px;padding:20px;margin-bottom:20px;">
+    <div class="layui-col-xs3" style="text-align:center">
+        <div style="font-size:50px;padding-top:10px">@Model.Vote0</div>
+        <div id="rate2"></div>
+    </div>
+    <div class="layui-col-xs9">
+        <ul class="allstar">
+            <li>
+                <div>5星</div>
+                <div style="position:absolute;right:0;left:30px;bottom:0;">
+                    <div class="layui-progress">
+                        <div class="layui-progress-bar" lay-percent="@Model.Vote5"></div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div>4星</div>
+                <div style="position:absolute;right:0;left:30px;bottom:0;">
+                    <div class="layui-progress">
+                        <div class="layui-progress-bar layui-bg-green" lay-percent="@Model.Vote4"></div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div>3星</div>
+                <div style="position:absolute;right:0;left:30px;bottom:0;">
+                    <div class="layui-progress">
+                        <div class="layui-progress-bar layui-bg-blue" lay-percent="@Model.Vote3"></div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div>2星</div>
+                <div style="position:absolute;right:0;left:30px;bottom:0;">
+                    <div class="layui-progress">
+                        <div class="layui-progress-bar layui-bg-orange" lay-percent="@Model.Vote2"></div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div>1星</div>
+                <div style="position:absolute;right:0;left:30px;bottom:0;">
+                    <div class="layui-progress">
+                        <div class="layui-progress-bar layui-bg-red" lay-percent="@Model.Vote1"></div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<hr />
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>评论区</legend>
+</fieldset>
+@using (Html.BeginForm("AddVote", "Active", FormMethod.Post, new { @class = "layui-form" }))
+{
+    <div class="layui-form-item layui-form-text">
+        <textarea placeholder="请输入内容" id="Content" name="Content" class="layui-textarea"></textarea>
+    </div>
+    <div class="layui-form-item">
+        <div id="rate1"></div>
+        <input type="hidden" name="aid" value="@Model.Id" />
+        <input type="hidden" name="vote" id="voteval" value="0" />
+    </div>
+    <div class="layui-form-item">
+        <button class="layui-btn" lay-submit lay-filter="demo2">提交</button>
+        <button type="button" class="layui-btn" onclick="getcontent()"><i class="layui-icon layui-icon-play"></i>预览</button>
+    </div>
+}
+<ul class="ul-list">
+    @foreach (var v in Model.Votings)
+    {
+    <li>
+        <a class="head-img-a" href="/User?uid=@v.User.UserId">
+            <img alt="@v.User.UserName" src="/@v.User.HeadImg">
+        </a>
+        <div class="head-name">@v.User.UserName</div>
+        <div class="div-desc-short">
+            @(new HtmlString(v.Desc))
+        </div>
+        <div class="ul-list-info">
+            <span class="layui-badge">@v.CreateDate.ToString("yyyy年MM月dd日-HH时mm分ss秒")</span>
+            <span><a href="#" title="赞同"><i class="layui-icon layui-icon-praise"></i> @v.Good</a></span>
+            <span><a href="#" title="反对"><i class="layui-icon layui-icon-tread"></i> @v.Bad</a></span>
+            <span><a href="#" title="评论"><i class="layui-icon layui-icon-dialogue"></i> ...</a> </span>
+        </div>
+        <div class="ul-list-badge">
+            <span title="评分"><i class="layui-icon layui-icon-star-fill"></i> @v.Votes</span>
+        </div>
+    </li>
+    }
+    @*<li>
+        <a class="head-img-a" href="/u/44272200"> <img alt="CrazyYi" src="~/Content/images/head1.png"> </a>
+        <div class="div-desc-short">
+            <p><img src="https://localhost:44312/Content/layui/images/face/25.gif" alt="[抱抱]"><img src="https://localhost:44312/Content/layui/images/face/25.gif" alt="[抱抱]"></p>
+            <span>撒大大的撒达娃大的撒达娃阿达伟大啊达娃的撒到我阿达的阿文哇大达娃大大挖的啊</span>
+        </div>
+        <div class="ul-list-info">
+            <span class="layui-badge">2020-1-7</span>
+            <span><a href="#" title="赞同"><i class="layui-icon layui-icon-praise"></i> 20</a></span>
+            <span><a href="#" title="反对"><i class="layui-icon layui-icon-tread"></i> 20</a></span>
+            <span><a href="#" title="评论"><i class="layui-icon layui-icon-dialogue"></i> 17 </a> </span>
+        </div>
+        <div class="ul-list-badge">
+            <span title="评分"><i class="layui-icon layui-icon-star-fill"></i> 4</span>
+        </div>
+    </li>*@
 
-<div>@(new HtmlString(Model.Content))</div>
+</ul>
+<script>
+    //var ratev = 0;
+    var getcontent;
+    layui.use(['form','layer', 'layedit','rate'], function () {
+        var form = layui.form,
+            layer=layui.layer,
+            rate=layui.rate,
+            layedit = layui.layedit;
+        var rate1 = rate.render({
+            elem: '#rate1',
+            text:true,
+            setText: function (value) {
+                var arrs = { '0':'请打分','1': '极差', '2': '差', '3': '一般', '4': '好', '5': '非常好' };
+                this.span.text(arrs[value] || (value + '星'));
+            },
+            choose: function (value) {
+                //ratev = value;
+                $("#voteval").val(value);
+            }
+        });
+        var rate2 = rate.render({
+            elem: '#rate2',  //绑定元素
+            value: @Model.Vote0,
+            half: true,
+            readonly: true
+        });
+        //监听提交
+        form.on('submit(demo2)', function (data) {
+            //console.log(data);
+            if (data.field.vote == 0) {
+                layer.msg('请打分！');
+                return false;
+            }
+            var desclen = layedit.getContent(vote).length;
+            if (desclen < 10) {
+                layer.msg("评论内容未达到字数要求");
+                return false;
+            }
+            if (desclen > 1000) {
+                layer.msg("评论内容长度超过限制");
+                return false;
+            }
+        });
+        layedit.set({
+            hideTool: ['image'],
+            //tool: ['strong', 'italic', 'underline', 'del', '|', 'left', 'center', 'right', 'link', 'unlink', 'face'],
+            height: 100
+        })
+        var vote = layedit.build('Content'); //建立编辑器
+        getcontent = function () {
+            layer.open({
+                type: 1 //此处以iframe举例
+                , title: '预览'
+                , area: ['50%', '100%'],
+                offset: 'r'
+                , shade: 0
+                , maxmin: true
+                , content: layedit.getContent(vote)
+
+            });
+        }
+    })
+</script>
