@@ -1,0 +1,14 @@
+﻿@model ClubApp.Models.Notice
+@{
+    ViewBag.Title = "系统公告";
+}
+<button class="layui-btn layui-btn-sm layui-btn-primary" onclick="javascript:history.back(-1)"><i class="layui-icon layui-icon-return"></i>返回公告列表</button>
+<hr />
+<fieldset class="layui-elem-field">
+    <legend>@Model.Title1</legend>
+    <div class="layui-field-box">
+        @Model.CreateDate.ToString("yyyy年MM月dd日：HH时mm分ss秒") <br /> @Model.Title2 
+    </div>
+</fieldset>
+<div class="content">@(new HtmlString(Model.Content))</div>
+<hr />
