@@ -127,7 +127,7 @@
                     posturl = '/GetData/GetActiveListData?page=' + page + '&cid=' + cid;
                 }
               //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
-              $.get('/GetData/GetActiveListData?page='+page, function(res){
+                $.get(posturl, function(res){
                 //假设你的列表返回在data集合中
                   layui.each(res.data, function (index, item) {
                       var badge1 = '<span class="layui-badge-rim">未开始</span>';

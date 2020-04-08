@@ -291,6 +291,10 @@
     <Compile Include="Migrations\202004051737390_addvote.designer.cs">
       <DependentUpon>202004051737390_addvote.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202004071454136_addnotice.cs" />
+    <Compile Include="Migrations\202004071454136_addnotice.designer.cs">
+      <DependentUpon>202004071454136_addnotice.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ActiveModel.cs" />
     <Compile Include="Models\AdminViewModels.cs" />
@@ -371,6 +375,8 @@
     <Content Include="Views\Admin\Areas.cshtml" />
     <Content Include="Views\Admin\AddArea.cshtml" />
     <Content Include="Views\Admin\AreaEdit.cshtml" />
+    <Content Include="Views\BAdmin\AddNotice.cshtml" />
+    <Content Include="Views\BAdmin\NoticesA.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -395,6 +401,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202004051737390_addvote.resx">
       <DependentUpon>202004051737390_addvote.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004071454136_addnotice.resx">
+      <DependentUpon>202004071454136_addnotice.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

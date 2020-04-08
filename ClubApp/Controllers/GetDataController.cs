@@ -384,5 +384,32 @@ namespace ClubApp.Controllers
 
             return Json(dataModel, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult GetNoticeListData(int page)
+        {
+            int count = 6;//单页显示数量
+            IQueryable<Notice> notices=db.Notices.OrderByDescending(a => a.Id).Skip((page - 1) * count).Take(count);
+            List<NoticeView> models = new List<NoticeView>();
+            foreach(Notice n in notices)
+            {
+                NoticeView nv = new NoticeView
+                {
+                    Id = n.Id,
+                    type = n.type,
+                    Title1 = n.Title1,
+                    Content = n.Content,
+                    CreateDate = n.CreateDate.ToLongDateString(),
+                };
+                models.Add(nv);
+            }
+            PageDataModel dataModel = new PageDataModel()
+            {
+                code = 0,
+                msg = "",
+                count = (int)Math.Ceiling((double)db.Notices.Count() / count),
+                data = models.AsQueryable()
+            };
+
+            return Json(dataModel, JsonRequestBehavior.AllowGet);
+        }
     }
 }

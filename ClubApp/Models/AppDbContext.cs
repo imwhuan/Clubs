@@ -56,7 +56,11 @@ namespace ClubApp.Models
         /// </summary>
         public virtual DbSet<UserTicket> UserTickets { get; set; }
         /// <summary>
-        /// 公告
+        /// 系统公告
+        /// </summary>
+        public virtual DbSet<Notice> Notices { get; set; }
+        /// <summary>
+        /// 社团公告
         /// </summary>
         public virtual DbSet<AnnounceMent> AnnounceMents { get; set; }
         /// <summary>
@@ -462,5 +466,25 @@ namespace ClubApp.Models
         public string CreateUser { get; set; }
         [Display(Name = "创建社团"), MaxLength(10)]
         public string CreateClub { get; set; }
+    }
+    public class Notice
+    {
+        [Key, Display(Name = "公告ID")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        [Display(Name = "公告类型")]
+        public int type { get; set; }
+        [Display(Name = "主标题"), MaxLength(100)]
+        public string Title1 { get; set; }
+        [Display(Name = "副标题"), MaxLength(100)]
+        public string Title2 { get; set; }
+        [Display(Name = "内容"), MaxLength(1000)]
+        public string Content { get; set; }
+        [Display(Name = "发布时间"), DataType(DataType.DateTime)]
+        public DateTime CreateDate { get; set; }
+        [Display(Name = "发布用户")]
+        public virtual UserNumber User { get; set; }
+        [Display(Name = "状态")]
+        public int state { get; set; }
     }
 }

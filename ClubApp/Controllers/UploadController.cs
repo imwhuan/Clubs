@@ -15,7 +15,65 @@ namespace ClubApp.Controllers
         {
             return View();
         }
+        public ActionResult UploadImg(string t)
+        {
+            EditData data1 = new EditData()
+            {
+                src = "",
+                title = ""
+            };
+            EditJson data = new EditJson()
+            {
+                code = 1,
+                msg = "",
+                data = data1
+            };
+            try
+            {
+                List<string> imgtype = new List<string>(new string[] { ".jpg", ".gif", ".png" });
+                HttpFileCollectionBase file = Request.Files;
 
+                if (file == null || file.Count < 1)
+                {
+                    data.msg += "未成功接收文件";
+                }
+                else if (!imgtype.Contains(Path.GetExtension(file[0].FileName)))
+                {
+                    data.msg = "文件格式错误（jpg/gif/png）";
+                }
+                else if (file[0].ContentLength > 2048000)
+                {
+                    data.msg += "文件大小不允许超过2M";
+                }
+                else
+                {
+                    string filepath = Server.MapPath("~/Content/upload/"+t+"/");
+                    if (!Directory.Exists(filepath))
+                    {
+                        Directory.CreateDirectory(filepath);
+                    }
+                    string name = Path.GetFileName(file[0].FileName);
+                    if (name.Length > 10)
+                    {
+                        name = name.Substring(name.Length - 10);
+                    }
+                    Random r1 = new Random();
+                    name = DateTime.Now.ToString("yyMMddHHmmss") + r1.Next(10).ToString() + name;
+                    //string ext = Path.GetExtension(name);
+                    file[0].SaveAs(filepath + name);
+                    data.code = 0;
+                    data.data.title = name;
+                    data.data.src = "../Content/upload/"+t+"/"+ name;
+                    data.msg += "保存成功";
+                }
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                data.msg = ex.Message;
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+        }
         public ActionResult ClubHeadImg(string cid)
         {
             try
@@ -225,7 +283,7 @@ namespace ClubApp.Controllers
             }
         }
 
-        public ActionResult UploadImg(string cid)
+        public ActionResult UploadActImg(string cid)
         {
             EditData data1 = new EditData()
             {

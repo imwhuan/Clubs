@@ -32,7 +32,7 @@
             </div>
             <!-- 头部区域（可配合layui已有的水平导航） -->
             <ul class="layui-nav layui-layout-left">
-                <li class="layui-nav-item">@Html.ActionLink("公告", "Notices", "Home")</li>
+                <li class="layui-nav-item">@Html.ActionLink("公告", "Notice", "BAdmin")</li>
                 <li class="layui-nav-item"><a href="">关于</a></li>
                 @if (User.IsInRole("Admin"))
                 {
@@ -74,7 +74,7 @@
                             <dl class="layui-nav-child">
                                 <dd id="b1">@Html.ActionLink("社团创建审批", "AuditClub", "BAdmin")</dd>
                                 <dd id="b2">@Html.ActionLink("社团活动审批", "AuditAct", "BAdmin")</dd>
-                                <dd id="b3">@Html.ActionLink("发布公告", "Notice", "BAdmin")</dd>
+                                <dd id="b3">@Html.ActionLink("发布公告", "AddNotice", "BAdmin")</dd>
                             </dl>
                         </li>
                     }
@@ -88,12 +88,15 @@
                             <dd id="c4">@Html.ActionLink("管理我的社团", "MyClubs", "Clubs")</dd>
                         </dl>
                     </li>
-                    <li class="layui-nav-item">
-                        <a href="javascript:;">我是社长</a>
-                        <dl class="layui-nav-child">
-                            <dd id="d1">@Html.ActionLink("入社申请", "AuditJoinClub", "CAdmin")</dd>
-                        </dl>
-                    </li>
+                    @if (User.IsInRole("CAdmin"))
+                    {
+                        <li class="layui-nav-item">
+                            <a href="javascript:;">我是社长</a>
+                            <dl class="layui-nav-child">
+                                <dd id="d1">@Html.ActionLink("入社申请", "AuditJoinClub", "CAdmin")</dd>
+                            </dl>
+                        </li>
+                    }
                     <li class="layui-nav-item">
                         <a href="javascript:;">活动管理</a>
                         <dl class="layui-nav-child">

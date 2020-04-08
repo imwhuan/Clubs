@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace ClubApp.Controllers
 {
+    [Authorize]
     public class CAdminController : Controller
     {
         AppDbContext db = new AppDbContext();

@@ -260,4 +260,23 @@ namespace ClubApp.Models
         [Display(Name = "状态")]
         public string State { get; set; }
     }
+    public class NoticeView
+    {
+        [Display(Name = "公告ID")]
+        public int Id { get; set; }
+        [Display(Name = "公告类型")]
+        public int type { get; set; }
+        [Display(Name = "主标题"), MaxLength(100)]
+        public string Title1 { get; set; }
+        [Display(Name = "副标题"), MaxLength(100)]
+        public string Title2 { get; set; }
+        [Display(Name = "内容"), MaxLength(1000)]
+        public string Content { get; set; }
+        [Display(Name = "发布时间")]
+        public string CreateDate { get; set; }
+        [Display(Name = "发布用户")]
+        public string User { get; set; }
+        [Display(Name = "状态")]
+        public string state { get; set; }
+    }
 }

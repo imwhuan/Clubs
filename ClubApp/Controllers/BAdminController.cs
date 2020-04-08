@@ -21,6 +21,40 @@ namespace ClubApp.Controllers
         {
             return View();
         }
+        [HttpGet]
+        public ActionResult AddNotice()
+        {
+            return View();
+        }
+        [HttpPost,ValidateInput(false)]
+        public ActionResult AddNotice(NoticeView model)
+        {
+            UserNumber tuser = db.UserNumbers.Find(User.Identity.Name);
+            Notice nn = new Notice();
+            nn.Content = model.Content;
+            nn.Title1 = model.Title1;
+            nn.Title2 = model.Title2;
+            nn.type = model.type;
+            nn.User = tuser;
+            nn.CreateDate = DateTime.Now;
+            db.Notices.Add(nn);
+            db.SaveChanges();
+            return RedirectToAction("Notice");
+        }
+        public ActionResult NoticesA(int? nid)
+        {
+            if (nid == null)
+            {
+                return RedirectToAction("Notice");
+            }
+            Notice model = db.Notices.Find(nid);
+            if (model == null)
+            {
+                Session["Msg"] = "未发现公告"+nid.ToString();
+                RedirectToAction("Erroe404", "Home");
+            }
+            return View(model);
+        }
 
         public ActionResult AuditClub(string Msg = "", int s = 0)
         {

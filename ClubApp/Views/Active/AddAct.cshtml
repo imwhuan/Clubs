@@ -93,7 +93,7 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <button class="layui-btn" lay-submit lay-filter="demo2">跳转式提交</button>
+        <button class="layui-btn" lay-submit lay-filter="demo2">提交创建</button>
         <button type="button" class="layui-btn" onclick="getcontent()"><i class="layui-icon layui-icon-play"></i>预览</button>
         <input type="button" class="layui-btn" onclick="gettext()" value="获取纯文本" />
         @Html.TextBoxFor(m => m.ClubID, new { @class = "layui-input layui-hide" })
@@ -128,7 +128,7 @@ layui.use(['form', 'laydate', 'layedit'], function () {
 
     layedit.set({
       uploadImage: {
-        url: '/Upload/UploadImg?cid='+@Model.ClubID,
+        url: '/Upload/UploadActImg?cid='+@Model.ClubID,
       }
     });
     index = layedit.build('Content'); //建立编辑器

@@ -1,7 +1,71 @@
 ﻿
 @{
-    ViewBag.Title = "系统公告";
+    ViewBag.Title = "公告";
 }
+<style>
+    .ul-list li {
+        position: relative;
+        padding: 15px 52px 15px 0;
+        border-bottom: 1px dashed;
+        list-style: decimal;
+    }
+    .time{
+        float:right;
+        color:gray;
+    }
+    .ul-list-badge {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+    }
+</style>
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>系统公告</legend>
+</fieldset>
+@*<ul class="ul-list">
+    <li>
+        <div>
+            <a class="title" href="#">撒大大的撒达娃大的撒达娃阿达伟大啊达娃的撒到我阿达的阿文哇大达娃大大挖的啊</a>
+            <span class="time">2020/04/07</span>
+        </div>
+        <div class="ul-list-badge">
+            <span class="layui-badge layui-bg-red">置顶</span>
+        </div>
+    </li>
+    <li>
+        <div>
+            <a class="title" href="#">撒大大的撒达娃大的撒达娃阿达伟大啊达娃的撒到我阿达的阿文哇大达娃大大挖的啊</a>
+            <span class="time">2020/04/07</span>
+        </div>
+        <div class="ul-list-badge">
+            <span class="layui-badge layui-bg-red">置顶</span>
+        </div>
+    </li>
+</ul>*@
+<ul class="ul-list" style="padding-left:30px" id="LAY_demo1"></ul>
 
-<h2>系统公告</h2>
+<script>
+    layui.use('flow', function () {
+        var flow = layui.flow;
 
+          flow.load({
+            elem: '#LAY_demo1' //指定列表容器
+            ,done: function(page, next){ //到达临界点（默认滚动触发），触发下一页
+                var lis = [];
+              //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
+              $.get('/GetData/GetNoticeListData?page='+page, function(res){
+                //假设你的列表返回在data集合中
+                  layui.each(res.data, function (index, item) {
+                      var dom = '<li><div><a class="title" href="/BAdmin/NoticesA?nid=' + item.Id + '">' + item.Title1 + '</a><span class="time">' + item.CreateDate + '</span></div><div class="ul-list-badge"><span class="layui-badge layui-bg-red">置顶</span></div></li>'
+                  lis.push(dom);
+                });
+
+        //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+        //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+        next(lis.join(''), page < res.count);
+      });
+    }
+  });
+
+    })
+</script>
