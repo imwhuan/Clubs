@@ -1,0 +1,166 @@
+﻿@model ClubApp.Models.RecommendView
+@{
+    ViewBag.Title = "推荐";
+}
+    <style>
+        .ul-list li {
+            position: relative;
+            padding: 15px 52px 15px 80px;
+        }
+
+        .ul-list-badge {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+        }
+
+        .head-img-a {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+        }
+
+            .head-img-a img {
+                width: 50px;
+                height: 50px;
+            }
+
+        .ul-list h2 span {
+            line-height: 23px;
+            height: 23px;
+            font-size: 15px;
+        }
+
+        .div-desc-short {
+            padding: 5px 0;
+            color: gray;
+        }
+
+        .ul-list-info span {
+            margin: 0 5px;
+        }
+
+        .layui-icon-star-fill {
+            color: orange;
+        }
+        /*用户推荐*/
+        .u-card {
+            text-align: center;
+            border: 1px solid beige;
+            border-radius: 20px;
+            box-shadow: 0 0 10px 0px grey;
+            padding: 10px 0;
+        }
+        .u-head-img {
+            height: 100px;
+        }
+        .u-head-img img {
+            height: 100%;
+            border-radius: 50%;
+        }
+        .u-head-img img:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 10px grey;
+        }
+        .u-name{
+            padding:10px 0;
+        }
+    </style>
+<fieldset class="layui-elem-field">
+    <legend>我的标签</legend>
+    <div class="layui-field-box">
+        <span class="layui-badge layui-bg-blue">@Model.Labels</span>
+    </div>
+</fieldset>
+<fieldset class="layui-elem-field">
+    <legend>活动推荐</legend>
+    <div class="layui-field-box">
+        @if (Model.Acts.Count > 0)
+        {
+            <ul class="ul-list">
+                @foreach (var act in Model.Acts)
+                {
+                    <li>
+                        <a title="@act.Club.Name" class="head-img-a" href="/Clubs/Club?cid=@act.Club.ClubId">
+                            <img alt="@act.Club.Name" src="/@act.Club.HeadImg">
+                        </a>
+                        <h2><a href="/Active/Detail?aid='+item.Id+'"> @act.Title1</a></h2>
+                        <div class="div-desc-short"><span class="layui-badge layui-bg-blue">@act.Label</span><span> 活动简介：@act.Title2</span></div>
+                        <div class="ul-list-info">
+                            <a href="/User?uid=@act.User.UserId"><cite>@act.User.UserName</cite></a>
+                            <span>时间：@act.Time1.ToString("yyyy年MM月dd日:HH时mm分ss秒") 到 @act.Time2.ToString("yyyy年MM月dd日:HH时mm分ss秒")</span>
+                            <span title="评分"><i class="layui-icon layui-icon-star-fill"></i>@act.Votes0</span>
+                        </div>
+                        <div class="ul-list-badge">
+                            <span class="layui-badge layui-bg-red">置顶</span>
+                        </div>
+                    </li>
+                }
+
+            </ul>
+        }
+        else
+        {
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>暂无推荐项</legend>
+            </fieldset>
+        }
+    </div>
+</fieldset>
+<fieldset class="layui-elem-field">
+    <legend>道友推荐</legend>
+    <div class="layui-field-box">
+        @if (Model.Users.Count > 0)
+        {
+            <div class="layui-row">
+                @foreach (var us in Model.Users)
+                {
+                    <div class="layui-col-sm3 layui-col-sm-offset1 u-card">
+                        <div class="u-head-img"><a href="/User?uid=@us.UserId"><img alt="头像" src="/@us.HeadImg"></a></div>
+                        <div class="u-name">@us.UserName</div>
+                        <div class="u-lab"><span class="layui-badge layui-bg-blue"> @us.Labels</span></div>
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>暂无推荐项</legend>
+            </fieldset>
+        }
+    </div>
+</fieldset>
+<fieldset class="layui-elem-field">
+    <legend>社团推荐</legend>
+    <div class="layui-field-box">
+        @if (Model.Clubs.Count > 0)
+        {
+            <ul class="ul-list">
+                @foreach (var club in Model.Clubs)
+                {
+                    <li>
+                        <a title="@club.Name" class="head-img-a" href="/Clubs/Club?cid=@club.ClubId">
+                            <img alt="@club.Name" src="/@club.HeadImg">
+                        </a>
+                        <h2><a href="/Active/Detail?aid='+item.Id+'"> @club.Name</a></h2>
+                        <div class="div-desc-short">社团类型：<span class="layui-badge layui-bg-blue"> @club.Type.Name</span><span> 社团简介：@club.ShortDesc</span></div>
+                        <div class="ul-list-info">
+                            <a href="/User?uid=@club.User.UserId"><cite>社长：@club.User.UserName</cite></a>
+                            <span>时间：@club.CreateDate2.ToString() </span>
+                        </div>
+                    </li>
+                }
+
+            </ul>
+        }
+        else
+        {
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>暂无推荐项</legend>
+            </fieldset>
+        }
+
+    </div>
+</fieldset>
