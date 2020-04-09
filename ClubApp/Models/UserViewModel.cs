@@ -26,12 +26,21 @@ namespace ClubApp.Models
         [Display(Name ="学校")]
         public string School { get; set; }
         [Display(Name ="学院")]
-        public string Cologe { get; set; }
+        public int Cologe { get; set; }
         public List<Coloege> Cologes { get; set; }
         [Display(Name ="班级")]
-        public string Grade { get; set; }
+        public int Grade { get; set; }
         public string Grade2 { get; set; }
         [Display(Name ="兴趣标签"),MaxLength(3)]
+        public string Label { get; set; }
         public List<string> Labels { get; set; }
+    }
+    public class RecommendView
+    {
+        public string Uid { get; set; }
+        public string Labels { get; set; }
+        public List<Activities> Acts { get; set; }
+        public List<ClubNumber> Clubs { get; set; }
+        public List<UserNumber> Users { get; set; }
     }
 }

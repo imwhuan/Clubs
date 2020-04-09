@@ -79,15 +79,15 @@
     <div class="layui-form-item">
         @Html.LabelFor(m => m.LabelStr, new { @class = "layui-form-label" })
         <div class="layui-input-block">
-            <input type="checkbox" name="label" value="write" title="写作">
-            <input type="checkbox" name="label" value="read" title="阅读">
-            <input type="checkbox" name="label" value="game" title="游戏">
-            <input type="checkbox" name="label" value="write" title="写作">
-            <input type="checkbox" name="label" value="read" title="阅读">
-            <input type="checkbox" name="label" value="game" title="游戏">
-            <input type="checkbox" name="label" value="write" title="写作">
-            <input type="checkbox" name="label" value="read" title="阅读">
-            <input type="checkbox" name="label" value="game" title="游戏">
+            <input type="checkbox" name="label" title="文学">
+            <input type="checkbox" name="label" title="编程">
+            <input type="checkbox" name="label" title="游戏">
+            <input type="checkbox" name="label" title="体育">
+            <input type="checkbox" name="label" title="社交">
+            <input type="checkbox" name="label" title="音乐">
+            <input type="checkbox" name="label" title="科学">
+            <input type="checkbox" name="label" title="商务">
+            <input type="checkbox" name="label" title="男女">
             <input type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="addlabel()" value="更多" />
             @Html.TextBoxFor(m => m.LabelStr, new { @class = "layui-input layui-hide" })
         </div>

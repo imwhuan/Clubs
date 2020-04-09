@@ -377,6 +377,7 @@
     <Content Include="Views\Admin\AreaEdit.cshtml" />
     <Content Include="Views\BAdmin\AddNotice.cshtml" />
     <Content Include="Views\BAdmin\NoticesA.cshtml" />
+    <Content Include="Views\User\Recommend.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
