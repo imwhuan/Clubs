@@ -184,10 +184,10 @@ namespace ClubApp.Controllers
             model.ClubID = club.ClubId;
             model.ClubName = club.Name;
             List<Area> areas = db.Areas.Where(a=>a.State==(int)EnumState.正常).ToList();
-            model.Areas = new Dictionary<string, string>();
+            model.Areas = new Dictionary<int, string>();
             foreach(Area a in areas)
             {
-                model.Areas.Add(a.Id.ToString(), a.Name);
+                model.Areas.Add(a.Id, a.Name);
             }
             return View(model);
         }
@@ -207,18 +207,28 @@ namespace ClubApp.Controllers
                 Title1 = model.Title1,
                 Title2 = model.Title2,
                 Content = model.Content,
+                MaxUser=model.MaxUser,
+                Area0=model.Area0,
                 Club = club,
                 CreateDate = DateTime.Now,
                 User = u,
                 State = (int)ActiveState.待提交,
                 Votes0="0"
             };
+            if (model.Area != null)
+            {
+                Area a = db.Areas.Find(model.Area);
+                if (a != null)
+                {
+                    Act.Area = a;
+                }
+            }
             int type;
             int.TryParse(model.Type, out type);
             Act.Type = type;
-            if (model.LabelStr.Length > 1)
+            if (model.LabelStr?.Length > 1)
             {
-                Act.Label = model.LabelStr.Substring(1, model.LabelStr.Length - 1);
+                Act.Label = model.LabelStr.Substring(1);
             }
             DateTime t1 ;
             DateTime.TryParse(model.Time1, out t1);
@@ -344,7 +354,7 @@ namespace ClubApp.Controllers
 
                 db.Entry(act).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Manage", "Clubs", new { Msg = "活动编号[" + act.Id + "]一个申请已提交，牢记并使用申请任务凭证[" + apply.Id + "]查看申请进度" });
+                return RedirectToAction("Manage", "Clubs", new { cid= act.Club.ClubId});
             }
             catch (Exception ex)
             {
@@ -366,6 +376,11 @@ namespace ClubApp.Controllers
                 if (act == null)
                 {
                     Session["Error"] = "未发现活动" + aid;
+                    return RedirectToAction("Error404", "Home");
+                }
+                if (act.State != (int)ActiveState.未开始)
+                {
+                    Session["Error"] = "活动<" + act.Id.ToString() + "-" + act.Title1 + ">状态未开始，无法参与打分评论";
                     return RedirectToAction("Error404", "Home");
                 }
                 UserNumber u = db.UserNumbers.Find(User.Identity.Name);
@@ -415,6 +430,11 @@ namespace ClubApp.Controllers
             if (act == null)
             {
                 return RedirectToAction("Index");
+            }
+            if (act.State != (int)ActiveState.未开始)
+            {
+                Session["Error"] = "活动<" + act.Id.ToString() + "-" + act.Title1 + ">状态未开始，无法参与门票获取";
+                return RedirectToAction("Error404", "Home");
             }
             if (act.MaxUser == null)
             {

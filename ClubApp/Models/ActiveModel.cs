@@ -30,10 +30,14 @@ namespace ClubApp.Models
         [Display(Name = "活动图片")]
         public List<string> ImgList { get; set; }
         [Display(Name = "人数限制")]
-        public string MaxUser { get; set; }
-        public Dictionary<string,string> Areas { get; set; }
+        public int? MaxUser { get; set; }
+        public Dictionary<int,string> Areas { get; set; }
         [Display(Name = "活动地点")]
-        public string Area { get; set; }
+        public int? Area { get; set; }
+        [Display(Name = "地点备注")]
+        public string Area0 { get; set; }
+        [Display(Name = "地点名称")]
+        public string Area1 { get; set; }
         [Display(Name = "开始时间")]
         public string Time1 { get; set; }
         [Display(Name = "结束时间")]

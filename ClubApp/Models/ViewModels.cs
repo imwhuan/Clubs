@@ -155,11 +155,11 @@ namespace ClubApp.Models
         public List<ClubType> clubTypes { get; set; }
         [Display(Name = "社团账号")]
         public string ClubId { get; set; }
-        [Display(Name = "社团类型")]
+        [Display(Name = "社团类型"),Required]
         public int Type { get; set; }
         [Display(Name = "社团标签")]
         public string Label { get; set; }
-        [MaxLength(50), Display(Name = "社团名称")]
+        [MaxLength(50), Display(Name = "社团名称"),Required]
         public string Name { get; set; }
         [Display(Name = "头像"), MaxLength(500)]
         public string HeadImg { get; set; }

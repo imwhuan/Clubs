@@ -12,7 +12,7 @@
         <thead>
             <tr>
                 <th>@Html.DisplayNameFor(m => m.Id)</th>
-                <th>@Html.DisplayNameFor(m => m.Type)</th>
+                <th>@Html.DisplayNameFor(m => m.Club)</th>
                 <th>@Html.DisplayNameFor(m => m.ApplyUser)</th>
                 <th>@Html.DisplayNameFor(m => m.ApplyDate)</th>
                 <th>@Html.DisplayNameFor(m => m.AuditDate)</th>
@@ -26,7 +26,7 @@
             {
                 <tr>
                     <td>@Html.DisplayFor(m => item.Id)</td>
-                    <td>@Html.DisplayFor(m => item.Type.Name)</td>
+                    <td>@Html.DisplayFor(m => item.Club.Name)</td>
                     <td>@Html.DisplayFor(m => item.ApplyUser.UserName)</td>
                     <td>@Html.DisplayFor(m => item.ApplyDate)</td>
                     <td>@Html.DisplayFor(m => item.AuditDate)</td>

@@ -28,14 +28,14 @@
         <div class="layui-col-sm8">
             @Html.LabelFor(m => m.Title1, new { @class = "layui-form-label" })
             <div class="layui-input-block">
-                <input type="text" name="Title1" id="Title1" lay-verify="required" class = "layui-input", autocomplete = "off" />
+                <input type="text" name="Title1" id="Title1" lay-verify="required" class="layui-input" , autocomplete="off" />
             </div>
         </div>
     </div>
     <div class="layui-form-item">
         @Html.LabelFor(m => m.Title2, new { @class = "layui-form-label" })
         <div class="layui-input-block">
-            <input type="text" name="Title2" id="Title2" lay-verify="required" class="layui-input" autocomplete="off" placeholder = "副标题/简介：50字以内" />
+            <input type="text" name="Title2" id="Title2" lay-verify="required" class="layui-input" autocomplete="off" placeholder="副标题/简介：50字以内" />
         </div>
     </div>
     <div class="layui-form-item layui-form-text">
@@ -54,6 +54,21 @@
         <div class="layui-form-mid layui-word-aux">
             请查看该地点的预约信息以防止与其他活动冲突
             <a href="#" style="color:red">（点击查看）</a>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class = "layui-form-label">地点备注</label>
+        <div class="layui-input-block">
+            @Html.TextBoxFor(m => m.Area0, new { @class = "layui-input",placeholder="备注或其他地点信息" })
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelFor(m => m.MaxUser, new { @class = "layui-form-label" })
+        <div class="layui-input-inline">
+            @Html.TextBoxFor(m => m.MaxUser, new { @class = "layui-input" })
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+            若无人数限制请不要填写此项
         </div>
     </div>
     <div class="layui-form-item">

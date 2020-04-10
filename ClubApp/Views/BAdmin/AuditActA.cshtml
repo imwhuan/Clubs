@@ -56,6 +56,15 @@
         </div>
     </div>
     <div class="layui-form-item">
+        @Html.LabelFor(m => m.MaxUser, new { @class = "layui-form-label" })
+        <div class="layui-input-inline">
+            @Html.TextBoxFor(m => m.MaxUser, new { @class = "layui-input", @readonly = true })
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+            若无人数限制请不要填写此项
+        </div>
+    </div>
+    <div class="layui-form-item">
         <div class="layui-inline">
             @Html.LabelFor(m => m.Time1, new { @class = "layui-form-label" })
             <div class="layui-input-block">

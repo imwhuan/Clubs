@@ -239,8 +239,8 @@ namespace ClubApp.Controllers
                     Title1 = act.Title1,
                     Title2 = act.Title2,
                     Content = act.Content,
-                    MaxUser = act.MaxUser == null ? "无限制" : act.MaxUser.ToString() + "人",
-                    Area = act.Area?.Name,
+                    MaxUser = act.MaxUser,
+                    Area1 = act.Area?.Name,
                     Time1 = act.Time1.ToString("yyyy/MM/dd hh:mm"),
                     Time2 = act.Time2.ToString("yyyy/MM/dd hh:mm"),
                     CreateDate = act.CreateDate.ToString(),
@@ -268,11 +268,11 @@ namespace ClubApp.Controllers
                 {
                     if (string.IsNullOrEmpty(act.Area0))
                     {
-                        model.Area = "未知";
+                        model.Area1 = "未知";
                     }
                     else
                     {
-                        model.Area= act.Area0;
+                        model.Area1= act.Area0;
                     }
                 }
 

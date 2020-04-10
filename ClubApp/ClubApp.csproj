@@ -380,6 +380,7 @@
     <Content Include="Views\User\Recommend.cshtml" />
     <Content Include="Views\Active\Ticket.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Account\ForgetPwd.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

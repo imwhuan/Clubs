@@ -73,7 +73,47 @@ namespace ClubApp.Controllers
         {
             return View();
         }
-
+        public ActionResult ForgetPwd()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult ForgetPwd(LoginViewModel model)
+        {
+            AppUser user = (from u in db.Users where u.Email.ToUpper() == model.UserName.ToUpper() || u.PhoneNumber == model.UserName || u.UserName.ToUpper() == model.UserName.ToUpper() select u).FirstOrDefault();
+            if (user == null)
+            {
+                UserNumber user1 = db.UserNumbers.Where(u => u.RelName == model.UserName).FirstOrDefault();
+                if (user1 == null)
+                {
+                    ModelState.AddModelError("", "账户不存在！");
+                    return View(model);
+                }
+                else
+                {
+                    user = db.Users.Where(u => u.UserName == user1.UserId).FirstOrDefault();
+                    if (user == null)
+                    {
+                        ModelState.AddModelError("", "账户不存在！");
+                        return View(model);
+                    }
+                }
+            }
+            //生成重置密码所需的token
+            string tok = UserManager.GeneratePasswordResetToken(user.Id);
+            //调用重置密码的方法
+            var result = UserManager.ResetPassword(user.Id, tok, model.Password);
+            if (result == IdentityResult.Success)
+            {
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                AddErrors(result);
+                return View(model);
+            }
+                    
+        }
         #region 登陆
         [HttpGet]
         public ActionResult Login(string returnUrl)

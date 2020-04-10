@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -129,11 +130,12 @@ namespace ClubApp.Controllers
         {
             return View();
         }
-        public ActionResult AuditClubAY(int? id, string AuditDesc = "")
+        public async Task<ActionResult> AuditClubAY(int? id, string AuditDesc = "")
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                Session["Error"] = "错误操作！审批过程未发现任务编号";
+                return RedirectToAction("Error404", "Home");
             }
             ClubNumber club = db.ClubNumbers.Where(c => c.AuditID == id).FirstOrDefault();
             if (club == null)
@@ -158,7 +160,7 @@ namespace ClubApp.Controllers
                     bool c= userManager.IsInRoleAsync(uid.Id, "CAdmin").Result;
                     if (!c)
                     {
-                        userManager.AddToRoleAsync(uid.Id, "CAdmin");
+                        await userManager.AddToRoleAsync(uid.Id, "CAdmin");
                     }
                 }
                 db.SaveChanges();
