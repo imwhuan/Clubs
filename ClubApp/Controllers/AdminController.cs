@@ -87,11 +87,20 @@ namespace ClubApp.Controllers
             if (!RoleManager.RoleExists("BAdmin"))
             {
                 RoleManager.Create(new IdentityRole("BAdmin"));
-                ViewBag.Msg += "角色初始化成功；";
+                ViewBag.Msg += "管理员角色初始化成功；";
             }
             else
             {
-                ViewBag.Msg += "角色初始化失败；";
+                ViewBag.Msg += "管理员角色初始化失败；";
+            }
+            if (!RoleManager.RoleExists("CAdmin"))
+            {
+                RoleManager.Create(new IdentityRole("CAdmin"));
+                ViewBag.Msg += "社长角色初始化成功；";
+            }
+            else
+            {
+                ViewBag.Msg += "社长角色初始化失败；";
             }
             //申请通道
             if (db.ApplyTypes.Count() == 0)
@@ -114,7 +123,7 @@ namespace ClubApp.Controllers
             //社团类型
             if (db.ClubTypes.Count() == 0)
             {
-                ClubType club = new ClubType() { Name = "无", Enable = 0 };
+                ClubType club = new ClubType() { Name = "学术研究", Enable = 0 };
                 db.ClubTypes.Add(club);
                 ViewBag.Msg += "社团类型初始化成功；";
             }
