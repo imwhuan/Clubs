@@ -1,0 +1,91 @@
+﻿@model IEnumerable<ClubApp.Models.UserTicketView>
+@{
+    ViewBag.Title = "活动门票";
+}
+<style>
+    .title span {
+        border: 1px solid darkgrey;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px grey;
+        margin:0 4px;
+    }
+    .title span i {
+        color: white;
+        font-weight: bold;
+    }
+    .title button {
+        line-height: 100%;
+        background-color: lightpink;
+        color: white;
+        font-weight: bold;
+    }
+</style>
+<h2>活动门票:@ViewBag.Act</h2>
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend class="title">
+        <span style="background-color: yellowgreen;">总投放门票数 <i>@ViewBag.Count0</i></span>
+        <span style="background-color: coral;">已被领取 <i>@ViewBag.Count1</i></span>
+        <span style="background-color: dodgerblue;">剩余 <i>@ViewBag.Count2</i></span>
+        @if(ViewBag.Count2>0)
+        {
+        <button class="layui-btn layui-btn-sm layui-btn-primary" type="button" onclick="getticket()"><i class="layui-icon layui-icon-senior"></i>点击获取门票</button>
+        }
+        else
+        {
+        <button class="layui-btn layui-btn-sm layui-btn-primary" type="button" onclick="noticket()"><i class="layui-icon layui-icon-senior"></i>门票告罄</button>
+        }
+    </legend>
+</fieldset>
+<ul class="layui-timeline">
+    <li class="layui-timeline-item">
+        <i class="layui-icon layui-timeline-axis"></i>
+        <div class="layui-timeline-content layui-text">
+            <div class="layui-timeline-title">@(DateTime.Now.ToString("yyyy年MM月dd日-HH时mm分ss秒")) 剩余门票 @ViewBag.Count2</div>
+        </div>
+    </li>
+    @foreach (var item in Model)
+    {
+        <li class="layui-timeline-item">
+            <i class="layui-icon layui-timeline-axis"></i>
+            <div class="layui-timeline-content layui-text">
+                <div class="layui-timeline-title">@item.CreateDate，@item.User 获取门票 ——@item.Desc </div>
+            </div>
+        </li>
+    }
+    <li class="layui-timeline-item">
+        <i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop layui-timeline-axis"></i>
+        <div class="layui-timeline-content layui-text">
+            <div class="layui-timeline-title">本次活动投放 @ViewBag.Count0 张门票</div>
+        </div>
+    </li>
+</ul>
+
+<script>
+    layui.use(['layer'], function () {
+
+    })
+    function getticket() {
+        layer.load();
+        setTimeout(gotticket,2000)
+    }
+    function gotticket() {
+        $.post("/Active/GetTicket", { "aid": @ViewBag.ActId }, function (data) {
+            if (data == "OK") {
+                layer.closeAll('loading');
+                layer.msg("成功获取到门票！");
+                setTimeout("location.reload()", 2000);
+            }
+            else {
+                layer.closeAll('loading');
+                layer.msg(data, {icon:2,time:6000});
+            }
+        })
+    }
+    function noticket() {
+        layer.msg("抱歉，门票已告罄！", { icon: 2 });
+    }
+    $("#e2").addClass("layui-this");
+    $("#e2").parents("li").addClass("layui-nav-itemed")
+</script>
