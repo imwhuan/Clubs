@@ -1,8 +1,10 @@
 ﻿using ClubApp.Models;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Mvc;
 
 namespace ClubApp.Controllers
@@ -146,10 +148,19 @@ namespace ClubApp.Controllers
             }
             else if (res == 2) 
             {
-
                 club.State = (int)EnumState.正常;
                 club.CreateDate2 = DateTime.Now;
                 db.Entry(club).State = System.Data.Entity.EntityState.Modified;
+                if (club.User != null)
+                {
+                    AppUser uid = db.Users.Where(u => u.UserName == club.User.UserId).FirstOrDefault();
+                    AppUserManager userManager= HttpContext.GetOwinContext().GetUserManager<AppUserManager>();
+                    bool c= userManager.IsInRoleAsync(uid.Id, "CAdmin").Result;
+                    if (!c)
+                    {
+                        userManager.AddToRoleAsync(uid.Id, "CAdmin");
+                    }
+                }
                 db.SaveChanges();
                 return RedirectToAction("AuditClub", new { Msg = "社团申请任务[" + id + "]审批成功" });
             }

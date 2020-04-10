@@ -76,8 +76,10 @@ namespace ClubApp.Controllers
                 CreateDate = userinfo.CreateDate,
                 LoginDate = userinfo.LoginDate,
                 SysAge = "未知",
-                Label = "无标签",
-                Role = "无角色"
+                Label = userinfo.Labels,
+                Role = "无角色",
+                Desc=userinfo.Desc,
+                ShortDesc=userinfo.ShortDesc
             };
             if (userinfo.CreateDate != null)
             {

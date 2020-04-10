@@ -153,10 +153,12 @@ namespace ClubApp.Models
     {
         [Display(Name = "社团类型")]
         public List<ClubType> clubTypes { get; set; }
-        [Key, Display(Name = "社团账号"), MaxLength(10)]
+        [Display(Name = "社团账号")]
         public string ClubId { get; set; }
         [Display(Name = "社团类型")]
         public int Type { get; set; }
+        [Display(Name = "社团标签")]
+        public string Label { get; set; }
         [MaxLength(50), Display(Name = "社团名称")]
         public string Name { get; set; }
         [Display(Name = "头像"), MaxLength(500)]

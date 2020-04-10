@@ -134,7 +134,11 @@ namespace ClubApp.Controllers
                     //    AuditTimes=0                      
                     //};
                     newclub.Name = model.Name;
-                    newclub.HeadImg = model.HeadImg;
+                    if (model.Label?.Length > 1)
+                    {
+                        newclub.Label = model.Label.Substring(1);
+                    }
+                    
                     newclub.Desc = model.Desc;
                     newclub.ShortDesc = model.ShortDesc;
                     newclub.CreateDate = DateTime.Now;

@@ -133,4 +133,19 @@ namespace ClubApp.Models
         public List<string> Labels { get; set; }
         public List<Voting> Votings { get; set; }
     }
+    public class UserTicketView
+    {
+        [Display(Name = "编号")]
+        public int Id { get; set; }
+        [Display(Name = "活动")]
+        public string Active { get; set; }
+        [Display(Name = "用户")]
+        public string User { get; set; }
+        [Display(Name = "描述"), MaxLength(100)]
+        public string Desc { get; set; }
+        [Display(Name = "状态")]
+        public int State { get; set; }
+        [Display(Name = "创建日期")]
+        public string CreateDate { get; set; }
+    }
 }

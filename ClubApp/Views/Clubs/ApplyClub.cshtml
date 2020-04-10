@@ -43,16 +43,32 @@
         </div>
     </div>
     <div class="layui-form-item">
+        @Html.LabelFor(m => m.Label, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            <input type="checkbox" name="like" title="文学">
+            <input type="checkbox" name="like" title="编程">
+            <input type="checkbox" name="like" title="游戏">
+            <input type="checkbox" name="like" title="体育">
+            <input type="checkbox" name="like" title="社交">
+            <input type="checkbox" name="like" title="音乐">
+            <input type="checkbox" name="like" title="科学">
+            <input type="checkbox" name="like" title="商务">
+            <input type="checkbox" name="like" title="男女">
+            <input type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="addlabel()" value="更多" />
+            @Html.TextBoxFor(m => m.Label, new { @class = "layui-input layui-hide" })
+        </div>
+    </div>
+    <div class="layui-form-item">
         @Html.LabelFor(m => m.Name, new { @class = "layui-form-label" })
         <div class="layui-input-block">
-            @Html.TextBoxFor(m => m.Name, new { @class = "layui-input",autocomplete="off" })
+            @Html.TextBoxFor(m => m.Name, new { @class = "layui-input", autocomplete = "off" })
         </div>
     </div>
 
     <div class="layui-form-item">
         @Html.LabelFor(m => m.ShortDesc, new { @class = "layui-form-label" })
         <div class="layui-input-block">
-            @Html.TextBoxFor(m => m.ShortDesc, new { @class = "layui-input",autocomplete="off" })
+            @Html.TextBoxFor(m => m.ShortDesc, new { @class = "layui-input", autocomplete = "off" })
         </div>
     </div>
     <div class="layui-form-item">
@@ -63,7 +79,7 @@
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <input type="submit" class="layui-btn" lay-submit value="确认提交" />
+            <button class="layui-btn" lay-submit lay-filter="demo2">确认提交</button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
     </div>
@@ -80,7 +96,19 @@
                     return '超过最大长度[500]个字符！'
                 }
             }
-        })
+        });
+        //监听提交
+        form.on('submit(demo2)', function (data) {
+            if ($('input[name="like"]:checked').length > 3) {
+                layer.msg("社团标签最多可选择3个");
+                return false;
+            }
+            var label = "";
+            $('input[name="like"]:checked').each(function () {
+                label = label + "," + this.title;
+            });
+            $("#Label").val(label);
+        });
     });
     $("#c3").addClass("layui-this");
     $("#c3").parents("li").addClass("layui-nav-itemed")

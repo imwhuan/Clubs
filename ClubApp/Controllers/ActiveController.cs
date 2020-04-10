@@ -404,5 +404,92 @@ namespace ClubApp.Controllers
             }
             
         }
+        [Authorize]
+        public ActionResult Ticket(int? aid=1)
+        {
+            if (aid == null)
+            {
+                return RedirectToAction("Index");
+            }
+            Activities act = db.Activities.Find(aid);
+            if (act == null)
+            {
+                return RedirectToAction("Index");
+            }
+            if (act.MaxUser == null)
+            {
+                Session["Error"] = "活动<" + act.Id.ToString() + "-" + act.Title1 + ">无人数参与限制，无门票发放";
+                return RedirectToAction("Error404", "Home");
+            }
+            List<UserTicket> uts = db.UserTickets.Where(u => u.Active.Id == aid).OrderByDescending(u=>u.Id).ToList();
+            List<UserTicketView> models = new List<UserTicketView>();
+            
+            foreach (UserTicket ut in uts)
+            {
+                UserTicketView utv = new UserTicketView()
+                {
+                    User = ut.User.UserName,
+                    Desc = ut.Desc,
+                    CreateDate = ut.CreateDate.ToString("yyyy年MM月dd日-HH时mm分ss秒"),
+                    State = ut.State,
+                };
+                models.Add(utv);
+            }
+            int c0 = (int)act.MaxUser;
+            int c1 = uts.Count;
+            int c2 = c0 - c1;
+            ViewBag.Count0 = c0;
+            ViewBag.Count1 = c1;
+            ViewBag.Count2 = c2;
+            ViewBag.ActId = act.Id;
+            ViewBag.Act = act.Title1;
+            return View(models);
+        }
+        [Authorize]
+        public string GetTicket(int aid)
+        {
+            try
+            {
+                Activities act = db.Activities.Find(aid);
+                if (act == null)
+                {
+                    throw new Exception("活动"+aid.ToString()+"不存在！");
+                }
+                if (act.MaxUser == null)
+                {
+                    throw new Exception("活动 " + act.Id.ToString() + "-" + act.Title1 + " 无人数参与限制，无门票发放");
+                }
+                UserNumber me = db.UserNumbers.Find(User.Identity.Name);
+                if (me == null)
+                {
+                    throw new Exception("用户" + User.Identity.Name + "不存在！");
+                }
+                int counted = db.UserTickets.Where(u => u.Active.Id == aid).Count();
+                if (counted >= act.MaxUser)
+                {
+                    throw new Exception("抱歉，活动 " + act.Id.ToString() + "-" + act.Title1 + " 门票发放已达上限");
+                }
+                bool check = db.UserTickets.Where(u => u.Active.Id == aid && u.User.UserId == User.Identity.Name).Any();
+                if (check)
+                {
+                    throw new Exception("用户" + User.Identity.Name + "已持有活动" + act.Title1 + "的门票");
+                }
+                UserTicket ut = new UserTicket
+                {
+                    Active = act,
+                    User = me,
+                    CreateDate = DateTime.Now,
+                    State = (int)EnumTicket.正常,
+                    Desc = "用户通过系统领取"
+                };
+                db.UserTickets.Add(ut);
+                db.SaveChanges();
+                return "OK";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
     }
 }

@@ -33,10 +33,10 @@
             <!-- 头部区域（可配合layui已有的水平导航） -->
             <ul class="layui-nav layui-layout-left">
                 <li class="layui-nav-item">@Html.ActionLink("公告", "Notice", "BAdmin")</li>
-                <li class="layui-nav-item"><a href="">关于</a></li>
+                <li class="layui-nav-item">@Html.ActionLink("关于", "About", "Home")</li>
                 @if (User.IsInRole("Admin"))
                 {
-                    <li class="layui-nav-item"><a href="">用户</a></li>
+                    <li class="layui-nav-item">@Html.ActionLink("错误页", "Error", "Home")</li>
                     <li class="layui-nav-item">
                         <a href="javascript:;">变量控制</a>
                         <dl class="layui-nav-child">
@@ -83,7 +83,6 @@
                         <a href="javascript:;">社团</a>
                         <dl class="layui-nav-child">
                             <dd id="c1">@Html.ActionLink("社团查询", "Index", "Clubs")</dd>
-                            <dd id="c2">@Html.ActionLink("加入社团", "JoinClub", "Clubs")</dd>
                             <dd id="c3">@Html.ActionLink("创建社团", "ApplyClub", "Clubs")</dd>
                             <dd id="c4">@Html.ActionLink("管理我的社团", "MyClubs", "Clubs")</dd>
                         </dl>
@@ -101,6 +100,7 @@
                         <a href="javascript:;">活动管理</a>
                         <dl class="layui-nav-child">
                             <dd id="e1">@Html.ActionLink("活动查看", "Index", "Active")</dd>
+                            <dd id="e2">@Html.ActionLink("活动门票", "Ticket", "Active")</dd>
                         </dl>
                     </li>
                     <li id="vote-nav-item" class="layui-nav-item">@Html.ActionLink("推荐", "Recommend", "User")</li>

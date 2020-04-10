@@ -70,7 +70,7 @@
         参与人数限制：@Model.MaxUser
         @if (Model.MaxUser != "无限制")
         {
-    <span class="layui-badge layui-bg-blue">获取门票</span>
+            <a  class="layui-btn layui-btn-xs" href="Ticket?aid=@Model.Id"><i class="layui-icon"></i>获取门票</a>
         }
     </div>
 </fieldset>

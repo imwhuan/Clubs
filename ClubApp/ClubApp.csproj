@@ -378,6 +378,8 @@
     <Content Include="Views\BAdmin\AddNotice.cshtml" />
     <Content Include="Views\BAdmin\NoticesA.cshtml" />
     <Content Include="Views\User\Recommend.cshtml" />
+    <Content Include="Views\Active\Ticket.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
