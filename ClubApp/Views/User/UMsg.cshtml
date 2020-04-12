@@ -34,9 +34,9 @@
         @Html.LabelFor(m => m.Gender, new { @class = "layui-form-label" })
         <div class="layui-input-block">
             <div class="diy-inline">
-                @Html.RadioButtonFor(m => m.Gender, 0, new { id = "s1", title = "保密" })
-                @Html.RadioButtonFor(m => m.Gender, 1, new { id = "s2", title = "男" })
-                @Html.RadioButtonFor(m => m.Gender, 2, new { id = "s3", title = "女" })
+                <input type="radio" name="Gender" value="0" title="保密" checked="@(Model.Gender==0)">
+                <input type="radio" name="Gender" value="1" title="男" checked="@(Model.Gender==1)">
+                <input type="radio" name="Gender" value="2" title="女" checked="@(Model.Gender==2)">
             </div>
 
             <div class="layui-form-mid layui-word-aux">

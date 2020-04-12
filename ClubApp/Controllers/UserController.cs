@@ -173,6 +173,11 @@ namespace ClubApp.Controllers
                 model.Labels = u.Labels.Split(',').ToList();
             }
             model.Cologes = db.Coloeges.ToList();
+            if (Session["UserSet"] != null)
+            {
+                ViewBag.Msg = Session["UserSet"].ToString();
+                Session["UserSet"] = null;
+            }
             return View(model);
         }
         [HttpPost]
@@ -196,6 +201,8 @@ namespace ClubApp.Controllers
             }
             db.Entry(me).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
+            Session["UserSet"]= "信息保存成功！页面部分显示信息可能在重新登陆后才能更新生效";
+            ViewBag.Msg = "信息保存成功！页面部分显示信息可能在重新登陆后才能更新生效";
             return RedirectToAction("UserSet");
         }
         

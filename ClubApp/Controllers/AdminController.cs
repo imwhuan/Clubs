@@ -12,7 +12,7 @@ using System.Web.Mvc;
 
 namespace ClubApp.Controllers
 {
-    [Authorize]
+    [Authorize(Roles ="Admin")]
     public class AdminController : Controller
     {
         #region 初始化用户/角色/登陆管理器
@@ -75,7 +75,6 @@ namespace ClubApp.Controllers
             return View();
         }
 
-        [Authorize(Roles ="Admin")]
         /// <summary>
         /// 一键初始化，为项目填充初始数据
         /// </summary>

@@ -180,6 +180,11 @@ namespace ClubApp.Controllers
                 Session["Error"] = "未发现社团" + cid;
                 return RedirectToAction("Error404", "Home");
             }
+            if (club.State!=(int)EnumState.正常)
+            {
+                Session["Error"] = "活动<" + club.ClubId.ToString() + "-" + club.Name + ">非正常状态，无法发布活动";
+                return RedirectToAction("Error404", "Home");
+            }
             ActiveListModel model = new ActiveListModel();
             model.ClubID = club.ClubId;
             model.ClubName = club.Name;
